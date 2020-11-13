@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private OkHttpClient okHttpClient;
 
-    private static final String URL = "https://www.thecocktaildb.com/api/json/v1/1/random.php";
+    private static final String URL = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?a=Alcoholic";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,22 +45,28 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
                     System.out.println(rawResponse);
-                    //ist<String> textInfo = getTextInformation(rawResponse);
-                    //System.out.println("Response: " + textInfo);
+
+                    //GET ALL THE COCKTAILS INFORMATION (ONLY ID, NAME AND IMG_URL)
+                    List<Cocktail> textInfo = getTextInformation(rawResponse);
+                    for (Cocktail c : textInfo){
+                        System.out.println(c);
+                    }
                 }
             }
         });
     }
 
-    private List<String> getTextInformation(String rawResponse) {
-        List<String> results = new ArrayList<>();
+    private List<Cocktail> getTextInformation(String rawResponse) {
+        List<Cocktail> results = new ArrayList<>();
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
-            JSONArray responseArray = responseObject.getJSONArray("all");
+            JSONArray responseArray = responseObject.getJSONArray("drinks");
             for (int index = 0; index < responseArray.length(); index++) {
                 JSONObject tempObject = responseArray.getJSONObject(index);
-                String text = tempObject.getString("text");
-                results.add(text);
+                String Name = tempObject.getString("strDrink");
+                String Img_Url = tempObject.getString("strDrinkThumb");
+                int ID = tempObject.getInt("idDrink");
+                results.add(new Cocktail(ID, Name, Img_Url));
             }
         } catch (JSONException e) {
             System.out.println("Something went wrong here");
