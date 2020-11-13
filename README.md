@@ -1,5 +1,6 @@
 # ShakerApp
 Wir sind die besten Entwickler der Welt...
+Kauft unseren Merch
 
 
 
