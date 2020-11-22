@@ -30,7 +30,7 @@ public class Network {
         //ArrayList<Cocktail> Cocktails;
         final Request request = new Request.Builder().url(URL).build();
 
-        this.okHttpClient = new OkHttpClient();
+        //this.okHttpClient = new OkHttpClient();
 
 
         // use async method, to not block the UI thread
@@ -54,6 +54,7 @@ public class Network {
                         addFullCocktailInfo(c);
                         CocktailList.add(c);
                     }
+
                 }
             }
         });
@@ -76,7 +77,7 @@ public class Network {
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
                     try {
-                        System.out.println("At Cocktail "+c.getStrDrink());
+                        System.out.println("Getting all the Information of Cocktail "+c.getStrDrink());
                         JSONObject responseObject = new JSONObject(rawResponse);
                         JSONArray responseArray = responseObject.getJSONArray("drinks");
                         //System.out.println("Response: "+responseArray.toString());
