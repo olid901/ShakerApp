@@ -27,7 +27,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Request request = new Request.Builder().url(URL).build();
+
+        ArrayList<Cocktail> Cocktails = new ArrayList<Cocktail>();
+        Network Network1 = new Network();
+        Network1.loadCocktails(URL, Cocktails);
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for (Cocktail c : Cocktails){
+            System.out.println(c);
+        }
+
+
+
+        /*final Request request = new Request.Builder().url(URL).build();
 
         this.okHttpClient = new OkHttpClient();
 
@@ -53,10 +70,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
+
+
     }
 
-    private List<Cocktail> getTextInformation(String rawResponse) {
+   /* private List<Cocktail> getTextInformation(String rawResponse) {
         List<Cocktail> results = new ArrayList<>();
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
@@ -72,6 +91,6 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Something went wrong here");
         }
         return results;
-    }
+    }*/
 
 }
