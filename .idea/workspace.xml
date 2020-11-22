@@ -22,8 +22,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aadec54-a085-4e3e-ac7d-00aa4540062b" name="Default Changelist" comment="Network class added (geht noch nicht ganz)">
+    <list default="true" id="1aadec54-a085-4e3e-ac7d-00aa4540062b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Cocktail.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Cocktail.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/MainActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Network.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Network.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,6 +47,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="navigation-menu" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1kEhsRvZt0oFvP6jCf02PuIjwWz" />
@@ -182,22 +189,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="760" y="97" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1606062790702" />
-    <state width="1876" height="385" key="GridCell.Tab.0.bottom" timestamp="1606062994165">
+    <state width="1876" height="385" key="GridCell.Tab.0.bottom" timestamp="1606063572934">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="385" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606062994165" />
-    <state width="1876" height="385" key="GridCell.Tab.0.center" timestamp="1606062994165">
+    <state width="1876" height="385" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606063572934" />
+    <state width="1876" height="385" key="GridCell.Tab.0.center" timestamp="1606063572934">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="385" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606062994165" />
-    <state width="1876" height="385" key="GridCell.Tab.0.left" timestamp="1606062994165">
+    <state width="1876" height="385" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606063572934" />
+    <state width="1876" height="385" key="GridCell.Tab.0.left" timestamp="1606063572933">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="385" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606062994165" />
-    <state width="1876" height="385" key="GridCell.Tab.0.right" timestamp="1606062994165">
+    <state width="1876" height="385" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606063572933" />
+    <state width="1876" height="385" key="GridCell.Tab.0.right" timestamp="1606063572934">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="385" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606062994165" />
+    <state width="1876" height="385" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606063572934" />
     <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1606062523292">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -206,5 +213,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1249" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605281344506" />
+    <state x="730" y="233" key="git4idea.branch.GitSmartOperationDialog" timestamp="1606063595877">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="730" y="233" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1606063595877" />
   </component>
 </project>

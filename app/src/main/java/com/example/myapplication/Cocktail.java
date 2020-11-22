@@ -2,8 +2,6 @@ package com.example.myapplication;
 
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
-
 public class Cocktail {
     public int getID() {
         return ID;
@@ -11,14 +9,11 @@ public class Cocktail {
 
     private int ID;
     private String StrDrink;
-
-    public String getStrDrink() {
-        return StrDrink;
-    }
-
     private String Img_Url;
     private ArrayList<String> Ingredients, Measures;
     private String Instruction, Category, Alcoholic, Glass, Tags;
+
+    public String getStrDrink() { return StrDrink; }
 
     public void setInstruction(String instruction) {
         this.Instruction = instruction;
@@ -51,9 +46,12 @@ public class Cocktail {
         this.Alcoholic = "";
         this.Glass = "";
         this.Tags = "";
-        //this.category = category;
-        //this.Ingredients = Ingredients;
-        //this.Measures = Measures;
+        this.Ingredients = new ArrayList<String>();
+        this.Measures = new ArrayList<String>();
+    }
+
+    public void addIngredients(String rawData){
+        //TBA: Siehe Karte Measurements Magic
     }
 
     @Override
@@ -69,7 +67,4 @@ public class Cocktail {
                 '}';
     }
 
-    public void addAdditionalInfo(String Instruction, String Category, String Alcoholic, String Glass, String Tags){
-
-    }
 }
