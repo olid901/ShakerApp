@@ -22,10 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1aadec54-a085-4e3e-ac7d-00aa4540062b" name="Default Changelist" comment="">
+    <list default="true" id="1aadec54-a085-4e3e-ac7d-00aa4540062b" name="Default Changelist" comment="Network class added (geht noch nicht ganz)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Cocktail.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Cocktail.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Network.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Network.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +36,13 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -129,6 +135,21 @@
       <option name="presentableId" value="Default" />
       <updated>1605271864716</updated>
     </task>
+    <task id="LOCAL-00001" summary="Added simple feature to list all Cocktails">
+      <created>1605281328009</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1605281328009</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Network class added (geht noch nicht ganz)">
+      <created>1606062373976</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1606062373976</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -143,34 +164,47 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added simple feature to list all Cocktails" />
+    <MESSAGE value="Network class added (geht noch nicht ganz)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Network class added (geht noch nicht ganz)" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1605278549662">
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1606061656557">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605278549662" />
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1606061656557" />
     <state x="1053" y="100" width="774" height="847" key="AVDManager" timestamp="1605272213504">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="1053" y="100" width="774" height="847" key="AVDManager/0.0.1920.1040@0.0.1920.1040" timestamp="1605272213504" />
-    <state width="1877" height="256" key="GridCell.Tab.0.bottom" timestamp="1605281080113">
+    <state x="760" y="97" key="CommitChangelistDialog2" timestamp="1606062790702">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="256" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1605281080113" />
-    <state width="1877" height="256" key="GridCell.Tab.0.center" timestamp="1605281080112">
+    <state x="760" y="97" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1606062790702" />
+    <state width="1876" height="385" key="GridCell.Tab.0.bottom" timestamp="1606062994165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="256" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1605281080112" />
-    <state width="1877" height="256" key="GridCell.Tab.0.left" timestamp="1605281080112">
+    <state width="1876" height="385" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606062994165" />
+    <state width="1876" height="385" key="GridCell.Tab.0.center" timestamp="1606062994165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="256" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1605281080112" />
-    <state width="1877" height="256" key="GridCell.Tab.0.right" timestamp="1605281080113">
+    <state width="1876" height="385" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606062994165" />
+    <state width="1876" height="385" key="GridCell.Tab.0.left" timestamp="1606062994165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="256" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1605281080113" />
-    <state x="1249" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605271913506">
+    <state width="1876" height="385" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606062994165" />
+    <state width="1876" height="385" key="GridCell.Tab.0.right" timestamp="1606062994165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1249" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605271913506" />
+    <state width="1876" height="385" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606062994165" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1606062523292">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606062523292" />
+    <state x="1249" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605281344506">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1249" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605281344506" />
   </component>
 </project>
