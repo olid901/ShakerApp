@@ -3,9 +3,7 @@ package com.example.myapplication;
 import java.util.ArrayList;
 
 public class Cocktail {
-    public int getID() {
-        return ID;
-    }
+
 
     private int ID;
     private String StrDrink;
@@ -13,7 +11,35 @@ public class Cocktail {
     private ArrayList<String> Ingredients, Measures;
     private String Instruction, Category, Alcoholic, Glass, Tags;
 
+
+
+    private boolean favorite;
+
+    //GETTER
     public String getStrDrink() { return StrDrink; }
+
+    public int getID() { return ID; }
+
+    public String getImg_Url() { return Img_Url; }
+
+    public ArrayList<String> getIngredients() { return Ingredients; }
+
+    public ArrayList<String> getMeasures() { return Measures; }
+
+    public String getInstruction() { return Instruction; }
+
+    public String getCategory() { return Category; }
+
+    public String getAlcoholic() { return Alcoholic; }
+
+    public String getGlass() { return Glass; }
+
+    public String getTags() { return Tags; }
+
+    public boolean isFavorite() { return favorite; }
+
+    //SETTER
+    public void setFavorite(boolean favorite) { this.favorite = favorite; }
 
     public void setInstruction(String instruction) {
         this.Instruction = instruction;
@@ -52,6 +78,11 @@ public class Cocktail {
 
     public void addIngredients(String rawData){
         //TBA: Siehe Karte Measurements Magic
+    }
+
+    public void downloadPicture(){
+        //TBA in Network! (Karte Bilder speichern)
+        Network.downloadPic(Img_Url);
     }
 
     @Override
