@@ -18,12 +18,25 @@ import okhttp3.Response;
 public class Network {
 
     private OkHttpClient okHttpClient;
+
     public Network(){
         this.okHttpClient = new OkHttpClient();
     }
 
 
-    public void loadCocktails(String URL, ArrayList<Cocktail> CocktailList){
+    public void loadIngredients(ArrayList<String> IngredientList){
+        //TDA: Siehe Karte Zutaten abfragen
+    }
+
+    public void addFullIngredientInfo(Ingredient i){
+        //TDA: Siehe Karte Zutaten abfragen
+    }
+
+    public static void downloadPic(String URL){
+        //TBA: Siehe Karte Bilder speichern
+    }
+
+    public void loadCocktails(String URL, ArrayList<Cocktail> CocktailList) {
 
         final Request request = new Request.Builder().url(URL).build();
 
@@ -41,19 +54,24 @@ public class Network {
                     String rawResponse = response.body().string();
                     System.out.println(rawResponse);
 
-                    //Nicht schön: Erst alle Cocktails in cocktsials speichern und dann einzeln in CocktailList hinzufügen, funktioniert aber erstmal
+                    //Nicht schön: Erst alle Cocktails in cocktails speichern und dann einzeln in CocktailList hinzufügen, funktioniert aber erstmal
                     List<Cocktail> cocktails = extractCocktails(rawResponse);
-                    for (Cocktail c : cocktails){
-                        addFullCocktailInfo(c);
-                        CocktailList.add(c);
-                    }
+                    List<Cocktail> sublist1 = cocktails.subList(0, (int) cocktails.size() / 2);
+                    List<Cocktail> sublist2 = cocktails.subList((int) cocktails.size() / 2, (int) cocktails.size());
 
+                    for (Cocktail c : cocktails) {
+
+                        //addFullCocktailInfo(c);
+                        CocktailList.add(c);
+
+                    }
                 }
             }
         });
     }
 
-    private void addFullCocktailInfo(Cocktail c){
+
+    public void addFullCocktailInfo(Cocktail c){
 
         String URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i="+c.getID();
         final Request request = new Request.Builder().url(URL).build();
@@ -70,7 +88,7 @@ public class Network {
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
                     try {
-                        System.out.println("Getting all the Information of Cocktail "+c.getStrDrink());
+                        //System.out.println("Getting all the Information of Cocktail "+c.getStrDrink());
                         JSONObject responseObject = new JSONObject(rawResponse);
                         JSONArray responseArray = responseObject.getJSONArray("drinks");
                         JSONObject tempObject = responseArray.getJSONObject(0);

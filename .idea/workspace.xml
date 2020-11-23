@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
@@ -23,6 +31,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1aadec54-a085-4e3e-ac7d-00aa4540062b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Ingredient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Cocktail.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/Cocktail.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myapplication/MainActivity.java" afterDir="false" />
@@ -60,6 +69,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Nexus_6_API_27" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-11-23T09:39:08.878Z" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -156,7 +167,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606062373976</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Schönheits-OP: Code mal ordentlich aufgeräumt">
+      <created>1606065787915</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1606065787915</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -174,41 +192,42 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added simple feature to list all Cocktails" />
     <MESSAGE value="Network class added (geht noch nicht ganz)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Network class added (geht noch nicht ganz)" />
+    <MESSAGE value="Schönheits-OP: Code mal ordentlich aufgeräumt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Schönheits-OP: Code mal ordentlich aufgeräumt" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1606061656557">
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1606117825858">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1606061656557" />
-    <state x="1053" y="100" width="774" height="847" key="AVDManager" timestamp="1605272213504">
+    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1606117825858" />
+    <state x="1053" y="100" width="774" height="847" key="AVDManager" timestamp="1606124361123">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1053" y="100" width="774" height="847" key="AVDManager/0.0.1920.1040@0.0.1920.1040" timestamp="1605272213504" />
-    <state x="760" y="97" key="CommitChangelistDialog2" timestamp="1606062790702">
+    <state x="1053" y="100" width="774" height="847" key="AVDManager/0.0.1920.1040@0.0.1920.1040" timestamp="1606124361123" />
+    <state x="760" y="97" key="CommitChangelistDialog2" timestamp="1606065787059">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="760" y="97" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1606062790702" />
-    <state width="1876" height="385" key="GridCell.Tab.0.bottom" timestamp="1606063572934">
+    <state x="760" y="97" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1606065787059" />
+    <state width="1859" height="425" key="GridCell.Tab.0.bottom" timestamp="1606124340409">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="385" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606063572934" />
-    <state width="1876" height="385" key="GridCell.Tab.0.center" timestamp="1606063572934">
+    <state width="1859" height="425" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1606124340409" />
+    <state width="1859" height="425" key="GridCell.Tab.0.center" timestamp="1606124340408">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="385" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606063572934" />
-    <state width="1876" height="385" key="GridCell.Tab.0.left" timestamp="1606063572933">
+    <state width="1859" height="425" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1606124340408" />
+    <state width="1859" height="425" key="GridCell.Tab.0.left" timestamp="1606124340408">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="385" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606063572933" />
-    <state width="1876" height="385" key="GridCell.Tab.0.right" timestamp="1606063572934">
+    <state width="1859" height="425" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1606124340408" />
+    <state width="1859" height="425" key="GridCell.Tab.0.right" timestamp="1606124340409">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1876" height="385" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606063572934" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1606062523292">
+    <state width="1859" height="425" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1606124340409" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1606065860264">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606062523292" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1606065860264" />
     <state x="1249" y="437" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605281344506">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
