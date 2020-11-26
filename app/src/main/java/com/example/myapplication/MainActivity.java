@@ -1,96 +1,37 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import okhttp3.*;
-
 
 import android.os.Bundle;
-import android.util.Log;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private OkHttpClient okHttpClient;
-
-    private static final String URL = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?a=Alcoholic";
+    private static final String Cocktails_URL = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?a=Alcoholic";
+    private static final String Ingredients_URL = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list";
+    public ArrayList<Cocktail> Cocktails;
+    public ArrayList<Ingredient> Ingredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Cocktails laden
+        Cocktails = new ArrayList<Cocktail>();
+        Ingredients = new ArrayList<Ingredient>();
 
-        ArrayList<Cocktail> Cocktails = new ArrayList<Cocktail>();
         Network Network1 = new Network();
-        Network1.loadCocktails(URL, Cocktails);
+        Network1.loadCocktails(Cocktails_URL, Cocktails);
+        Network1.loadIngredients(Ingredients_URL, Ingredients);
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        for (Cocktail c : Cocktails){
+        for (Cocktail c : Cocktails) {
             System.out.println(c);
         }
-
-
-
-        /*final Request request = new Request.Builder().url(URL).build();
-
-        this.okHttpClient = new OkHttpClient();
-
-
-        // use async method, to not block the UI thread
-        this.okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                //Log.e(TAG, "Could not fetch data! Message: " + e);
-                System.out.println("Something went wrong there");
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String rawResponse = response.body().string();
-                    System.out.println(rawResponse);
-
-                    //GET ALL THE COCKTAILS INFORMATION (ONLY ID, NAME AND IMG_URL)
-                    List<Cocktail> textInfo = getTextInformation(rawResponse);
-                    for (Cocktail c : textInfo){
-                        System.out.println(c);
-                    }
-                }
-            }
-        });*/
-
-
-    }
-
-   /* private List<Cocktail> getTextInformation(String rawResponse) {
-        List<Cocktail> results = new ArrayList<>();
-        try {
-            JSONObject responseObject = new JSONObject(rawResponse);
-            JSONArray responseArray = responseObject.getJSONArray("drinks");
-            for (int index = 0; index < responseArray.length(); index++) {
-                JSONObject tempObject = responseArray.getJSONObject(index);
-                String Name = tempObject.getString("strDrink");
-                String Img_Url = tempObject.getString("strDrinkThumb");
-                int ID = tempObject.getInt("idDrink");
-                results.add(new Cocktail(ID, Name, Img_Url));
-            }
-        } catch (JSONException e) {
-            System.out.println("Something went wrong here");
+        for (Ingredient i : Ingredients) {
+            System.out.println(i);
         }
-        return results;
-    }*/
-
+    }
 }

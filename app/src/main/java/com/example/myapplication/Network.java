@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import android.app.Activity;
-
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,19 +17,48 @@ import okhttp3.Response;
 
 public class Network {
 
+    private OkHttpClient okHttpClient;
+
     public Network(){
         this.okHttpClient = new OkHttpClient();
     }
 
-    private OkHttpClient okHttpClient;
 
-    public void loadCocktails(String URL, ArrayList<Cocktail> CocktailList){
 
-        //ArrayList<Cocktail> Cocktails;
+    public void loadIngredients(String URL, ArrayList<Ingredient> IngredientList){
         final Request request = new Request.Builder().url(URL).build();
 
-        //this.okHttpClient = new OkHttpClient();
+        // use async method, to not block the UI thread
+        this.okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                //Log.e(TAG, "Could not fetch data! Message: " + e);
+                System.out.println("Something went wrong there");
+            }
 
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String rawResponse = response.body().string();
+                    System.out.println("Ingredient response: "+rawResponse);
+                    extractIngredients(rawResponse, IngredientList);
+                }
+            }
+        });
+
+    }
+
+    public void addFullIngredientInfo(Ingredient i){
+        //TBA: Siehe Karte Zutaten abfragen
+    }
+
+    public static void downloadPic(String URL){
+        //TBA: Siehe Karte Bilder speichern
+    }
+
+    public void loadCocktails(String URL, ArrayList<Cocktail> CocktailList) {
+
+        final Request request = new Request.Builder().url(URL).build();
 
         // use async method, to not block the UI thread
         this.okHttpClient.newCall(request).enqueue(new Callback() {
@@ -47,23 +74,25 @@ public class Network {
                     String rawResponse = response.body().string();
                     System.out.println(rawResponse);
 
-                    //GET ALL THE COCKTAILS INFORMATION (ONLY ID, NAME AND IMG_URL)
-                    List<Cocktail> textInfo = extractCocktails(rawResponse);
+                    //Nicht schön: Erst alle Cocktails in cocktails speichern und dann einzeln in CocktailList hinzufügen, funktioniert aber erstmal
+                    List<Cocktail> cocktails = extractCocktails(rawResponse);
 
-                    for (Cocktail c : textInfo){
-                        addFullCocktailInfo(c);
+                    for (Cocktail c : cocktails) {
+
+                        //addFullCocktailInfo(c);
                         CocktailList.add(c);
-                    }
 
+                    }
                 }
             }
         });
     }
 
-    private void addFullCocktailInfo(Cocktail c){
+
+    public void addFullCocktailInfo(Cocktail c){
+
         String URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i="+c.getID();
         final Request request = new Request.Builder().url(URL).build();
-        //this.okHttpClient = new OkHttpClient();
 
         this.okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -77,10 +106,9 @@ public class Network {
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
                     try {
-                        System.out.println("Getting all the Information of Cocktail "+c.getStrDrink());
+                        //System.out.println("Getting all the Information of Cocktail "+c.getStrDrink());
                         JSONObject responseObject = new JSONObject(rawResponse);
                         JSONArray responseArray = responseObject.getJSONArray("drinks");
-                        //System.out.println("Response: "+responseArray.toString());
                         JSONObject tempObject = responseArray.getJSONObject(0);
                         c.setAlcoholic(tempObject.getString("strAlcoholic"));
                         c.setInstruction(tempObject.getString("strInstructions"));
@@ -117,72 +145,19 @@ public class Network {
         return results;
     }
 
-
-}
-
-    /*static String mResponse;
-
-    public static String getRawResponse(String URL) {
-        OkHttpClient okHttpClient;
-
-        final Request request = new Request.Builder().url(URL).build();
-
-        okHttpClient = new OkHttpClient();
-
-        final String[] anwser = new String[1];
-        //String mResponse;
-        // use async method, to not block the UI thread
-        String res = "123";
-        Thread callThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String body = okHttpClient.newCall(request).execute().body().toString();
-                    res = body;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-        return res;
-
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                //Log.e(TAG, "Could not fetch data! Message: " + e);
-                System.out.println("Something went wrong there");
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    String rawResponse = response.body().string();
-                    System.out.println(rawResponse);
-                    mResponse = response.body().string();
-                }
-            }
-        });
-        return mResponse;
-    }
-    }
-
-    private List<Cocktail> getTextInformation(String rawResponse) {
-        List<Cocktail> results = new ArrayList<>();
+    private void extractIngredients(String rawResponse, ArrayList<Ingredient> IngredientList) {
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
             for (int index = 0; index < responseArray.length(); index++) {
                 JSONObject tempObject = responseArray.getJSONObject(index);
-                String Name = tempObject.getString("strDrink");
-                String Img_Url = tempObject.getString("strDrinkThumb");
-                int ID = tempObject.getInt("idDrink");
-                results.add(new Cocktail(ID, Name, Img_Url));
+                String Name = tempObject.getString("strIngredient1");
+                IngredientList.add(new Ingredient(Name));
             }
         } catch (JSONException e) {
             System.out.println("Something went wrong here");
         }
-        return results;
-    }*/
+    }
 
 
+}
