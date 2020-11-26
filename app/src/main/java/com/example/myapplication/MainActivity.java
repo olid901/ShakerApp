@@ -25,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
         Network Network1 = new Network();
         Network1.loadCocktails(Cocktails_URL, Cocktails);
         Network1.loadIngredients(Ingredients_URL, Ingredients);
+        Network1.downloadPic(getFilesDir(),"https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg");
 
+        System.out.println("getFilesDir: "+getFilesDir().toString());
 
         for (Cocktail c : Cocktails) {
             System.out.println(c);
