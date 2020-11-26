@@ -2,23 +2,42 @@ package com.example.myapplication;
 
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
-
 public class Cocktail {
-    public int getID() {
-        return ID;
-    }
+
 
     private int ID;
     private String StrDrink;
-
-    public String getStrDrink() {
-        return StrDrink;
-    }
-
     private String Img_Url;
     private ArrayList<String> Ingredients, Measures;
     private String Instruction, Category, Alcoholic, Glass, Tags;
+    private boolean favorite;
+
+
+    //GETTER
+    public String getStrDrink() { return StrDrink; }
+
+    public int getID() { return ID; }
+
+    public String getImg_Url() { return Img_Url; }
+
+    public ArrayList<String> getIngredients() { return Ingredients; }
+
+    public ArrayList<String> getMeasures() { return Measures; }
+
+    public String getInstruction() { return Instruction; }
+
+    public String getCategory() { return Category; }
+
+    public String getAlcoholic() { return Alcoholic; }
+
+    public String getGlass() { return Glass; }
+
+    public String getTags() { return Tags; }
+
+    public boolean isFavorite() { return favorite; }
+
+    //SETTER
+    public void setFavorite(boolean favorite) { this.favorite = favorite; }
 
     public void setInstruction(String instruction) {
         this.Instruction = instruction;
@@ -51,9 +70,17 @@ public class Cocktail {
         this.Alcoholic = "";
         this.Glass = "";
         this.Tags = "";
-        //this.category = category;
-        //this.Ingredients = Ingredients;
-        //this.Measures = Measures;
+        this.Ingredients = new ArrayList<String>();
+        this.Measures = new ArrayList<String>();
+    }
+
+    public void addIngredients(String rawData){
+        //TBA: Siehe Karte Measurements Magic
+    }
+
+    public void downloadPicture(){
+        //TBA in Network! (Karte Bilder speichern)
+        Network.downloadPic(Img_Url);
     }
 
     @Override
@@ -69,7 +96,4 @@ public class Cocktail {
                 '}';
     }
 
-    public void addAdditionalInfo(String Instruction, String Category, String Alcoholic, String Glass, String Tags){
-
-    }
 }
