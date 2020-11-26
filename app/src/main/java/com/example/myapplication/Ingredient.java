@@ -27,4 +27,12 @@ public class Ingredient {
             return "https://www.thecocktaildb.com/images/ingredients/"+StrIngredient+".png";
     }
 
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "StrIngredient='" + StrIngredient + '\'' +
+                ", StrID='" + StrID + '\'' +
+                ", atHome=" + atHome +
+                '}';
+    }
 }
