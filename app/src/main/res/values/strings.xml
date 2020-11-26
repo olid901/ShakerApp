@@ -5,4 +5,10 @@
     <string name="navigation_header_image">Navigation Header Image</string>
     <string name="navigation_header_title">ShakerApp</string>
     <string name="navigation_header_sub">Die geile Cocktail-App!</string>
+
+    <string name="popular_drinks">Popular Drinks</string>
+    <string name="saved_drinks">Saved Drinks</string>
+    <string name="all_drinks">All Drinks</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="settings">Settings</string>
 </resources>
