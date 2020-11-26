@@ -13,7 +13,7 @@ public class Ingredient {
 
     public void downloadPicture(){
         //TBA in Network! (Karte Bilder speichern)
-        Network.downloadPic(Img_Url(SMALL));
+        //Network.downloadPic(Img_Url(SMALL));
     }
 
     private String Img_Url(short size){
@@ -27,4 +27,12 @@ public class Ingredient {
             return "https://www.thecocktaildb.com/images/ingredients/"+StrIngredient+".png";
     }
 
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "StrIngredient='" + StrIngredient + '\'' +
+                ", StrID='" + StrID + '\'' +
+                ", atHome=" + atHome +
+                '}';
+    }
 }

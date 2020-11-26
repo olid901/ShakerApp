@@ -1,23 +1,35 @@
 package com.example.myapplication;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okio.BufferedSink;
+import okio.Okio;
+
 
 public class Network {
 
-    private OkHttpClient okHttpClient;
+    static private OkHttpClient okHttpClient;
 
     public Network(){
         this.okHttpClient = new OkHttpClient();
@@ -25,11 +37,11 @@ public class Network {
 
 
 
-    public void loadIngredients(String URL, ArrayList<Ingredient> IngredientList){
+    public static void loadIngredients(String URL, ArrayList<Ingredient> IngredientList){
         final Request request = new Request.Builder().url(URL).build();
 
         // use async method, to not block the UI thread
-        this.okHttpClient.newCall(request).enqueue(new Callback() {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 //Log.e(TAG, "Could not fetch data! Message: " + e);
@@ -48,20 +60,54 @@ public class Network {
 
     }
 
-    public void addFullIngredientInfo(Ingredient i){
+
+
+    public static void addFullIngredientInfo(Ingredient i){
         //TBA: Siehe Karte Zutaten abfragen
     }
 
-    public static void downloadPic(String URL){
-        //TBA: Siehe Karte Bilder speichern
+
+    public static void downloadPic(String Filename, String URL){
+        Request request = new Request.Builder().url(URL).build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Failed to download file: " + response);
+                }
+
+                InputStream inputStream = response.body().byteStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+                System.out.println("Trying to save file");
+                //File file = new File (android.os.Environment.getExternalStorageDirectory(),"test2.jpg");
+                File file = new File(MainActivity.localDir, "Filename");
+
+                // ???
+                if (file.exists ()) file.delete ();
+                try {
+                    FileOutputStream out = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    out.flush();
+                    out.close();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println("saved!");
+            }
+        });
     }
 
-    public void loadCocktails(String URL, ArrayList<Cocktail> CocktailList) {
+    public static void loadCocktails(String URL, ArrayList<Cocktail> CocktailList) {
 
         final Request request = new Request.Builder().url(URL).build();
 
         // use async method, to not block the UI thread
-        this.okHttpClient.newCall(request).enqueue(new Callback() {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 //Log.e(TAG, "Could not fetch data! Message: " + e);
@@ -72,29 +118,23 @@ public class Network {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
-                    System.out.println(rawResponse);
+                    System.out.println("Cocktailsdata: "+rawResponse);
 
-                    //Nicht schön: Erst alle Cocktails in cocktails speichern und dann einzeln in CocktailList hinzufügen, funktioniert aber erstmal
-                    List<Cocktail> cocktails = extractCocktails(rawResponse);
+                    extractAndAddCocktails(rawResponse, CocktailList);
 
-                    for (Cocktail c : cocktails) {
 
-                        //addFullCocktailInfo(c);
-                        CocktailList.add(c);
-
-                    }
                 }
             }
         });
     }
 
 
-    public void addFullCocktailInfo(Cocktail c){
+    public static void addFullCocktailInfo(Cocktail c){
 
         String URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i="+c.getID();
         final Request request = new Request.Builder().url(URL).build();
 
-        this.okHttpClient.newCall(request).enqueue(new Callback() {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 //Log.e(TAG, "Could not fetch data! Message: " + e);
@@ -115,6 +155,7 @@ public class Network {
                         c.setCategory(tempObject.getString("strCategory"));
                         c.setGlass(tempObject.getString("strGlass"));
                         c.setTags(tempObject.getString("strGlass"));
+                        extractAndAddIngredientsAndMeasurments(rawResponse, c);
 
                     } catch (JSONException e) {
                         System.out.println("Something went wrong here");
@@ -127,8 +168,8 @@ public class Network {
 
     }
 
-    private List<Cocktail> extractCocktails(String rawResponse) {
-        List<Cocktail> results = new ArrayList<>();
+    private static void extractAndAddCocktails(String rawResponse, ArrayList<Cocktail> Cocktails) {
+        //List<Cocktail> results = new ArrayList<>();
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
@@ -137,15 +178,15 @@ public class Network {
                 String Name = tempObject.getString("strDrink");
                 String Img_Url = tempObject.getString("strDrinkThumb");
                 int ID = tempObject.getInt("idDrink");
-                results.add(new Cocktail(ID, Name, Img_Url));
+                Cocktails.add(new Cocktail(ID, Name, Img_Url));
             }
         } catch (JSONException e) {
             System.out.println("Something went wrong here");
         }
-        return results;
+
     }
 
-    private void extractIngredients(String rawResponse, ArrayList<Ingredient> IngredientList) {
+    private static void extractIngredients(String rawResponse, ArrayList<Ingredient> IngredientList) {
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
@@ -154,6 +195,48 @@ public class Network {
                 String Name = tempObject.getString("strIngredient1");
                 IngredientList.add(new Ingredient(Name));
             }
+        } catch (JSONException e) {
+            System.out.println("Something went wrong here");
+        }
+    }
+
+    private static void extractAndAddIngredientsAndMeasurments(String rawResponse, Cocktail c){
+        try {
+            //System.out.println("Getting all the Information of Cocktail "+c.getStrDrink());
+            JSONObject responseObject = new JSONObject(rawResponse);
+            JSONArray responseArray = responseObject.getJSONArray("drinks");
+            JSONObject tempObject = responseArray.getJSONObject(0);
+            String Ingredient, Measurement;
+            for(int i = 1; i <= 15; i++){
+                Ingredient = tempObject.getString("strIngredient"+i);
+                Measurement = tempObject.getString("strMeasure"+i);
+                if(!Ingredient.equals("null")){
+                    //Text replacement weil oz eine scheiß Einheit ist
+                    Measurement = Measurement.replace("1 1/2 oz", "3 cl");
+                    Measurement = Measurement.replace("2 1/2 oz", "7.5 cl");
+                    Measurement = Measurement.replace("3 1/2 oz", "10.5 cl");
+                    Measurement = Measurement.replace("4 1/2 oz", "13.5 cl");
+                    Measurement = Measurement.replace("1/4 oz", "1 cl");
+                    Measurement = Measurement.replace("3/4 oz", "2 cl");
+                    Measurement = Measurement.replace("1/2 oz", "1.5 cl");
+                    Measurement = Measurement.replace("0.5 oz", "1.5 cl");
+                    Measurement = Measurement.replace("1 oz", "3 cl");
+                    Measurement = Measurement.replace("1.5 oz", "4.5 cl");
+                    Measurement = Measurement.replace("2 oz", "6 cl");
+                    Measurement = Measurement.replace("2.5 oz", "7.5 cl");
+                    Measurement = Measurement.replace("3 oz", "9 cl");
+                    Measurement = Measurement.replace("3.5 oz", "10.5 cl");
+                    Measurement = Measurement.replace("4 oz", "12 cl");
+                    Measurement = Measurement.replace("4.5 oz", "13.5 cl");
+                    Measurement = Measurement.replace("5 oz", "15 cl");
+
+                    c.addIngredient(Ingredient, Measurement);
+                }else{
+                    return;
+                }
+
+            }
+
         } catch (JSONException e) {
             System.out.println("Something went wrong here");
         }
