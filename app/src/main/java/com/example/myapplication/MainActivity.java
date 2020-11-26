@@ -12,21 +12,24 @@ import okhttp3.*;
 
 
 import android.os.Bundle;
+import java.io.File;
 import android.util.Log;
 import android.view.Menu;
-
 import com.google.android.material.navigation.NavigationView;
-
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 
+
 public class MainActivity extends AppCompatActivity {
+
+
+    //Network Constructor muss ein mal ausgeführt werden
+    Network n = new Network();
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -34,9 +37,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String Ingredients_URL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/list.php?i=list";
     public ArrayList<Cocktail> Cocktails;
     public ArrayList<Ingredient> Ingredients;
+    public static File localDir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        localDir = getFilesDir();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -58,17 +64,10 @@ public class MainActivity extends AppCompatActivity {
         Cocktails = new ArrayList<Cocktail>();
         Ingredients = new ArrayList<Ingredient>();
 
-        Network Network1 = new Network();
-        Network1.loadCocktails(Cocktails_URL, Cocktails);
-        Network1.loadIngredients(Ingredients_URL, Ingredients);
+        Network.loadCocktails(Cocktails_URL, Cocktails);
+        Network.loadIngredients(Ingredients_URL, Ingredients);
+        //Network.downloadPic("test2.jpg", "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg");
 
-
-        for (Cocktail c : Cocktails) {
-            System.out.println(c);
-        }
-        for (Ingredient i : Ingredients) {
-            System.out.println(i);
-        }
     }
 
     @Override
