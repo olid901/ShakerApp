@@ -10,10 +10,8 @@ public class Cocktail {
     private String Img_Url;
     private ArrayList<String> Ingredients, Measures;
     private String Instruction, Category, Alcoholic, Glass, Tags;
-
-
-
     private boolean favorite;
+
 
     //GETTER
     public String getStrDrink() { return StrDrink; }

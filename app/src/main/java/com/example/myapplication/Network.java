@@ -24,12 +24,32 @@ public class Network {
     }
 
 
-    public void loadIngredients(ArrayList<String> IngredientList){
-        //TDA: Siehe Karte Zutaten abfragen
+
+    public void loadIngredients(String URL, ArrayList<Ingredient> IngredientList){
+        final Request request = new Request.Builder().url(URL).build();
+
+        // use async method, to not block the UI thread
+        this.okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                //Log.e(TAG, "Could not fetch data! Message: " + e);
+                System.out.println("Something went wrong there");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String rawResponse = response.body().string();
+                    System.out.println("Ingredient response: "+rawResponse);
+                    extractIngredients(rawResponse, IngredientList);
+                }
+            }
+        });
+
     }
 
     public void addFullIngredientInfo(Ingredient i){
-        //TDA: Siehe Karte Zutaten abfragen
+        //TBA: Siehe Karte Zutaten abfragen
     }
 
     public static void downloadPic(String URL){
@@ -56,8 +76,6 @@ public class Network {
 
                     //Nicht schön: Erst alle Cocktails in cocktails speichern und dann einzeln in CocktailList hinzufügen, funktioniert aber erstmal
                     List<Cocktail> cocktails = extractCocktails(rawResponse);
-                    List<Cocktail> sublist1 = cocktails.subList(0, (int) cocktails.size() / 2);
-                    List<Cocktail> sublist2 = cocktails.subList((int) cocktails.size() / 2, (int) cocktails.size());
 
                     for (Cocktail c : cocktails) {
 
@@ -125,6 +143,20 @@ public class Network {
             System.out.println("Something went wrong here");
         }
         return results;
+    }
+
+    private void extractIngredients(String rawResponse, ArrayList<Ingredient> IngredientList) {
+        try {
+            JSONObject responseObject = new JSONObject(rawResponse);
+            JSONArray responseArray = responseObject.getJSONArray("drinks");
+            for (int index = 0; index < responseArray.length(); index++) {
+                JSONObject tempObject = responseArray.getJSONObject(index);
+                String Name = tempObject.getString("strIngredient1");
+                IngredientList.add(new Ingredient(Name));
+            }
+        } catch (JSONException e) {
+            System.out.println("Something went wrong here");
+        }
     }
 
 

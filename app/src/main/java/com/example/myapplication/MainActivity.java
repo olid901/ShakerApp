@@ -8,8 +8,10 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String URL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/filter.php?a=Alcoholic";
-    ArrayList<Cocktail> Cocktails;
+    private static final String Cocktails_URL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/filter.php?a=Alcoholic";
+    private static final String Ingredients_URL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/list.php?i=list";
+    public ArrayList<Cocktail> Cocktails;
+    public ArrayList<Ingredient> Ingredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,11 +20,18 @@ public class MainActivity extends AppCompatActivity {
 
         //Cocktails laden
         Cocktails = new ArrayList<Cocktail>();
+        Ingredients = new ArrayList<Ingredient>();
+
         Network Network1 = new Network();
-        Network1.loadCocktails(URL, Cocktails);
+        Network1.loadCocktails(Cocktails_URL, Cocktails);
+        Network1.loadIngredients(Ingredients_URL, Ingredients);
+
 
         for (Cocktail c : Cocktails) {
             System.out.println(c);
+        }
+        for (Ingredient i : Ingredients) {
+            System.out.println(i);
         }
     }
 }
