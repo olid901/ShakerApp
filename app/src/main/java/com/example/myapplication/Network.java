@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -27,7 +28,7 @@ import okio.Okio;
 
 public class Network {
 
-    private OkHttpClient okHttpClient;
+    static private OkHttpClient okHttpClient;
 
     public Network(){
         this.okHttpClient = new OkHttpClient();
@@ -35,11 +36,11 @@ public class Network {
 
 
 
-    public void loadIngredients(String URL, ArrayList<Ingredient> IngredientList){
+    public static void loadIngredients(String URL, ArrayList<Ingredient> IngredientList){
         final Request request = new Request.Builder().url(URL).build();
 
         // use async method, to not block the UI thread
-        this.okHttpClient.newCall(request).enqueue(new Callback() {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 //Log.e(TAG, "Could not fetch data! Message: " + e);
@@ -58,11 +59,15 @@ public class Network {
 
     }
 
-    public void addFullIngredientInfo(Ingredient i){
+
+
+    public static void addFullIngredientInfo(Ingredient i){
         //TBA: Siehe Karte Zutaten abfragen
     }
 
-    public void downloadPic(File dir, String URL){
+
+
+    public static void downloadPic(String Filename, String URL){
         Request request = new Request.Builder().url(URL).build();
         okHttpClient.newCall(request).enqueue(new Callback() {
             public void onFailure(Call call, IOException e) {
@@ -73,18 +78,15 @@ public class Network {
                 if (!response.isSuccessful()) {
                     throw new IOException("Failed to download file: " + response);
                 }
-//                System.out.println("Trying to save D:/test.jpg");
-//                FileOutputStream fos = new FileOutputStream("D:/test.jpg");
-//                fos.write(response.body().bytes());
-//                fos.close();
-//                System.out.println("saved!");
+
                 InputStream inputStream = response.body().byteStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
                 System.out.println("Trying to save file");
                 //File file = new File (android.os.Environment.getExternalStorageDirectory(),"test2.jpg");
-                File file = new File(dir, "test2.jpg");
+                File file = new File(MainActivity.localDir, "Filename");
 
+                // ???
                 if (file.exists ()) file.delete ();
                 try {
                     FileOutputStream out = new FileOutputStream(file);
@@ -100,12 +102,12 @@ public class Network {
         });
     }
 
-    public void loadCocktails(String URL, ArrayList<Cocktail> CocktailList) {
+    public static void loadCocktails(String URL, ArrayList<Cocktail> CocktailList) {
 
         final Request request = new Request.Builder().url(URL).build();
 
         // use async method, to not block the UI thread
-        this.okHttpClient.newCall(request).enqueue(new Callback() {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 //Log.e(TAG, "Could not fetch data! Message: " + e);
@@ -133,12 +135,12 @@ public class Network {
     }
 
 
-    public void addFullCocktailInfo(Cocktail c){
+    public static void addFullCocktailInfo(Cocktail c){
 
         String URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i="+c.getID();
         final Request request = new Request.Builder().url(URL).build();
 
-        this.okHttpClient.newCall(request).enqueue(new Callback() {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 //Log.e(TAG, "Could not fetch data! Message: " + e);
@@ -171,7 +173,7 @@ public class Network {
 
     }
 
-    private List<Cocktail> extractCocktails(String rawResponse) {
+    private static List<Cocktail> extractCocktails(String rawResponse) {
         List<Cocktail> results = new ArrayList<>();
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
@@ -189,7 +191,7 @@ public class Network {
         return results;
     }
 
-    private void extractIngredients(String rawResponse, ArrayList<Ingredient> IngredientList) {
+    private static void extractIngredients(String rawResponse, ArrayList<Ingredient> IngredientList) {
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
