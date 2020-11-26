@@ -74,8 +74,9 @@ public class Cocktail {
         this.Measures = new ArrayList<String>();
     }
 
-    public void addIngredients(String rawData){
-        //TBA: Siehe Karte Measurements Magic
+    public void addIngredient(String Ingr, String Measurement){
+        Ingredients.add(Ingr);
+        Measures.add(Measurement);
     }
 
     public void downloadPicture(){
@@ -88,12 +89,15 @@ public class Cocktail {
         return "Cocktail{" +
                 "ID=" + ID +
                 ", StrDrink='" + StrDrink + '\'' +
+                ", Img_Url='" + Img_Url + '\'' +
+                ", Ingredients=" + Ingredients +
+                ", Measures=" + Measures +
                 ", Instruction='" + Instruction + '\'' +
                 ", Category='" + Category + '\'' +
                 ", Alcoholic='" + Alcoholic + '\'' +
                 ", Glass='" + Glass + '\'' +
                 ", Tags='" + Tags + '\'' +
+                ", favorite=" + favorite +
                 '}';
     }
-
 }
