@@ -1,11 +1,18 @@
 package com.example.myapplication;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +21,9 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okio.BufferedSink;
+import okio.Okio;
+
 
 public class Network {
 
@@ -52,8 +62,42 @@ public class Network {
         //TBA: Siehe Karte Zutaten abfragen
     }
 
-    public static void downloadPic(String URL){
-        //TBA: Siehe Karte Bilder speichern
+    public void downloadPic(File dir, String URL){
+        Request request = new Request.Builder().url(URL).build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Failed to download file: " + response);
+                }
+//                System.out.println("Trying to save D:/test.jpg");
+//                FileOutputStream fos = new FileOutputStream("D:/test.jpg");
+//                fos.write(response.body().bytes());
+//                fos.close();
+//                System.out.println("saved!");
+                InputStream inputStream = response.body().byteStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+                System.out.println("Trying to save file");
+                //File file = new File (android.os.Environment.getExternalStorageDirectory(),"test2.jpg");
+                File file = new File(dir, "test2.jpg");
+
+                if (file.exists ()) file.delete ();
+                try {
+                    FileOutputStream out = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    out.flush();
+                    out.close();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println("saved!");
+            }
+        });
     }
 
     public void loadCocktails(String URL, ArrayList<Cocktail> CocktailList) {

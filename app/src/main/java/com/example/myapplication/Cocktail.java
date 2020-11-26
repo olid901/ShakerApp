@@ -80,7 +80,7 @@ public class Cocktail {
 
     public void downloadPicture(){
         //TBA in Network! (Karte Bilder speichern)
-        Network.downloadPic(Img_Url);
+        //Network.downloadPic(Img_Url);
     }
 
     @Override
