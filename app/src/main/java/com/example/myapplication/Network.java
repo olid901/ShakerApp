@@ -211,38 +211,9 @@ public class Network {
             String Ingredient, Measurement;
 
             for(int i = 1; i <= 15; i++){
-
                 Ingredient = tempObject.getString("strIngredient"+i);
                 Measurement = tempObject.getString("strMeasure"+i);
-
-                //Text replacement von oz in cl weil oz eine scheiß Einheit ist
                 if(!Ingredient.equals("null") && !Ingredient.equals(" ")){
-                    Pattern patternAll = Pattern.compile("([0-9]+ )?([0-9].)?[0-9] oz");
-                    Pattern patternBruch = Pattern.compile("[0-9]/[0-9](?= oz)");
-                    Pattern patternDezimalzahl = Pattern.compile("[0-9]+\\.?[0-9]?(?=  ?oz)");
-                    Matcher matcherAll = patternAll.matcher(Measurement);
-                    if (matcherAll.find())
-                    {
-                        double totalOz = 0;
-                        String all = matcherAll.group(0);
-                        String all_replaced = all;
-                        Matcher matcherBruch = patternBruch.matcher(all);
-                        if (matcherBruch.find()){
-                            String Bruch = matcherBruch.group(0);
-                            double DezimalBruch = ((double) Integer.parseInt(String.valueOf(Bruch.charAt(0))))/Integer.parseInt(String.valueOf(Bruch.charAt(2)));
-                            all_replaced = all.replace(Bruch, "");
-                            totalOz += DezimalBruch;
-                        }
-                        Matcher matcherDezimal = patternDezimalzahl.matcher(all_replaced);
-                        if (matcherDezimal.find()){
-                            String Dezizahl = matcherDezimal.group(0);
-                            totalOz += Double.parseDouble(Dezizahl);
-                        }
-                        String replacement = ozToCl(totalOz)+" cl";
-                        Measurement = Measurement.replace(all, replacement);
-                        System.out.println("Regex replacement: "+all+" --> "+replacement);
-
-                    }
                     c.addIngredient(Ingredient, Measurement);
                 }else{
                     return;
@@ -255,8 +226,5 @@ public class Network {
         }
     }
 
-    private static double ozToCl(double oz){
-        return Math.round(2*oz*2.95735)/2.0;
-    }
 
 }
