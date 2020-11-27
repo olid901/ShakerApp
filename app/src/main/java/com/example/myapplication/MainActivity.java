@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         Network.loadCocktails(Cocktails_URL, Cocktails);
         Network.loadIngredients(Ingredients_URL, Ingredients);
+
         //Network.downloadPic("test2.jpg", "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg");
 
     }
