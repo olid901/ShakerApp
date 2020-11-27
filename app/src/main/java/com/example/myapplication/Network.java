@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.appcompat.app.AppCompatActivity;
 import okhttp3.Call;
@@ -202,34 +204,45 @@ public class Network {
 
     private static void extractAndAddIngredientsAndMeasurments(String rawResponse, Cocktail c){
         try {
-            //System.out.println("Getting all the Information of Cocktail "+c.getStrDrink());
+
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
             JSONObject tempObject = responseArray.getJSONObject(0);
             String Ingredient, Measurement;
+
             for(int i = 1; i <= 15; i++){
+
                 Ingredient = tempObject.getString("strIngredient"+i);
                 Measurement = tempObject.getString("strMeasure"+i);
-                if(!Ingredient.equals("null")){
-                    //Text replacement weil oz eine scheiß Einheit ist
-                    Measurement = Measurement.replace("1 1/2 oz", "3 cl");
-                    Measurement = Measurement.replace("2 1/2 oz", "7.5 cl");
-                    Measurement = Measurement.replace("3 1/2 oz", "10.5 cl");
-                    Measurement = Measurement.replace("4 1/2 oz", "13.5 cl");
-                    Measurement = Measurement.replace("1/4 oz", "1 cl");
-                    Measurement = Measurement.replace("3/4 oz", "2 cl");
-                    Measurement = Measurement.replace("1/2 oz", "1.5 cl");
-                    Measurement = Measurement.replace("0.5 oz", "1.5 cl");
-                    Measurement = Measurement.replace("1 oz", "3 cl");
-                    Measurement = Measurement.replace("1.5 oz", "4.5 cl");
-                    Measurement = Measurement.replace("2 oz", "6 cl");
-                    Measurement = Measurement.replace("2.5 oz", "7.5 cl");
-                    Measurement = Measurement.replace("3 oz", "9 cl");
-                    Measurement = Measurement.replace("3.5 oz", "10.5 cl");
-                    Measurement = Measurement.replace("4 oz", "12 cl");
-                    Measurement = Measurement.replace("4.5 oz", "13.5 cl");
-                    Measurement = Measurement.replace("5 oz", "15 cl");
 
+                //Text replacement von oz in cl weil oz eine scheiß Einheit ist
+                if(!Ingredient.equals("null") && !Ingredient.equals(" ")){
+                    Pattern patternAll = Pattern.compile("([0-9]+ )?([0-9].)?[0-9] oz");
+                    Pattern patternBruch = Pattern.compile("[0-9]/[0-9](?= oz)");
+                    Pattern patternDezimalzahl = Pattern.compile("[0-9]+\\.?[0-9]?(?=  ?oz)");
+                    Matcher matcherAll = patternAll.matcher(Measurement);
+                    if (matcherAll.find())
+                    {
+                        double totalOz = 0;
+                        String all = matcherAll.group(0);
+                        String all_replaced = all;
+                        Matcher matcherBruch = patternBruch.matcher(all);
+                        if (matcherBruch.find()){
+                            String Bruch = matcherBruch.group(0);
+                            double DezimalBruch = ((double) Integer.parseInt(String.valueOf(Bruch.charAt(0))))/Integer.parseInt(String.valueOf(Bruch.charAt(2)));
+                            all_replaced = all.replace(Bruch, "");
+                            totalOz += DezimalBruch;
+                        }
+                        Matcher matcherDezimal = patternDezimalzahl.matcher(all_replaced);
+                        if (matcherDezimal.find()){
+                            String Dezizahl = matcherDezimal.group(0);
+                            totalOz += Double.parseDouble(Dezizahl);
+                        }
+                        String replacement = ozToCl(totalOz)+" cl";
+                        Measurement = Measurement.replace(all, replacement);
+                        System.out.println("Regex replacement: "+all+" --> "+replacement);
+
+                    }
                     c.addIngredient(Ingredient, Measurement);
                 }else{
                     return;
@@ -242,5 +255,8 @@ public class Network {
         }
     }
 
+    private static double ozToCl(double oz){
+        return Math.round(2*oz*2.95735)/2.0;
+    }
 
 }
