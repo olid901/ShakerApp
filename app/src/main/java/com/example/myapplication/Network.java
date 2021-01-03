@@ -89,7 +89,9 @@ public class Network {
                 File file = new File(MainActivity.localDir, "Filename");
 
                 // ???
-                if (file.exists ()) file.delete ();
+                if (file.exists())
+                    file.delete();
+
                 try {
                     FileOutputStream out = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
