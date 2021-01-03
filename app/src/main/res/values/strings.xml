@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">My Application</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hallo Welt!</string>
     <string name="navigation_header_image">Navigation Header Image</string>
     <string name="navigation_header_title">ShakerApp</string>
-    <string name="navigation_header_sub">Die geile Cocktail-App!</string>
+    <string name="navigation_header_sub">Die beste Cocktail-App aller Zeiten!</string>
 
     <string name="popular_drinks">Popular Drinks</string>
     <string name="saved_drinks">Saved Drinks</string>
