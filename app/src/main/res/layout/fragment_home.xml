@@ -3,17 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.HomeFragment"
+    tools:context=".ui.BigCocktailFragment"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/big_cocktail_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        />
-
-    <include layout="@layout/big_cocktail_layout" />
-
-
+        android:layout_height="match_parent" />
 </LinearLayout>

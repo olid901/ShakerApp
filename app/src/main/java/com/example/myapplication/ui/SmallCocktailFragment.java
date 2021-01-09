@@ -1,15 +1,14 @@
 package com.example.myapplication.ui;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Cocktail;
 import com.example.myapplication.Network;
@@ -17,15 +16,18 @@ import com.example.myapplication.R;
 
 import java.util.ArrayList;
 
+// TODO: Cocktails klein darstellen
+// Aktuell ist diese Klasse mehr oder weniger ein Stub!
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link SmallCocktailFragment#newInstance} factory method to
  * create an instance of this fragment.
  *
- * Dieses Fragment zeigt die beliebtesten Cocktails groß an, ähnlich wie auf Instagram
+ * Dieses Fragment zeigt Cocktails klein an, was für größere Listen praktischer wird
  * TODO: Das ganze Parameter-Zeug kommt vermutlich ja noch weg
  */
-public class HomeFragment extends Fragment implements BigCocktailRVAdapter.ItemClickListener{
+public class SmallCocktailFragment extends Fragment implements BigCocktailRVAdapter.ItemClickListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,7 +40,7 @@ public class HomeFragment extends Fragment implements BigCocktailRVAdapter.ItemC
     private String mParam1;
     private String mParam2;
 
-    public HomeFragment() {
+    public SmallCocktailFragment() {
         // Required empty public constructor
     }
 
@@ -51,8 +53,8 @@ public class HomeFragment extends Fragment implements BigCocktailRVAdapter.ItemC
      * @return A new instance of fragment HomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
+    public static SmallCocktailFragment newInstance(String param1, String param2) {
+        SmallCocktailFragment fragment = new SmallCocktailFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
