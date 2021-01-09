@@ -20,6 +20,7 @@ import java.util.ArrayList;
 /**
  * Dieses Fragment zeigt die beliebtesten Cocktails groß an, ähnlich wie auf Instagram
  * TODO: Eine einheitliche Fragment-Klasse für die Groß- und Kleinansicht für Cocktails?
+ * TODO: Das kleine "Like"-Herz soll wechseln, wenn der Cocktail bereits geliked wurde
  */
 public class BigCocktailFragment extends Fragment implements BigCocktailRVAdapter.ItemClickListener {
 

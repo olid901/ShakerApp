@@ -30,7 +30,7 @@ public class BigCocktailRVAdapter extends RecyclerView.Adapter<BigCocktailRVAdap
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.big_cocktail_layout, parent, false);
+        View view = layoutInflater.inflate(R.layout.big_cocktail_item, parent, false);
         return new ViewHolder(view);
     }
 
