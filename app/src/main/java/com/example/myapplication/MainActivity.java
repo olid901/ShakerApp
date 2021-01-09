@@ -8,19 +8,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import okhttp3.*;
-
 
 import android.os.Bundle;
 import java.io.File;
-import android.util.Log;
-import android.view.Menu;
+
 import com.google.android.material.navigation.NavigationView;
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.io.IOException;
+
 import java.util.ArrayList;
 
 

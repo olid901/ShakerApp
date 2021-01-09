@@ -7,4 +7,6 @@
 
     <color name="violet_background">#14162b</color>
     <color name="violet_header">#202346</color>
+
+    <color name="ic_cocktail_background">#230312</color>
 </resources>
