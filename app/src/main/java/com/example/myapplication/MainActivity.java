@@ -14,8 +14,9 @@ import java.io.File;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-
+import java.util.stream.Collectors;
 
 
 public class MainActivity extends AppCompatActivity {

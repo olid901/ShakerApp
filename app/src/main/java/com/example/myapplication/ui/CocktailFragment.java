@@ -22,11 +22,11 @@ import java.util.ArrayList;
  * TODO: Eine einheitliche Fragment-Klasse für die Groß- und Kleinansicht für Cocktails?
  * TODO: Das kleine "Like"-Herz soll wechseln, wenn der Cocktail bereits geliked wurde
  */
-public class BigCocktailFragment extends Fragment implements CocktailClickListener {
+public abstract class CocktailFragment extends Fragment implements CocktailClickListener {
 
     BigCocktailRVAdapter adapter;
 
-    public BigCocktailFragment() {
+    public CocktailFragment() {
         // Required empty public constructor
     }
 
@@ -46,14 +46,16 @@ public class BigCocktailFragment extends Fragment implements CocktailClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        // View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(getCurrentFragmentID(), container, false);
 
         ArrayList<Cocktail> cocktailList = new ArrayList<>();
 
         Network.loadCocktails("https://www.thecocktaildb.com/api/json/v2/***REMOVED***/popular.php", cocktailList);
 
         // set up the RecyclerView
-        RecyclerView recyclerView = view.findViewById(R.id.big_cocktail_rv);
+        //RecyclerView recyclerView = view.findViewById(R.id.big_cocktail_rv);
+        RecyclerView recyclerView = view.findViewById(getCurrentRecViewID());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new BigCocktailRVAdapter(getContext(), cocktailList);
 
@@ -71,4 +73,7 @@ public class BigCocktailFragment extends Fragment implements CocktailClickListen
 
         return view;
     }
+
+    abstract int getCurrentFragmentID();
+    abstract int getCurrentRecViewID();
 }
