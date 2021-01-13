@@ -15,13 +15,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class BigCocktailRVAdapter extends RecyclerView.Adapter<BigCocktailRVAdapter.ViewHolder> {
+public class SmallCocktailRVAdapter extends RecyclerView.Adapter<SmallCocktailRVAdapter.ViewHolder> {
 
     private final List<Cocktail> cocktailList;
     private final LayoutInflater layoutInflater;
-    private CocktailClickListener itemClickListener;
+    private ItemClickListener itemClickListener;
 
-    BigCocktailRVAdapter(Context context, List<Cocktail> data) {
+    SmallCocktailRVAdapter(Context context, List<Cocktail> data) {
         this.layoutInflater = LayoutInflater.from(context);
         this.cocktailList = data;
     }
@@ -30,7 +30,7 @@ public class BigCocktailRVAdapter extends RecyclerView.Adapter<BigCocktailRVAdap
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.big_cocktail_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.small_cocktail_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -56,7 +56,7 @@ public class BigCocktailRVAdapter extends RecyclerView.Adapter<BigCocktailRVAdap
 
         ViewHolder(View itemView) {
             super(itemView);
-            cocktailNameView = itemView.findViewById(R.id.big_cocktail_layout_name);
+            cocktailNameView = itemView.findViewById(R.id.small_cocktail_layout_name);
             itemView.setOnClickListener(this);
         }
 
@@ -72,9 +72,12 @@ public class BigCocktailRVAdapter extends RecyclerView.Adapter<BigCocktailRVAdap
     }
 
     // allows clicks events to be caught
-    void setClickListener(CocktailClickListener itemClickListener) {
+    void setClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
-
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
 }

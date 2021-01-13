@@ -27,14 +27,14 @@ import java.util.ArrayList;
  * Dieses Fragment zeigt Cocktails klein an, was für größere Listen praktischer wird
  * TODO: Das ganze Parameter-Zeug kommt vermutlich ja noch weg
  */
-public class SmallCocktailFragment extends Fragment implements BigCocktailRVAdapter.ItemClickListener{
+public class SmallCocktailFragment extends Fragment implements SmallCocktailRVAdapter.ItemClickListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    BigCocktailRVAdapter adapter;
+    SmallCocktailRVAdapter adapter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -82,22 +82,17 @@ public class SmallCocktailFragment extends Fragment implements BigCocktailRVAdap
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_all_cocktails, container, false);
 
 
         ArrayList<Cocktail> cocktailNames = new ArrayList<>();
 
-        Network.loadCocktails("https://www.thecocktaildb.com/api/json/v2/9973533/popular.php", cocktailNames);
-        /*cocktailNames.add("Radioactive Long Island Icetea");
-        cocktailNames.add("Daiquiri");
-        cocktailNames.add("Old Fashioned");
-        cocktailNames.add("Margarita");
-        cocktailNames.add("SPAGHETTIOS");*/
+        Network.loadCocktails("https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?a=Alcoholic", cocktailNames);
 
         // set up the RecyclerView
-        RecyclerView recyclerView = view.findViewById(R.id.big_cocktail_rv);
+        RecyclerView recyclerView = view.findViewById(R.id.small_cocktail_rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new BigCocktailRVAdapter(getContext(), cocktailNames);
+        adapter = new SmallCocktailRVAdapter(getContext(), cocktailNames);
 
         // TODO: Das darf auf keinen Fall so bleiben!
         // Ohne sleep wird im Main-Fragment kein Cocktail angezeigt, weil diese dann noch nicht geladen sind
