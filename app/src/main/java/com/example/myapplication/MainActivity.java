@@ -22,7 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String Cocktails_URL = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?a=Alcoholic";
     private static final String Ingredients_URL = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list";
-    public ArrayList<Cocktail> Cocktails;
-    public ArrayList<Ingredient> Ingredients;
+    // Mapping geht bei Cocktail über die ID, bei Ingredients leider nur über den Namen (siehe Issue: HashMap erstellen)
+    public HashMap<Integer, Cocktail> Cocktails;
+    public HashMap<String, Ingredient> Ingredients;
     public static File localDir;
 
     @Override
@@ -61,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         //Cocktails laden
-        Cocktails = new ArrayList<Cocktail>();
-        Ingredients = new ArrayList<Ingredient>();
+        Cocktails = new HashMap<Integer, Cocktail>();
+        Ingredients = new HashMap<String, Ingredient>();
 
         Network.loadCocktails(Cocktails_URL, Cocktails);
         Network.loadIngredients(Ingredients_URL, Ingredients);

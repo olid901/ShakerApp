@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,7 +40,7 @@ public class Network {
 
 
 
-    public static void loadIngredients(String URL, ArrayList<Ingredient> IngredientList){
+    public static void loadIngredients(String URL, HashMap<String, Ingredient> IngredientMap){
         final Request request = new Request.Builder().url(URL).build();
 
         // use async method, to not block the UI thread
@@ -55,7 +56,7 @@ public class Network {
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
                     System.out.println("Ingredient response: "+rawResponse);
-                    extractIngredients(rawResponse, IngredientList);
+                    extractIngredients(rawResponse, IngredientMap);
                 }
             }
         });
@@ -104,7 +105,7 @@ public class Network {
         });
     }
 
-    public static void loadCocktails(String URL, ArrayList<Cocktail> CocktailList) {
+    public static void loadCocktails(String URL, HashMap<Integer, Cocktail> CocktailMap) {
 
         final Request request = new Request.Builder().url(URL).build();
 
@@ -122,7 +123,7 @@ public class Network {
                     String rawResponse = response.body().string();
                     System.out.println("Cocktailsdata: "+rawResponse);
 
-                    extractAndAddCocktails(rawResponse, CocktailList);
+                    extractAndAddCocktails(rawResponse, CocktailMap);
 
 
                 }
@@ -170,7 +171,7 @@ public class Network {
 
     }
 
-    private static void extractAndAddCocktails(String rawResponse, ArrayList<Cocktail> Cocktails) {
+    private static void extractAndAddCocktails(String rawResponse, HashMap<Integer, Cocktail> Cocktails) {
         //List<Cocktail> results = new ArrayList<>();
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
@@ -180,7 +181,7 @@ public class Network {
                 String Name = tempObject.getString("strDrink");
                 String Img_Url = tempObject.getString("strDrinkThumb");
                 int ID = tempObject.getInt("idDrink");
-                Cocktails.add(new Cocktail(ID, Name, Img_Url));
+                Cocktails.put(ID, new Cocktail(ID, Name, Img_Url));
             }
         } catch (JSONException e) {
             System.out.println("Something went wrong here");
@@ -188,14 +189,14 @@ public class Network {
 
     }
 
-    private static void extractIngredients(String rawResponse, ArrayList<Ingredient> IngredientList) {
+    private static void extractIngredients(String rawResponse, HashMap<String, Ingredient> IngredientList) {
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
             for (int index = 0; index < responseArray.length(); index++) {
                 JSONObject tempObject = responseArray.getJSONObject(index);
                 String Name = tempObject.getString("strIngredient1");
-                IngredientList.add(new Ingredient(Name));
+                IngredientList.put(Name, new Ingredient(Name));
             }
         } catch (JSONException e) {
             System.out.println("Something went wrong here");
