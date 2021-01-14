@@ -1,4 +1,4 @@
-package com.example.myapplication.ui;
+package com.example.myapplication.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,54 +9,57 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Cocktail;
-import com.example.myapplication.R;
+import com.example.myapplication.ui.CocktailClickListener;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class BigCocktailRVAdapter extends RecyclerView.Adapter<BigCocktailRVAdapter.ViewHolder> {
+public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVAdapter.ViewHolder> {
 
     private final List<Cocktail> cocktailList;
     private final LayoutInflater layoutInflater;
     private CocktailClickListener itemClickListener;
 
-    BigCocktailRVAdapter(Context context, List<Cocktail> data) {
+    public CocktailRVAdapter(Context context, List<Cocktail> data) {
         this.layoutInflater = LayoutInflater.from(context);
         this.cocktailList = data;
     }
 
-    // inflates the row layout from xml when needed
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.big_cocktail_item, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(layoutInflater.inflate(getItemLayoutID(), parent, false));
     }
 
-    // binds the data to the TextView in each row
-    // Hier wird der Cocktail-Name und zukünftig auch das Bild zu jedem Cocktail gesetzt
-    // TODO: Bild zu Cocktail anzeigen
+    /**
+     * Hier wird der Cocktail-Name und das Bild zu jedem Eintrag im Recycler View gesetzt
+     * TODO: Bild zu Cocktail anzeigen
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String cocktailName = cocktailList.get(position).getStrDrink();
         holder.cocktailNameView.setText(cocktailName);
     }
 
-    // total number of rows
+    /**
+     * Get total number of rows
+     */
     @Override
     public int getItemCount() {
         return cocktailList.size();
     }
 
 
-    // stores and recycles views as they are scrolled off screen
+    /**
+     * Stores and recycles views as they are scrolled off screen
+     */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView cocktailNameView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            cocktailNameView = itemView.findViewById(R.id.big_cocktail_layout_name);
+            cocktailNameView = itemView.findViewById(getCocktailNameID());
             itemView.setOnClickListener(this);
         }
 
@@ -66,15 +69,28 @@ public class BigCocktailRVAdapter extends RecyclerView.Adapter<BigCocktailRVAdap
         }
     }
 
-    // convenience method for getting data at click position
-    Cocktail getItem(int id) {
+    /**
+     * Convenience method for getting data at click position
+     */
+    public Cocktail getItem(int id) {
         return cocktailList.get(id);
     }
 
-    // allows clicks events to be caught
-    void setClickListener(CocktailClickListener itemClickListener) {
+    /**
+     * allows clicks events to be caught
+     */
+    public void setClickListener(CocktailClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
+    /**
+     * Hole die ID vom jeweiligen Layout eines einzelnen Recycler View Eintrags
+     */
+    public abstract int getItemLayoutID();
+
+    /**
+     * Hole die ID vom TextView, welches den Namen des Cocktails beinhaltet
+     */
+    public abstract int getCocktailNameID();
 
 }
