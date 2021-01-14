@@ -8,32 +8,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import androidx.appcompat.app.AppCompatActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okio.BufferedSink;
-import okio.Okio;
 
 
 public class Network {
 
     static private OkHttpClient okHttpClient;
 
+    // TODO: Da hier vermutlich sowieso alles static sein wird -> Konstruktor durch static-Block ersetzen
     public Network(){
         this.okHttpClient = new OkHttpClient();
     }
@@ -90,7 +87,9 @@ public class Network {
                 File file = new File(MainActivity.localDir, "Filename");
 
                 // ???
-                if (file.exists ()) file.delete ();
+                if (file.exists())
+                    file.delete();
+
                 try {
                     FileOutputStream out = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
