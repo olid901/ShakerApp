@@ -6,31 +6,31 @@
 
     <fragment
         android:id="@+id/nav_popular"
-        android:name="com.example.myapplication.ui.HomeFragment"
+        android:name="com.example.myapplication.ui.fragment.BigCocktailFragment"
         android:label="@string/popular_drinks"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_favorite"
-        android:name="com.example.myapplication.ui.HomeFragment"
+        android:name="com.example.myapplication.ui.fragment.BigCocktailFragment"
         android:label="@string/saved_drinks"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_all_drinks"
-        android:name="com.example.myapplication.ui.HomeFragment"
+        android:name="com.example.myapplication.ui.fragment.SmallCocktailFragment"
         android:label="@string/all_drinks"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_all_cocktails" />
 
     <fragment
         android:id="@+id/nav_ingredients"
-        android:name="com.example.myapplication.ui.HomeFragment"
+        android:name="com.example.myapplication.ui.fragment.BigCocktailFragment"
         android:label="@string/ingredients"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.example.myapplication.ui.HomeFragment"
+        android:name="com.example.myapplication.ui.fragment.BigCocktailFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_home" />
 </navigation>
