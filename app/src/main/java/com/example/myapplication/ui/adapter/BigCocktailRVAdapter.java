@@ -5,11 +5,13 @@ import android.content.Context;
 import com.example.myapplication.Cocktail;
 import com.example.myapplication.R;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class BigCocktailRVAdapter extends CocktailRVAdapter {
 
-    public BigCocktailRVAdapter(Context context, List<Cocktail> data) {
+    public BigCocktailRVAdapter(Context context, LinkedHashMap<Integer, Cocktail> data) {
         super(context, data);
     }
 

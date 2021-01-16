@@ -14,9 +14,7 @@ import java.io.File;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String Cocktails_URL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/filter.php?a=Alcoholic";
     private static final String Ingredients_URL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/list.php?i=list";
-    public ArrayList<Cocktail> Cocktails;
-    public ArrayList<Ingredient> Ingredients;
+    public LinkedHashMap<Integer, Cocktail> Cocktails;
+    public LinkedHashMap<String, Ingredient> Ingredients;
     public static File localDir;
 
     @Override
@@ -55,11 +53,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         //Cocktails laden
-        Cocktails = new ArrayList<Cocktail>();
-        Ingredients = new ArrayList<Ingredient>();
+        Cocktails = new LinkedHashMap<Integer, Cocktail>();
+        Ingredients = new LinkedHashMap<String, Ingredient>();
 
-        Network.loadCocktails(Cocktails_URL, Cocktails);
-        Network.loadIngredients(Ingredients_URL, Ingredients);
+        //Testweise alles Laden, passiert später durch die einzelnen Fragments
+        Network.loadCocktails(Cocktails_URL, Cocktails, null);
+        Network.loadIngredients(Ingredients_URL, Ingredients, null);
 
         //Network.downloadPic("test2.jpg", "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg");
 
