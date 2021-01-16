@@ -5,6 +5,8 @@ import com.example.myapplication.R;
 import com.example.myapplication.ui.adapter.CocktailRVAdapter;
 import com.example.myapplication.ui.adapter.SmallCocktailRVAdapter;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -27,8 +29,10 @@ public class SmallCocktailFragment extends CocktailFragment {
         return "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?a=Alcoholic";
     }
 
+
+
     @Override
-    CocktailRVAdapter getAdapter(List<Cocktail> cocktailList) {
-        return new SmallCocktailRVAdapter(getContext(), cocktailList);
+    CocktailRVAdapter getAdapter(LinkedHashMap<Integer, Cocktail> cocktailMap) {
+        return new SmallCocktailRVAdapter(getContext(), cocktailMap);
     }
 }
