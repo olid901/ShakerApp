@@ -16,8 +16,7 @@ import com.example.myapplication.Network;
 import com.example.myapplication.ui.CocktailClickListener;
 import com.example.myapplication.ui.adapter.CocktailRVAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
 
 /**
  * Allgemeine Cocktail-Fragment-Klasse, da wir vermutlich mehrere
@@ -45,26 +44,21 @@ public abstract class CocktailFragment extends Fragment implements CocktailClick
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(getCurrentFragmentID(), container, false);
 
-        ArrayList<Cocktail> cocktailList = new ArrayList<>();
-        Network.loadCocktails(getCocktailListURL(), cocktailList);
+        LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<Integer, Cocktail>();
 
         RecyclerView recyclerView = view.findViewById(getCurrentRecViewID());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = getAdapter(cocktailList);
 
-        // TODO: Das darf auf keinen Fall so bleiben!
-        // Ohne sleep wird im Main-Fragment kein Cocktail angezeigt, weil diese dann noch nicht geladen sind
-        // Stattdessen die Network-Klasse umkrempeln und das ganze mit einem Callback lösen?
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        adapter = getAdapter(cocktailMap);
+        recyclerView.setAdapter(adapter);
+
+        Network.loadCocktails(getCocktailListURL(), cocktailMap, adapter);
+
 
         adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
 
         return view;
     }
@@ -72,5 +66,5 @@ public abstract class CocktailFragment extends Fragment implements CocktailClick
     abstract int getCurrentFragmentID();
     abstract int getCurrentRecViewID();
     abstract String getCocktailListURL();
-    abstract CocktailRVAdapter getAdapter(List<Cocktail> cocktailList);
+    abstract CocktailRVAdapter getAdapter(LinkedHashMap<Integer, Cocktail> cocktailList);
 }

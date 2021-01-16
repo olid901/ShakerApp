@@ -13,17 +13,24 @@ import com.example.myapplication.ui.CocktailClickListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVAdapter.ViewHolder> {
 
-    private final List<Cocktail> cocktailList;
+    private final LinkedHashMap<Integer, Cocktail> cocktailMap;
     private final LayoutInflater layoutInflater;
     private CocktailClickListener itemClickListener;
 
-    public CocktailRVAdapter(Context context, List<Cocktail> data) {
+    private List<Cocktail> cocktailList(){
+        return new ArrayList(cocktailMap.values());
+    }
+
+    public CocktailRVAdapter(Context context, LinkedHashMap<Integer, Cocktail> data) {
         this.layoutInflater = LayoutInflater.from(context);
-        this.cocktailList = data;
+        this.cocktailMap = data;
     }
 
     @NotNull
@@ -38,7 +45,8 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String cocktailName = cocktailList.get(position).getStrDrink();
+        //List<Cocktail> cocktailList = new ArrayList(cocktailMap.values());
+        String cocktailName = cocktailList().get(position).getStrDrink();
         holder.cocktailNameView.setText(cocktailName);
     }
 
@@ -47,9 +55,8 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
      */
     @Override
     public int getItemCount() {
-        return cocktailList.size();
+        return cocktailMap.size();
     }
-
 
     /**
      * Stores and recycles views as they are scrolled off screen
@@ -72,8 +79,10 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
     /**
      * Convenience method for getting data at click position
      */
-    public Cocktail getItem(int id) {
-        return cocktailList.get(id);
+    //wichtig: Es muss die cocktailList verwendet werden, da bei der Map sonst versucht wird das Item zu returnen, das auf id gemappt ist, nicht das an der Stelle id
+    //Daher zur Verständnis auch mal "id" in "pos" umbenannt, damit es nicht zu Verwirrung kommt
+    public Cocktail getItem(int pos) {
+        return cocktailList().get(pos);
     }
 
     /**
