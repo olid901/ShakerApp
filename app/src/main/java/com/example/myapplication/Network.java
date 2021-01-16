@@ -2,6 +2,10 @@ package com.example.myapplication;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Looper;
+
+import com.example.myapplication.ui.adapter.CocktailRVAdapter;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -12,7 +16,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -21,7 +26,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class Network {
+public class Network{
 
     static private OkHttpClient okHttpClient;
 
@@ -32,7 +37,7 @@ public class Network {
 
 
 
-    public static void loadIngredients(String URL, ArrayList<Ingredient> IngredientList){
+    public static void loadIngredients(String URL, LinkedHashMap<String, Ingredient> IngredientMap, CocktailRVAdapter adapter){
         final Request request = new Request.Builder().url(URL).build();
 
         // use async method, to not block the UI thread
@@ -48,10 +53,12 @@ public class Network {
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
                     System.out.println("Ingredient response: "+rawResponse);
-                    extractIngredients(rawResponse, IngredientList);
+                    extractIngredients(rawResponse, IngredientMap);
                 }
             }
         });
+
+        notifyAdaperFromUi(adapter);
 
     }
 
@@ -99,7 +106,7 @@ public class Network {
         });
     }
 
-    public static void loadCocktails(String URL, ArrayList<Cocktail> CocktailList) {
+    public static void loadCocktails(String URL, LinkedHashMap<Integer, Cocktail> CocktailMap, CocktailRVAdapter adapter) {
 
         final Request request = new Request.Builder().url(URL).build();
 
@@ -117,8 +124,9 @@ public class Network {
                     String rawResponse = response.body().string();
                     System.out.println("Cocktailsdata: "+rawResponse);
 
-                    extractAndAddCocktails(rawResponse, CocktailList);
+                    extractAndAddCocktails(rawResponse, CocktailMap);
 
+                    notifyAdaperFromUi(adapter);
 
                 }
             }
@@ -154,6 +162,8 @@ public class Network {
                         c.setTags(tempObject.getString("strGlass"));
                         extractAndAddIngredientsAndMeasurments(rawResponse, c);
 
+
+
                     } catch (JSONException e) {
                         System.out.println("Something went wrong here");
                     }finally {
@@ -165,8 +175,8 @@ public class Network {
 
     }
 
-    private static void extractAndAddCocktails(String rawResponse, ArrayList<Cocktail> Cocktails) {
-        //List<Cocktail> results = new ArrayList<>();
+    private static void extractAndAddCocktails(String rawResponse, LinkedHashMap<Integer, Cocktail> Cocktails) {
+
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
@@ -175,7 +185,7 @@ public class Network {
                 String Name = tempObject.getString("strDrink");
                 String Img_Url = tempObject.getString("strDrinkThumb");
                 int ID = tempObject.getInt("idDrink");
-                Cocktails.add(new Cocktail(ID, Name, Img_Url));
+                Cocktails.put(ID, new Cocktail(ID, Name, Img_Url));
             }
         } catch (JSONException e) {
             System.out.println("Something went wrong here");
@@ -183,14 +193,14 @@ public class Network {
 
     }
 
-    private static void extractIngredients(String rawResponse, ArrayList<Ingredient> IngredientList) {
+    private static void extractIngredients(String rawResponse, LinkedHashMap<String, Ingredient> IngredientMap) {
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
             for (int index = 0; index < responseArray.length(); index++) {
                 JSONObject tempObject = responseArray.getJSONObject(index);
                 String Name = tempObject.getString("strIngredient1");
-                IngredientList.add(new Ingredient(Name));
+                IngredientMap.put(Name, new Ingredient(Name));
             }
         } catch (JSONException e) {
             System.out.println("Something went wrong here");
@@ -222,4 +232,21 @@ public class Network {
     }
 
 
+    //Gibt einen Adapter bescheid, dass sich seine Daten geändert haben. Das muss auf dem Ui Thread ausgeführt werden.
+    private static void notifyAdaperFromUi(CocktailRVAdapter adapter){
+        if (adapter != null){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
+    }
+
+    //Diese Methode führt eine Task auf dem Ui Thread aus. Ist notwendig um in irgendeiner Weise mit Views zu interagieren
+    //(bspw. Adapter Bescheid geben, dass die Daten sich geändert haben)
+    private static void runOnUiThread(Runnable task) {
+        new Handler(Looper.getMainLooper()).post(task);
+    }
 }
