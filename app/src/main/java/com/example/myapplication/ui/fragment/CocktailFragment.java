@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.myapplication.Cocktail;
-import com.example.myapplication.Network;
 import com.example.myapplication.ui.CocktailClickListener;
 import com.example.myapplication.ui.adapter.CocktailRVAdapter;
 
@@ -26,7 +25,7 @@ import java.util.LinkedHashMap;
  */
 public abstract class CocktailFragment extends Fragment implements CocktailClickListener {
 
-    CocktailRVAdapter adapter;
+    protected CocktailRVAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,24 +46,25 @@ public abstract class CocktailFragment extends Fragment implements CocktailClick
 
         View view = inflater.inflate(getCurrentFragmentID(), container, false);
 
-        LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<Integer, Cocktail>();
+        LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<>();
 
         RecyclerView recyclerView = view.findViewById(getCurrentRecViewID());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = getAdapter(cocktailMap);
+        //adapter = createAdapter(cocktailMap);
+        adapter = createAdapter();
         recyclerView.setAdapter(adapter);
-
-        Network.loadCocktails(getCocktailListURL(), cocktailMap, adapter);
-
-
         adapter.setClickListener(this);
+
+        fetchAllCocktails();
+
+        //Network.loadCocktails(getCocktailListURL(), cocktailMap, adapter);
 
         return view;
     }
 
+    abstract public void fetchAllCocktails();
     abstract int getCurrentFragmentID();
     abstract int getCurrentRecViewID();
-    abstract String getCocktailListURL();
-    abstract CocktailRVAdapter getAdapter(LinkedHashMap<Integer, Cocktail> cocktailList);
+    abstract CocktailRVAdapter createAdapter();
 }

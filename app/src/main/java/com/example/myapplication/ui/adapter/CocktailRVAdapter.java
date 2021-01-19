@@ -14,13 +14,12 @@ import com.example.myapplication.ui.CocktailClickListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVAdapter.ViewHolder> {
 
-    private final LinkedHashMap<Integer, Cocktail> cocktailMap;
+    private LinkedHashMap<Integer, Cocktail> cocktailMap;
     private final LayoutInflater layoutInflater;
     private CocktailClickListener itemClickListener;
 
@@ -28,9 +27,14 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
         return new ArrayList(cocktailMap.values());
     }
 
-    public CocktailRVAdapter(Context context, LinkedHashMap<Integer, Cocktail> data) {
+    public CocktailRVAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
-        this.cocktailMap = data;
+        cocktailMap = new LinkedHashMap<>(); // Prevent app from crashing
+    }
+
+
+    public void setCocktailList(LinkedHashMap<Integer, Cocktail> cocktailMap) {
+        this.cocktailMap = cocktailMap;
     }
 
     @NotNull
