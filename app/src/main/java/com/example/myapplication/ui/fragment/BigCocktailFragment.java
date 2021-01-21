@@ -1,13 +1,12 @@
 package com.example.myapplication.ui.fragment;
 
 import com.example.myapplication.Cocktail;
+import com.example.myapplication.Network;
 import com.example.myapplication.R;
 import com.example.myapplication.ui.adapter.BigCocktailRVAdapter;
 import com.example.myapplication.ui.adapter.CocktailRVAdapter;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 /**
  * Dieses Fragment zeigt die beliebtesten Cocktails groß an, ähnlich wie auf Instagram
@@ -16,6 +15,14 @@ import java.util.List;
  * Gehe ich den SAP-Weg und klatsch extension points rein?
  */
 public class BigCocktailFragment extends CocktailFragment {
+
+    @Override
+    public void fetchAllCocktails() {
+        String apiURL = "https://www.thecocktaildb.com/api/json/v2/9973533/popular.php";
+        LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<>();
+        adapter.setCocktailList(cocktailMap);
+        Network.loadCocktails(apiURL, cocktailMap, adapter);
+    }
 
     @Override
     int getCurrentFragmentID() {
@@ -28,13 +35,7 @@ public class BigCocktailFragment extends CocktailFragment {
     }
 
     @Override
-    String getCocktailListURL() {
-        return "https://www.thecocktaildb.com/api/json/v2/9973533/popular.php";
-    }
-
-
-    @Override
-    CocktailRVAdapter getAdapter(LinkedHashMap<Integer, Cocktail> cocktailMap) {
-        return new BigCocktailRVAdapter(getContext(), cocktailMap);
+    CocktailRVAdapter createAdapter() {
+        return new BigCocktailRVAdapter(getContext());
     }
 }
