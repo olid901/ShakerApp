@@ -6,8 +6,18 @@
     tools:context=".ui.fragment.SmallCocktailFragment"
     android:orientation="vertical">
 
+    <EditText
+        android:id="@+id/cocktail_search_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:maxLines="1"
+        android:inputType="textFilter"
+        android:hint="@string/cocktail_search_hint" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/small_cocktail_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </LinearLayout>

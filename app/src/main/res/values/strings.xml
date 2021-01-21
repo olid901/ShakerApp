@@ -8,4 +8,5 @@
     <string name="all_drinks">All Drinks</string>
     <string name="ingredients">Ingredients</string>
     <string name="settings">Settings</string>
+    <string name="cocktail_search_hint">Search for Cocktails...</string>
 </resources>
