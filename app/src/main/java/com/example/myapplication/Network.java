@@ -33,9 +33,8 @@ public class Network{
 
     static private OkHttpClient okHttpClient;
 
-    // TODO: Da hier vermutlich sowieso alles static sein wird -> Konstruktor durch static-Block ersetzen
-    public Network(){
-        this.okHttpClient = new OkHttpClient();
+    static{
+        okHttpClient = new OkHttpClient();
     }
 
 
