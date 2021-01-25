@@ -21,10 +21,6 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    //Network Constructor muss ein mal ausgeführt werden
-    Network n = new Network();
-
     private AppBarConfiguration mAppBarConfiguration;
 
     private static final String Cocktails_URL = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?a=Alcoholic";
