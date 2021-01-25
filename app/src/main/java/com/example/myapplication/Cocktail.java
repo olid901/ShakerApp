@@ -103,7 +103,7 @@ public class Cocktail {
             }
             String replacement = ozToCl(totalOz)+" cl";
             Measurement = Measurement.replace(all, replacement);
-            System.out.println("Regex replacement: "+all+" --> "+replacement);
+            //System.out.println("Regex replacement: "+all+" --> "+replacement);
 
         }
 
@@ -126,7 +126,7 @@ public class Cocktail {
             }
             String replacement = cupsToMl(totalCups)+" ml";
             Measurement = Measurement.replace(all, replacement);
-            System.out.println("Regex replacement: "+all+" --> "+replacement);
+            //System.out.println("Regex replacement: "+all+" --> "+replacement);
 
         }
 

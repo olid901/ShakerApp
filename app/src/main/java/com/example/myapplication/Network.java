@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -68,6 +71,177 @@ public class Network{
         //TBA: Siehe Karte Zutaten abfragen
     }
 
+    //Multi Ingredient Search (kurz MIS)
+    public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, LinkedHashMap<String, Ingredient> ingredientsAtHome){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                //Zeitmessung weil ich performance Bedenken bei vielen Zutaten habe!
+                long startTime = System.nanoTime();
+
+                HashMap<Integer, Integer> CocktailCount = new HashMap<Integer, Integer>();
+                ExecutorService Executor = Executors.newCachedThreadPool();
+
+                for(String ingredientName : ingredientsAtHome.keySet()){
+
+                    Executor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("Running MIS for "+ingredientName);
+                            MIScocktailCounter(CocktailCount, ingredientName);
+                            System.out.println("MIS for "+ingredientName+" done!");
+                        }
+                    });
+                }
+
+                try{
+                    Executor.shutdown();
+                    boolean finished = Executor.awaitTermination(1, TimeUnit.MINUTES);
+                    System.out.println("Finished MIS!");
+                }catch(Exception e){
+                    System.out.println("Something went wrong with the Executor service in MIS!");
+                }
+
+
+                //Es gibt keine Cocktails mit einer Zutat: Entferne Cocktails die nur bei einer Zutaten Abfrage auftauchen
+                CocktailCount.entrySet().removeIf(cnt -> cnt.getValue() == 1);
+
+                LinkedHashMap<Integer, Cocktail> candidates = new LinkedHashMap<Integer, Cocktail>();
+
+                ExecutorService Executor2 = Executors.newCachedThreadPool();
+
+                for(int ID : CocktailCount.keySet()){
+
+                    Executor2.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            candidates.put(ID, MIScocktailLoader(ID));
+                        }
+                    });
+                }
+
+                try{
+                    Executor2.shutdown();
+                    boolean finished = Executor2.awaitTermination(1, TimeUnit.MINUTES);
+                    //System.out.println("Finished Candidate loading!");
+                }catch(Exception e){
+                    System.out.println("Something went wrong with the Executor service in MIS!");
+                }
+
+                for(int ID: candidates.keySet()){
+
+                    boolean allAtHome = true;
+
+                    for(String ingr : candidates.get(ID).getIngredients()){
+                        if(!ingredientsAtHome.keySet().contains(ingr)){
+                            //System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
+                            allAtHome = false;
+                        }
+
+                    }
+                    if(allAtHome){
+                        System.out.println("Drink with ID = "+ID+" contains only Ingredients, that are at home!");
+                        resultMap.put(ID, candidates.get(ID));
+                    }
+
+
+                }
+
+                long elapsedTimeMillis = (System.nanoTime() - startTime)/1000000;
+                System.out.println("MIS-test: \n - size = "+ingredientsAtHome.size()+"\n - time "+ elapsedTimeMillis+" millis \n - Cocktails found: "+resultMap.size());
+                System.out.println("Result of MIS: ");
+                for(Cocktail c : resultMap.values()){
+                    System.out.println(c);
+                }
+
+            }
+        }).start();
+
+    }
+
+    //Achtung:  Diese Methode verwendet eine SYNCHRONE Abfrage, da für Multiingredient Search Abfragen für jede Zutat gemacht werden müssen
+    //          und auf die Antwort jeder Abfrage gewartet werden muss.
+    //          Darf NIEMALS UND UNTER KEINEN UMSTÄNDEN AUF DEM UI THREAD AUSGEFÜHRT WERDEN!!! (Immer ein extra Thread machen!)
+    // CocktailCount:   Zählt wie oft ein Cocktail in den einzelnen Abfragen vorkommt. Sinn des ganzen ist, dass Cocktails die nur in einer Abfrage vorkommen,
+    //                  gedroppt werden können, da es keine Cocktails mit nur einer Zutat gibt. Bei jeder MIS Abfrage wird eine Map erstellt, die allen Zutatenabfragen mitgegeben wird
+    private static void MIScocktailCounter(HashMap<Integer, Integer> CocktailCount, String Ingredient){
+
+            final Request request = new Request.Builder().url("https://www.thecocktaildb.com/api/json/v2/***REMOVED***/filter.php?i="+Ingredient).build();
+
+            try{
+                try (Response response = okHttpClient.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String rawResponse = response.body().string();
+
+                    //do something with the response
+                    System.out.println("MIS Search response of Ingr. "+Ingredient+": "+rawResponse);
+                    try {
+                        JSONObject responseObject = new JSONObject(rawResponse);
+                        JSONArray responseArray = responseObject.getJSONArray("drinks");
+                        for (int index = 0; index < responseArray.length(); index++) {
+                            JSONObject tempObject = responseArray.getJSONObject(index);
+                            int ID = tempObject.getInt("idDrink");
+                            //int cnt = CocktailCount.containsKey(ID) ? CocktailCount.get(ID) : 0;
+                            //CocktailCount.put(ID, cnt + 1);
+                            CocktailCount.merge(ID, 1, Integer::sum);
+                        }
+                    } catch (JSONException e) {
+                        System.out.println("There is probaly no cocktail that uses: "+Ingredient+" as an Ingredient");
+                    }
+
+                }
+            }
+            catch (IOException e){
+                //System.out.println("There was a error with the loading of MIS Information");
+            }
+
+    }
+
+    private static Cocktail MIScocktailLoader(int cocktailID){
+        final Request request = new Request.Builder().url("https://www.thecocktaildb.com/api/json/v2/***REMOVED***/lookup.php?i="+cocktailID).build();
+        try{
+            try (Response response = okHttpClient.newCall(request).execute()) {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                String rawResponse = response.body().string();
+                try {
+                    //System.out.println("Getting all the Information of Cocktail "+c.getStrDrink());
+                    JSONObject responseObject = new JSONObject(rawResponse);
+                    JSONArray responseArray = responseObject.getJSONArray("drinks");
+                    JSONObject tempObject = responseArray.getJSONObject(0);
+
+                    String strDrink = tempObject.getString("strDrink");
+                    String imgUrl = tempObject.getString("strDrinkThumb");
+
+                    Cocktail c = new Cocktail(cocktailID, strDrink, imgUrl);
+
+                    c.setAlcoholic(tempObject.getString("strAlcoholic"));
+                    c.setInstruction(tempObject.getString("strInstructions"));
+                    c.setCategory(tempObject.getString("strCategory"));
+                    c.setGlass(tempObject.getString("strGlass"));
+                    c.setTags(tempObject.getString("strGlass"));
+                    extractAndAddIngredientsAndMeasurments(rawResponse, c);
+
+                    return c;
+
+
+
+                } catch (JSONException e) {
+                    System.out.println("Something went wrong here");
+                }finally {
+                    response.close();
+                }
+
+            }
+
+        }
+        catch (IOException e){
+            //System.out.println("There was a error with the loading of MIS Information");
+        }
+        return null;
+    }
 
     public static void downloadPic(String Filename, String URL){
         Request request = new Request.Builder().url(URL).build();
