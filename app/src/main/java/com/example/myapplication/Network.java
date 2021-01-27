@@ -126,8 +126,13 @@ public class Network{
 
                     extractAndAddCocktails(rawResponse, CocktailMap);
 
-                    notifyAdaperFromUi(adapter);
-
+                    // Für die einzelndarstellung des Cocktails brauchen wir keinen Adapter
+                    // In so einem Fall geben wir einfach null mit
+                    // TODO: Vlt. überladene Methode erstellen, damits schöner aussieht
+                    // null-Übergaben werden allerdings sehr ungern gesehen
+                    if (adapter != null) {
+                        notifyAdaperFromUi(adapter);
+                    }
                 }
             }
         });

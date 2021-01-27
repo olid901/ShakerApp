@@ -15,12 +15,18 @@
         android:roundIcon="@mipmap/ic_cocktail_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".ui.CocktailDetailsActivity"
+            android:label="HALLO TEST"
+            android:parentActivityName="com.example.myapplication.MainActivity"
+            android:theme="@style/Theme.MyApplication.NoActionBar">
+        </activity>
+        <activity
+            android:name=".MainActivity"
             android:label="ShakerApp"
             android:theme="@style/Theme.MyApplication.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -1,5 +1,7 @@
 package com.example.myapplication.ui.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.myapplication.Cocktail;
 import com.example.myapplication.ui.CocktailClickListener;
+import com.example.myapplication.ui.CocktailDetailsActivity;
 import com.example.myapplication.ui.adapter.CocktailRVAdapter;
 
 import java.util.LinkedHashMap;
@@ -38,7 +41,17 @@ public abstract class CocktailFragment extends Fragment implements CocktailClick
      */
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(getContext(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        // TODO Vlt kann man einen Cocktail einfach in ne statische Variable packen und den dann im neuen Intent auslesen
+        // Wäre besser, dann müsste man nicht erneut die Cocktail-Infos abfragen
+        // Außer die Suche liefert nicht direkt alle infos über den Cocktail
+        System.out.println();
+        System.out.println("rtesersfdsfdsfsdfsdfsdfdsfffffffsdfdsfdsfsfd");
+        Context context = getContext();
+        Intent intent = new Intent(context, CocktailDetailsActivity.class);
+        intent.putExtra("cocktailID", adapter.getItem(position).getID());
+        System.out.println("Sent: " + adapter.getItem(position).getID());
+        context.startActivity(intent);
     }
 
     @Override
