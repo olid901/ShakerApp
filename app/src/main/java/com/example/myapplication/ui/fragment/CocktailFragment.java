@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.myapplication.Cocktail;
 import com.example.myapplication.ui.CocktailClickListener;
@@ -41,16 +40,13 @@ public abstract class CocktailFragment extends Fragment implements CocktailClick
      */
     @Override
     public void onItemClick(View view, int position) {
-        //Toast.makeText(getContext(), "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
-        // TODO Vlt kann man einen Cocktail einfach in ne statische Variable packen und den dann im neuen Intent auslesen
-        // Wäre besser, dann müsste man nicht erneut die Cocktail-Infos abfragen
-        // Außer die Suche liefert nicht direkt alle infos über den Cocktail
-        System.out.println();
-        System.out.println("rtesersfdsfdsfsdfsdfsdfdsfffffffsdfdsfdsfsfd");
         Context context = getContext();
         Intent intent = new Intent(context, CocktailDetailsActivity.class);
-        intent.putExtra("cocktailID", adapter.getItem(position).getID());
-        System.out.println("Sent: " + adapter.getItem(position).getID());
+
+        // Wir weisen einem Cocktail direkt das Cocktail-Objekt zu, so haben wir
+        // direkt die Cocktail-Daten da und sparen uns die Netzwerkabfrage
+        CocktailDetailsActivity.cocktail = adapter.getItem(position);
+
         context.startActivity(intent);
     }
 
@@ -64,15 +60,11 @@ public abstract class CocktailFragment extends Fragment implements CocktailClick
         RecyclerView recyclerView = view.findViewById(getCurrentRecViewID());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //adapter = createAdapter(cocktailMap);
         adapter = createAdapter();
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
 
         fetchAllCocktails();
-
-        //Network.loadCocktails(getCocktailListURL(), cocktailMap, adapter);
-
         return view;
     }
 

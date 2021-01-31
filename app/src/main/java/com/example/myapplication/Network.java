@@ -5,6 +5,9 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.ui.UICallback;
 import com.example.myapplication.ui.adapter.CocktailRVAdapter;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,13 +34,11 @@ import okhttp3.Response;
 
 public class Network{
 
-    static private OkHttpClient okHttpClient;
+    private static final OkHttpClient okHttpClient;
 
-    static{
+    static {
         okHttpClient = new OkHttpClient();
     }
-
-
 
     public static void loadIngredients(String URL, LinkedHashMap<String, Ingredient> IngredientMap, CocktailRVAdapter adapter){
         final Request request = new Request.Builder().url(URL).build();
@@ -59,12 +60,8 @@ public class Network{
                 }
             }
         });
-
         notifyAdaperFromUi(adapter);
-
     }
-
-
 
     public static void addFullIngredientInfo(Ingredient i){
         //TBA: Siehe Karte Zutaten abfragen
@@ -312,7 +309,7 @@ public class Network{
     }
 
 
-    public static void addFullCocktailInfo(Cocktail c){
+    public static void addFullCocktailInfo(Cocktail c, UICallback cb){
 
         String URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i="+c.getID();
         final Request request = new Request.Builder().url(URL).build();
@@ -340,7 +337,7 @@ public class Network{
                         c.setTags(tempObject.getString("strGlass"));
                         extractAndAddIngredientsAndMeasurments(rawResponse, c);
 
-
+                        cb.refreshView();
 
                     } catch (JSONException e) {
                         System.out.println("Something went wrong here");
@@ -411,7 +408,7 @@ public class Network{
 
 
     //Gibt einen Adapter bescheid, dass sich seine Daten geändert haben. Das muss auf dem Ui Thread ausgeführt werden.
-    private static void notifyAdaperFromUi(CocktailRVAdapter adapter){
+    public static void notifyAdaperFromUi(RecyclerView.Adapter adapter){
         if (adapter != null){
             runOnUiThread(new Runnable() {
                 @Override
