@@ -16,6 +16,10 @@ public class Ingredient {
         //Network.downloadPic(Img_Url(SMALL));
     }
 
+    public String getStrIngredient() {
+        return this.StrIngredient;
+    }
+
     private String Img_Url(short size){
         if(size == SMALL)
             return "https://www.thecocktaildb.com/images/ingredients/"+StrIngredient+"-Small.png";
