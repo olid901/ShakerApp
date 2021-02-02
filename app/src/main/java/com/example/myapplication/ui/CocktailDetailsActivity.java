@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.myapplication.Cocktail;
+import com.example.myapplication.Helper;
 import com.example.myapplication.Ingredient;
 import com.example.myapplication.Network;
 import com.example.myapplication.R;
@@ -68,13 +69,11 @@ public class CocktailDetailsActivity extends AppCompatActivity implements UICall
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -95,7 +94,7 @@ public class CocktailDetailsActivity extends AppCompatActivity implements UICall
         }
 
         adapter.setIngredientList(ingredientMap);
-        Network.notifyAdaperFromUi(adapter);
+        Helper.notifyAdaperFromUi(adapter);
 
         // TODO Auf der TheCocktailDB-Seite wird hinter jedem Punkt ein Zeilenumbruch hinzugefügt
         TextView instructionView = findViewById(R.id.instructions_text);
@@ -113,7 +112,7 @@ class IngredientsRVAdapter extends RecyclerView.Adapter<IngredientsRVAdapter.Vie
     private CocktailClickListener itemClickListener;
 
     private List<Ingredient> ingredientList() {
-        return new ArrayList(ingredientMap.values());
+        return new ArrayList<Ingredient>(ingredientMap.values());
     }
 
     public IngredientsRVAdapter(Context context) {

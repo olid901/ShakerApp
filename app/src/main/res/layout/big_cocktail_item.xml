@@ -19,7 +19,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="Cocktail Image"
             android:scaleType="centerCrop"
-            android:src="@drawable/radioactive"
+            android:src="@drawable/ic_image_not_found"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
 

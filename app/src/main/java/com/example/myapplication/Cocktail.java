@@ -22,6 +22,8 @@ public class Cocktail {
 
     public String getImg_Url() { return Img_Url; }
 
+    public boolean hasImage() { return !(Img_Url == "null"); }
+
     //TODO: Hier statt strings eigentlich ne Liste mit Ingredients ausspucken, wenn möglich
     public ArrayList<String> getIngredients() { return Ingredients; }
 
@@ -61,8 +63,6 @@ public class Cocktail {
     public void setTags(String tags) {
         this.Tags = tags;
     }
-
-
 
     public Cocktail(int ID, String StrDrink, String Img_Url){
         this.ID = ID;

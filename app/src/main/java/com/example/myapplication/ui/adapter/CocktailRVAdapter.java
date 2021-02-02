@@ -1,18 +1,28 @@
 package com.example.myapplication.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Cocktail;
+import com.example.myapplication.Helper;
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.Network;
+import com.example.myapplication.R;
 import com.example.myapplication.ui.CocktailClickListener;
+import com.example.myapplication.ui.UICallback;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,7 +34,7 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
     private CocktailClickListener itemClickListener;
 
     private List<Cocktail> cocktailList(){
-        return new ArrayList(cocktailMap.values());
+        return new ArrayList<Cocktail>(cocktailMap.values());
     }
 
     public CocktailRVAdapter(Context context) {
@@ -50,8 +60,47 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //List<Cocktail> cocktailList = new ArrayList(cocktailMap.values());
-        String cocktailName = cocktailList().get(position).getStrDrink();
+        Cocktail cocktail = cocktailList().get(position);
+
+        // TODO Return null ist böse!!! Muss noch geändert werden
+        File file = updateCocktailImage(cocktail, position);
+        if (file != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+            holder.cocktailImgView.setImageBitmap(bitmap);
+        } else {
+            holder.cocktailImgView.setImageResource(R.drawable.ic_image_not_found);
+        }
+
+        String cocktailName = cocktail.getStrDrink();
         holder.cocktailNameView.setText(cocktailName);
+    }
+
+    public File updateCocktailImage(Cocktail cocktail, int position) {
+        // Abbrechen, wenn der Cocktail kein Bild hat
+        // Was aktuell nur beim "Americano" der Fall ist
+        if (!cocktail.hasImage()) {
+            return null;
+        }
+
+        String url = getCocktailImageURL(cocktail);
+        String filename = getCocktailImageFilename(cocktail);
+
+        File file = new File(MainActivity.localDir, filename);
+
+        if (!file.exists()) {
+            Network.downloadPic(filename, url, new UICallback() {
+                @Override
+                public void refreshView() {
+                    Helper.notifyAdaperFromUi(CocktailRVAdapter.this, position);
+                }
+            });
+            // Hier bin ich mir noch nicht 100% sicher - Eigentlich müsste
+            // er hier null zurückgeben und dann einfach kein Bild anzeigen
+            // Er probiert es aber später anscheinend nochmal - es funktioniert also doch :D
+            return null;
+        } else {
+            return file;
+        }
     }
 
     /**
@@ -67,10 +116,12 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView cocktailNameView;
+        final ImageView cocktailImgView;
 
         ViewHolder(View itemView) {
             super(itemView);
             cocktailNameView = itemView.findViewById(getCocktailNameID());
+            cocktailImgView = itemView.findViewById(getCocktailImageID());
             itemView.setOnClickListener(this);
         }
 
@@ -106,4 +157,20 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
      */
     public abstract int getCocktailNameID();
 
+    /**
+     * Hole die ID vom ImageView, welche das Bild des Cocktails beinhaltet
+     */
+    public abstract int getCocktailImageID();
+
+    /**
+     * Hole die Bild-URL vom Cocktail
+     * Wird benötigt, um zwischen kleinen und großen Bildern unterscheiden zu können
+     */
+    public abstract String getCocktailImageURL(Cocktail cocktail);
+
+    /**
+     * Hole den Dateinamen des Cocktail-Bilds
+     * Wird benötigt, um zwischen kleinen und großen Bildern unterscheiden zu können
+     */
+    public abstract String getCocktailImageFilename(Cocktail cocktail);
 }
