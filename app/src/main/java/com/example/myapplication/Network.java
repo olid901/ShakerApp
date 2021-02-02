@@ -2,10 +2,6 @@ package com.example.myapplication;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Handler;
-import android.os.Looper;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.ui.UICallback;
 import com.example.myapplication.ui.adapter.CocktailRVAdapter;
@@ -30,7 +26,6 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
 
 public class Network{
 
@@ -60,7 +55,7 @@ public class Network{
                 }
             }
         });
-        notifyAdaperFromUi(adapter);
+        Helper.notifyAdaperFromUi(adapter);
     }
 
     public static void addFullIngredientInfo(Ingredient i){
@@ -239,7 +234,7 @@ public class Network{
         return null;
     }
 
-    public static void downloadPic(String Filename, String URL){
+    public static void downloadPic(String filename, String URL, UICallback uicb){
         Request request = new Request.Builder().url(URL).build();
         okHttpClient.newCall(request).enqueue(new Callback() {
             public void onFailure(Call call, IOException e) {
@@ -256,7 +251,7 @@ public class Network{
 
                 System.out.println("Trying to save file");
                 //File file = new File (android.os.Environment.getExternalStorageDirectory(),"test2.jpg");
-                File file = new File(MainActivity.localDir, "Filename");
+                File file = new File(MainActivity.localDir, filename);
 
                 // ???
                 if (file.exists())
@@ -272,6 +267,7 @@ public class Network{
                     e.printStackTrace();
                 }
                 System.out.println("saved!");
+                uicb.refreshView();
             }
         });
     }
@@ -301,13 +297,12 @@ public class Network{
                     // TODO: Vlt. überladene Methode erstellen, damits schöner aussieht
                     // null-Übergaben werden allerdings sehr ungern gesehen
                     if (adapter != null) {
-                        notifyAdaperFromUi(adapter);
+                        Helper.notifyAdaperFromUi(adapter);
                     }
                 }
             }
         });
     }
-
 
     public static void addFullCocktailInfo(Cocktail c, UICallback cb){
 
@@ -384,7 +379,6 @@ public class Network{
 
     private static void extractAndAddIngredientsAndMeasurments(String rawResponse, Cocktail c){
         try {
-
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
             JSONObject tempObject = responseArray.getJSONObject(0);
@@ -398,30 +392,9 @@ public class Network{
                 }else{
                     return;
                 }
-
             }
-
         } catch (JSONException e) {
             System.out.println("Something went wrong here");
         }
-    }
-
-
-    //Gibt einen Adapter bescheid, dass sich seine Daten geändert haben. Das muss auf dem Ui Thread ausgeführt werden.
-    public static void notifyAdaperFromUi(RecyclerView.Adapter adapter){
-        if (adapter != null){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.notifyDataSetChanged();
-                }
-            });
-        }
-    }
-
-    //Diese Methode führt eine Task auf dem Ui Thread aus. Ist notwendig um in irgendeiner Weise mit Views zu interagieren
-    //(bspw. Adapter Bescheid geben, dass die Daten sich geändert haben)
-    private static void runOnUiThread(Runnable task) {
-        new Handler(Looper.getMainLooper()).post(task);
     }
 }

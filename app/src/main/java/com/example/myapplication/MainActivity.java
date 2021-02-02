@@ -14,10 +14,7 @@ import java.io.File;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Random;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,9 +72,6 @@ public class MainActivity extends AppCompatActivity {
         //Testweise alles Laden, passiert später durch die einzelnen Fragments
         Network.loadCocktails(Cocktails_URL, Cocktails, null);
         Network.loadIngredients(Ingredients_URL, Ingredients, null);
-
-        //Network.downloadPic("test2.jpg", "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg");
-
     }
 
     @Override
