@@ -12,12 +12,7 @@ public class Helper {
      */
     public static void notifyAdaperFromUi(RecyclerView.Adapter adapter){
         if (adapter != null){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.notifyDataSetChanged();
-                }
-            });
+            runOnUiThread(() -> adapter.notifyDataSetChanged());
         }
     }
 
@@ -27,12 +22,9 @@ public class Helper {
      */
     public static void notifyAdaperFromUi(RecyclerView.Adapter adapter, int position){
         if (adapter != null){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.notifyDataSetChanged();
-                    adapter.notifyItemChanged(position);
-                }
+            runOnUiThread(() -> {
+                adapter.notifyDataSetChanged();
+                adapter.notifyItemChanged(position);
             });
         }
     }
@@ -42,7 +34,7 @@ public class Helper {
      * irgendeiner Weise mit Views zu interagieren
      * (bspw. Adapter Bescheid geben, dass die Daten sich geändert haben)
      */
-    private static void runOnUiThread(Runnable task) {
+    public static void runOnUiThread(Runnable task) {
         new Handler(Looper.getMainLooper()).post(task);
     }
 }
