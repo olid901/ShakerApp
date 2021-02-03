@@ -3,7 +3,6 @@ package com.example.myapplication.ui.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.Network;
 import com.example.myapplication.R;
 import com.example.myapplication.ui.CocktailClickListener;
-import com.example.myapplication.ui.UICallback;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -55,14 +53,12 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
 
     /**
      * Hier wird der Cocktail-Name und das Bild zu jedem Eintrag im Recycler View gesetzt
-     * TODO: Bild zu Cocktail anzeigen
      */
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        //List<Cocktail> cocktailList = new ArrayList(cocktailMap.values());
+    public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
         Cocktail cocktail = cocktailList().get(position);
 
-        // TODO Return null ist böse!!! Muss noch geändert werden
+        // TODO Return null ist böse!!! Sollte noch geändert werden bei Gelegenheit
         File file = updateCocktailImage(cocktail, position);
         if (file != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
@@ -71,8 +67,7 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
             holder.cocktailImgView.setImageResource(R.drawable.ic_image_not_found);
         }
 
-        String cocktailName = cocktail.getStrDrink();
-        holder.cocktailNameView.setText(cocktailName);
+        holder.cocktailNameView.setText(cocktail.getStrDrink());
     }
 
     public File updateCocktailImage(Cocktail cocktail, int position) {
@@ -87,16 +82,10 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
 
         File file = new File(MainActivity.localDir, filename);
 
+        // Wenn kein Bild gespeichert ist, dann lädt er eines runter und gibt dem Adapter bescheid
+        // Danach durchläuft er erneut das onBindViewHolder inklusive dieser Methode hier
         if (!file.exists()) {
-            Network.downloadPic(filename, url, new UICallback() {
-                @Override
-                public void refreshView() {
-                    Helper.notifyAdaperFromUi(CocktailRVAdapter.this, position);
-                }
-            });
-            // Hier bin ich mir noch nicht 100% sicher - Eigentlich müsste
-            // er hier null zurückgeben und dann einfach kein Bild anzeigen
-            // Er probiert es aber später anscheinend nochmal - es funktioniert also doch :D
+            Network.downloadPic(filename, url, () -> Helper.notifyAdaperFromUi(CocktailRVAdapter.this, position));
             return null;
         } else {
             return file;

@@ -3,32 +3,36 @@ package com.example.myapplication.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
-import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.Cocktail;
 import com.example.myapplication.Helper;
 import com.example.myapplication.Ingredient;
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.Network;
 import com.example.myapplication.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class CocktailDetailsActivity extends AppCompatActivity implements UICallback {
+public class CocktailDetailsActivity extends AppCompatActivity {
 
     public static Cocktail cocktail;
     private IngredientsRVAdapter adapter;
@@ -42,8 +46,6 @@ public class CocktailDetailsActivity extends AppCompatActivity implements UICall
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        System.out.println(cocktail.getStrDrink());
-
         RecyclerView recyclerView = findViewById(R.id.cocktail_ingredients_rv);
         GridLayoutManager glm = new GridLayoutManager(getBaseContext(), 2);
 
@@ -51,20 +53,32 @@ public class CocktailDetailsActivity extends AppCompatActivity implements UICall
         recyclerView.setNestedScrollingEnabled(false);
 
         adapter = new IngredientsRVAdapter(getBaseContext());
-
-        LinkedHashMap<Integer, Ingredient> ingredientMap = new LinkedHashMap<>();
-
-        adapter.setIngredientList(ingredientMap);
-
+        adapter.setIngredientList(new LinkedHashMap<>());
         recyclerView.setAdapter(adapter);
 
-        // TODO TEST
-        Network.addFullCocktailInfo(cocktail, this);
+        Network.addFullCocktailInfo(cocktail, this::onCocktailInfoLoaded);
+        updateCocktailImage(cocktail);
+    }
 
-        NestedScrollView sv = findViewById(R.id.cocktail_scroll_view);
-        sv.scrollTo(0,0);
+    public void onCocktailInfoLoaded() {
+        LinkedHashMap<Integer, Ingredient> ingredientMap = new LinkedHashMap<>();
+        ArrayList<String> ingredientList = cocktail.getIngredients();
 
-        //TODO Cocktail darstellen
+        for (int i = 0; i < ingredientList.size(); i++) {
+            ingredientMap.put(i, new Ingredient(ingredientList.get(i)));
+        }
+
+        adapter.setIngredientList(ingredientMap);
+        Helper.notifyAdaperFromUi(adapter);
+
+        // TODO Auf der TheCocktailDB-Seite wird hinter jedem Punkt ein Zeilenumbruch hinzugefügt
+        TextView instructionView = findViewById(R.id.instructions_text);
+        TextView glassView = findViewById(R.id.glass_text);
+
+        Helper.runOnUiThread(() -> {
+            instructionView.setText(cocktail.getInstruction());
+            glassView.setText(cocktail.getGlass());
+        });
     }
 
     @Override
@@ -76,32 +90,31 @@ public class CocktailDetailsActivity extends AppCompatActivity implements UICall
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void refreshView() {
-        RecyclerView recyclerView = findViewById(R.id.cocktail_ingredients_rv);
-
-        LinkedHashMap<Integer, Ingredient> ingredientMap = new LinkedHashMap<>();
-        ArrayList<String> ingredientList = cocktail.getIngredients();
-        // TODO WHAT THE FUCK
-        ArrayList<String> measuresList = cocktail.getMeasures();
-
-        Log.d("MyActivity", "HALLO WELT");
-        Log.d("MyActivity", ingredientList.size() + "");
-
-        for (int i = 0; i < ingredientList.size(); i++) {
-            ingredientMap.put(i, new Ingredient(ingredientList.get(i)));
-            Log.d("MyActivity", ingredientList.get(i));
+    public void updateCocktailImage(Cocktail cocktail) {
+        // TODO Das hier ist mehr oder weniger von CocktailRVAdapter kopiert - Kombinieren?
+        // Abbrechen, wenn der Cocktail kein Bild hat
+        // Was aktuell nur beim "Americano" der Fall ist
+        if (!cocktail.hasImage()) {
+            return;
         }
 
-        adapter.setIngredientList(ingredientMap);
-        Helper.notifyAdaperFromUi(adapter);
+        String url = cocktail.getImg_Url();
+        String filename = url.substring(url.lastIndexOf('/')+1);
 
-        // TODO Auf der TheCocktailDB-Seite wird hinter jedem Punkt ein Zeilenumbruch hinzugefügt
-        TextView instructionView = findViewById(R.id.instructions_text);
-        instructionView.setText(cocktail.getInstruction());
+        File file = new File(MainActivity.localDir, filename);
 
-        TextView glassView = findViewById(R.id.glass_text);
-        glassView.setText(cocktail.getGlass());
+        ImageView view = findViewById(R.id.cocktail_image);
+
+        if (!file.exists()) {
+            Network.downloadPic(filename, url, () -> {
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                Helper.runOnUiThread(() -> view.setImageBitmap(bitmap));
+            });
+            view.setImageResource(R.drawable.ic_image_not_found);
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+            view.setImageBitmap(bitmap);
+        }
     }
 }
 
@@ -109,7 +122,6 @@ class IngredientsRVAdapter extends RecyclerView.Adapter<IngredientsRVAdapter.Vie
 
     private LinkedHashMap<Integer, Ingredient> ingredientMap;
     private final LayoutInflater layoutInflater;
-    private CocktailClickListener itemClickListener;
 
     private List<Ingredient> ingredientList() {
         return new ArrayList<Ingredient>(ingredientMap.values());
@@ -136,17 +148,45 @@ class IngredientsRVAdapter extends RecyclerView.Adapter<IngredientsRVAdapter.Vie
      * TODO: Bild zu Ingredient anzeigen
      */
     @Override
-    public void onBindViewHolder(IngredientsRVAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NotNull IngredientsRVAdapter.ViewHolder holder, int position) {
         List<Ingredient> ingredientList = ingredientList();
         ArrayList<String> measures = CocktailDetailsActivity.cocktail.getMeasures();
-        String ingredientName = ingredientList.get(position).getStrIngredient();
+
+        Ingredient ingredient = ingredientList.get(position);
+        String ingredientName = ingredient.getStrIngredient();
         String displayedText = ingredientName;
 
         // Für den Fall, dass bei einer Zutat keine Mengenangabe gegeben ist
-        if (measures.get(position) != "null")
+        if (!measures.get(position).equals("null")) {
+            // Damit immer ein Leerzeichen zwischen den Measurements und dem Ingredient sind
+            if (!(measures.get(position).endsWith(" ") || ingredientName.startsWith(" ")))
+                ingredientName = " " + ingredientName;
             displayedText = measures.get(position) + ingredientName;
+        }
 
         holder.ingredientNameView.setText(displayedText);
+
+        File file = updateIngredientImage(ingredient, position);
+        if (file != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+            holder.ingredientImageView.setImageBitmap(bitmap);
+        } else {
+            holder.ingredientImageView.setImageResource(R.drawable.ic_image_not_found);
+        }
+    }
+
+    public File updateIngredientImage(Ingredient ingredient, int position) {
+        String filename = ingredient.getStrIngredient() +  "-Medium.png";
+        String url = "https://www.thecocktaildb.com/images/ingredients/" + filename;
+
+        File file = new File(MainActivity.localDir, filename);
+
+        if (!file.exists()) {
+            Network.downloadPic(filename, url, () -> Helper.notifyAdaperFromUi(IngredientsRVAdapter.this, position));
+            return null;
+        } else {
+            return file;
+        }
     }
 
     /**
@@ -162,33 +202,12 @@ class IngredientsRVAdapter extends RecyclerView.Adapter<IngredientsRVAdapter.Vie
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
         final TextView ingredientNameView;
+        final ImageView ingredientImageView;
 
         ViewHolder(View itemView) {
             super(itemView);
             ingredientNameView = itemView.findViewById(R.id.ingredient_name);
-            //itemView.setOnClickListener(this);
+            ingredientImageView = itemView.findViewById(R.id.ingredient_image);
         }
-
-//        @Override
-//        public void onClick(View view) {
-//            if (itemClickListener != null)
-//                itemClickListener.onItemClick(view, getAdapterPosition());
-//        }
-    }
-
-    /**
-     * Convenience method for getting data at click position
-     */
-    //wichtig: Es muss die cocktailList verwendet werden, da bei der Map sonst versucht wird das Item zu returnen, das auf id gemappt ist, nicht das an der Stelle id
-    //Daher zur Verständnis auch mal "id" in "pos" umbenannt, damit es nicht zu Verwirrung kommt
-//    public Ingredient getItem(int pos) {
-//        return cocktailList().get(pos);
-//    }
-
-    /**
-     * allows clicks events to be caught
-     */
-    public void setClickListener(CocktailClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
     }
 }

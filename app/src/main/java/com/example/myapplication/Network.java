@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.example.myapplication.ui.UICallback;
 import com.example.myapplication.ui.adapter.CocktailRVAdapter;
@@ -42,15 +43,15 @@ public class Network{
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                //Log.e(TAG, "Could not fetch data! Message: " + e);
-                System.out.println("Something went wrong there");
+                Log.e("Network", "Could not fetch data! Message: " + e);
+//                System.out.println("Something went wrong there");
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
-                    System.out.println("Ingredient response: "+rawResponse);
+//                    System.out.println("Ingredient response: "+rawResponse);
                     extractIngredients(rawResponse, IngredientMap);
                 }
             }
@@ -259,7 +260,14 @@ public class Network{
 
                 try {
                     FileOutputStream out = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+
+                    // Ingredients werden als PNG-Dateien geliefert, da diese
+                    // einen Alphakanal besitzen
+                    if (file.getName().endsWith(".png"))
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+                    else
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+
                     out.flush();
                     out.close();
 
@@ -280,8 +288,8 @@ public class Network{
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                //Log.e(TAG, "Could not fetch data! Message: " + e);
-                System.out.println("Something went wrong there");
+                Log.e("Network", "Could not fetch data! Message: " + e);
+//                System.out.println("Something went wrong there");
             }
 
             @Override
@@ -304,7 +312,7 @@ public class Network{
         });
     }
 
-    public static void addFullCocktailInfo(Cocktail c, UICallback cb){
+    public static void addFullCocktailInfo(Cocktail c, UICallback uicb){
 
         String URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i="+c.getID();
         final Request request = new Request.Builder().url(URL).build();
@@ -312,8 +320,8 @@ public class Network{
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                //Log.e(TAG, "Could not fetch data! Message: " + e);
-                System.out.println("Something went wrong there");
+                Log.e("Network", "Could not fetch data! Message: " + e);
+//                System.out.println("Something went wrong there");
             }
 
             @Override
@@ -332,10 +340,11 @@ public class Network{
                         c.setTags(tempObject.getString("strGlass"));
                         extractAndAddIngredientsAndMeasurments(rawResponse, c);
 
-                        cb.refreshView();
+                        uicb.refreshView();
 
                     } catch (JSONException e) {
-                        System.out.println("Something went wrong here");
+//                        System.out.println("Something went wrong here");
+                        e.printStackTrace();
                     }finally {
                         response.close();
                     }
@@ -358,9 +367,9 @@ public class Network{
                 Cocktails.put(ID, new Cocktail(ID, Name, Img_Url));
             }
         } catch (JSONException e) {
-            System.out.println("Something went wrong here");
+//            System.out.println("Something went wrong here");
+            e.printStackTrace();
         }
-
     }
 
     private static void extractIngredients(String rawResponse, LinkedHashMap<String, Ingredient> IngredientMap) {
@@ -373,7 +382,8 @@ public class Network{
                 IngredientMap.put(Name, new Ingredient(Name));
             }
         } catch (JSONException e) {
-            System.out.println("Something went wrong here");
+//            System.out.println("Something went wrong here");
+            e.printStackTrace();
         }
     }
 
@@ -394,7 +404,8 @@ public class Network{
                 }
             }
         } catch (JSONException e) {
-            System.out.println("Something went wrong here");
+//            System.out.println("Something went wrong here");
+            e.printStackTrace();
         }
     }
 }

@@ -35,12 +35,12 @@
 
             <ImageView
                 android:id="@+id/cocktail_image"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:contentDescription="Cocktail Image"
                 android:scaleType="centerCrop"
-                android:src="@drawable/radioactive"
+                android:src="@drawable/ic_image_not_found"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
