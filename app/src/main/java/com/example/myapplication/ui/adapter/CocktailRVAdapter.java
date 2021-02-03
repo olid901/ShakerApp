@@ -1,11 +1,13 @@
 package com.example.myapplication.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -68,6 +70,16 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
         }
 
         holder.cocktailNameView.setText(cocktail.getStrDrink());
+        holder.shareButtonView.setOnClickListener(v -> shareIntent(cocktail));
+    }
+
+    private void shareIntent(Cocktail cocktail) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Have a look at this nice cocktail!\nhttps://www.thecocktaildb.com/drink.php?c=" + cocktail.getID());
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        layoutInflater.getContext().startActivity(shareIntent);
     }
 
     public File updateCocktailImage(Cocktail cocktail, int position) {
@@ -106,11 +118,13 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView cocktailNameView;
         final ImageView cocktailImgView;
+        final ImageButton shareButtonView;
 
         ViewHolder(View itemView) {
             super(itemView);
             cocktailNameView = itemView.findViewById(getCocktailNameID());
             cocktailImgView = itemView.findViewById(getCocktailImageID());
+            shareButtonView = itemView.findViewById(R.id.big_cocktail_interaction_share);
             itemView.setOnClickListener(this);
         }
 
