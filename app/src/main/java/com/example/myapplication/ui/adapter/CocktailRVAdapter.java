@@ -1,7 +1,6 @@
 package com.example.myapplication.ui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -30,10 +29,10 @@ import java.util.List;
 public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVAdapter.ViewHolder> {
 
     private LinkedHashMap<Integer, Cocktail> cocktailMap;
-    private final LayoutInflater layoutInflater;
+    protected final LayoutInflater layoutInflater;
     private CocktailClickListener itemClickListener;
 
-    private List<Cocktail> cocktailList(){
+    protected List<Cocktail> cocktailList(){
         return new ArrayList<Cocktail>(cocktailMap.values());
     }
 
@@ -70,16 +69,6 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
         }
 
         holder.cocktailNameView.setText(cocktail.getStrDrink());
-        holder.shareButtonView.setOnClickListener(v -> shareIntent(cocktail));
-    }
-
-    private void shareIntent(Cocktail cocktail) {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Have a look at this nice cocktail!\nhttps://www.thecocktaildb.com/drink.php?c=" + cocktail.getID());
-        sendIntent.setType("text/plain");
-        Intent shareIntent = Intent.createChooser(sendIntent, null);
-        layoutInflater.getContext().startActivity(shareIntent);
     }
 
     public File updateCocktailImage(Cocktail cocktail, int position) {
