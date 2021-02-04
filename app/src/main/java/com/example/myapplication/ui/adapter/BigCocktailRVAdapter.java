@@ -1,15 +1,34 @@
 package com.example.myapplication.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.example.myapplication.Cocktail;
 import com.example.myapplication.R;
-import com.example.myapplication.ui.UICallback;
+
+import org.jetbrains.annotations.NotNull;
 
 public class BigCocktailRVAdapter extends CocktailRVAdapter {
 
     public BigCocktailRVAdapter(Context context) {
         super(context);
+    }
+
+    @Override
+    public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        Cocktail cocktail = super.cocktailList().get(position);
+
+        holder.shareButtonView.setOnClickListener(v -> shareIntent(cocktail));
+    }
+
+    private void shareIntent(Cocktail cocktail) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Have a look at this nice cocktail!\nhttps://www.thecocktaildb.com/drink.php?c=" + cocktail.getID());
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        super.layoutInflater.getContext().startActivity(shareIntent);
     }
 
     @Override
