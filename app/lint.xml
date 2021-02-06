@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="IconXmlAndPng">
+        <ignore path="src/main/res/mipmap-hdpi/ic_cocktail_round.png" />
+        <ignore path="src/main/res/mipmap-mdpi/ic_cocktail_round.png" />
+    </issue>
+</lint>

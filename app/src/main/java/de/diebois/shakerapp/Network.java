@@ -82,89 +82,79 @@ public class Network{
     //Multi Ingredient Search (kurz MIS)
     public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, LinkedHashMap<String, Ingredient> ingredientsAtHome){
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(() -> {
 
-                //Zeitmessung weil ich performance Bedenken bei vielen Zutaten habe!
-                long startTime = System.nanoTime();
+            //Zeitmessung weil ich performance Bedenken bei vielen Zutaten habe!
+            long startTime = System.nanoTime();
 
-                HashMap<Integer, Integer> CocktailCount = new HashMap<Integer, Integer>();
-                ExecutorService Executor = Executors.newCachedThreadPool();
+            HashMap<Integer, Integer> CocktailCount = new HashMap<>();
+            ExecutorService Executor = Executors.newCachedThreadPool();
 
-                for(String ingredientName : ingredientsAtHome.keySet()){
+            for(String ingredientName : ingredientsAtHome.keySet()){
 
-                    Executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            System.out.println("Running MIS for "+ingredientName);
-                            MIScocktailCounter(CocktailCount, ingredientName);
-                            System.out.println("MIS for "+ingredientName+" done!");
-                        }
-                    });
-                }
+                Executor.execute(() -> {
+                    System.out.println("Running MIS for "+ingredientName);
+                    MIScocktailCounter(CocktailCount, ingredientName);
+                    System.out.println("MIS for "+ingredientName+" done!");
+                });
+            }
 
-                try{
-                    Executor.shutdown();
-                    boolean finished = Executor.awaitTermination(1, TimeUnit.MINUTES);
-                    System.out.println("Finished MIS!");
-                }catch(Exception e){
-                    System.out.println("Something went wrong with the Executor service in MIS!");
-                }
+            try{
+                Executor.shutdown();
+                boolean finished = Executor.awaitTermination(1, TimeUnit.MINUTES);
+                System.out.println("Finished MIS!");
+            }catch(Exception e){
+                System.out.println("Something went wrong with the Executor service in MIS!");
+            }
 
 
-                //Es gibt keine Cocktails mit einer Zutat: Entferne Cocktails die nur bei einer Zutaten Abfrage auftauchen
-                CocktailCount.entrySet().removeIf(cnt -> cnt.getValue() == 1);
+            //Es gibt keine Cocktails mit einer Zutat: Entferne Cocktails die nur bei einer Zutaten Abfrage auftauchen
+            CocktailCount.entrySet().removeIf(cnt -> cnt.getValue() == 1);
 
-                LinkedHashMap<Integer, Cocktail> candidates = new LinkedHashMap<Integer, Cocktail>();
+            LinkedHashMap<Integer, Cocktail> candidates = new LinkedHashMap<>();
 
-                ExecutorService Executor2 = Executors.newCachedThreadPool();
+            ExecutorService Executor2 = Executors.newCachedThreadPool();
 
-                for(int ID : CocktailCount.keySet()){
+            for(int ID : CocktailCount.keySet()){
 
-                    Executor2.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            candidates.put(ID, MIScocktailLoader(ID));
-                        }
-                    });
-                }
+                Executor2.execute(() -> candidates.put(ID, MIScocktailLoader(ID)));
+            }
 
-                try{
-                    Executor2.shutdown();
-                    boolean finished = Executor2.awaitTermination(1, TimeUnit.MINUTES);
-                    //System.out.println("Finished Candidate loading!");
-                }catch(Exception e){
-                    System.out.println("Something went wrong with the Executor service in MIS!");
-                }
+            try{
+                Executor2.shutdown();
+                boolean finished = Executor2.awaitTermination(1, TimeUnit.MINUTES);
+                //System.out.println("Finished Candidate loading!");
+            }catch(Exception e){
+                System.out.println("Something went wrong with the Executor service in MIS!");
+            }
 
-                for(int ID: candidates.keySet()){
+            for(int ID: candidates.keySet()){
 
-                    boolean allAtHome = true;
+                boolean allAtHome = true;
 
-                    for(String ingr : candidates.get(ID).getIngredients()){
-                        if(!ingredientsAtHome.keySet().contains(ingr)){
-                            //System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
-                            allAtHome = false;
-                        }
-
-                    }
-                    if(allAtHome){
-                        System.out.println("Drink with ID = "+ID+" contains only Ingredients, that are at home!");
-                        resultMap.put(ID, candidates.get(ID));
+                for(String ingr : candidates.get(ID).getIngredients()){
+                    if (!ingredientsAtHome.containsKey(ingr)) {
+                        //System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
+                        allAtHome = false;
+                        break;
                     }
 
-
+                }
+                if(allAtHome){
+                    System.out.println("Drink with ID = "+ID+" contains only Ingredients, that are at home!");
+                    resultMap.put(ID, candidates.get(ID));
                 }
 
-                long elapsedTimeMillis = (System.nanoTime() - startTime)/1000000;
-                System.out.println("MIS-test: \n - size = "+ingredientsAtHome.size()+"\n - time "+ elapsedTimeMillis+" millis \n - Cocktails found: "+resultMap.size());
-                System.out.println("Result of MIS: ");
-                for(Cocktail c : resultMap.values()){
-                    System.out.println(c);
-                }
 
             }
+
+            long elapsedTimeMillis = (System.nanoTime() - startTime)/1000000;
+            System.out.println("MIS-test: \n - size = "+ingredientsAtHome.size()+"\n - time "+ elapsedTimeMillis+" millis \n - Cocktails found: "+resultMap.size());
+            System.out.println("Result of MIS: ");
+            for(Cocktail c : resultMap.values()){
+                System.out.println(c);
+            }
+
         }).start();
 
     }
@@ -254,11 +244,11 @@ public class Network{
     public static void downloadPic(String filename, String URL, UICallback uicb){
         Request request = new Request.Builder().url(URL).build();
         okHttpClient.newCall(request).enqueue(new Callback() {
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
             }
 
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     throw new IOException("Failed to download file: " + response);
                 }
@@ -272,6 +262,7 @@ public class Network{
 
                 // ???
                 if (file.exists())
+                    //noinspection ResultOfMethodCallIgnored
                     file.delete();
 
                 try {

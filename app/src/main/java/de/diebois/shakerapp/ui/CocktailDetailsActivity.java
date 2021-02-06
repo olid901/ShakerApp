@@ -131,7 +131,7 @@ public class CocktailDetailsActivity extends AppCompatActivity {
         // TODO Das hier ist mehr oder weniger von CocktailRVAdapter kopiert - Kombinieren?
         // Abbrechen, wenn der Cocktail kein Bild hat
         // Was aktuell nur beim "Americano" der Fall ist
-        if (!cocktail.hasImage()) {
+        if (cocktail.isImageMissing()) {
             return;
         }
 
@@ -161,7 +161,7 @@ class IngredientsRVAdapter extends RecyclerView.Adapter<IngredientsRVAdapter.Vie
     private final LayoutInflater layoutInflater;
 
     private List<Ingredient> ingredientList() {
-        return new ArrayList<Ingredient>(ingredientMap.values());
+        return new ArrayList<>(ingredientMap.values());
     }
 
     public IngredientsRVAdapter(Context context) {
@@ -237,7 +237,7 @@ class IngredientsRVAdapter extends RecyclerView.Adapter<IngredientsRVAdapter.Vie
     /**
      * Stores and recycles views as they are scrolled off screen
      */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView ingredientNameView;
         final ImageView ingredientImageView;
 

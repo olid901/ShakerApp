@@ -16,4 +16,10 @@
     <string name="heading_glass">Glass</string>
     <string name="default_text_glass">Unknown</string>
     <string name="cocktail_icon_attribution">App icon and Cocktails:\nTheCocktailDB.com</string>
+    <string name="desc_share_button">Cocktail share button</string>
+    <string name="desc_like_button">Cocktail like button</string>
+    <string name="desc_save_ingredient_button">Save ingredient button</string>
+    <string name="desc_cocktail_name">Cocktail-Name</string>
+    <string name="desc_ingredient_image">Ingredient image</string>
+    <string name="desc_ingredient_name">Ingredient name</string>
 </resources>

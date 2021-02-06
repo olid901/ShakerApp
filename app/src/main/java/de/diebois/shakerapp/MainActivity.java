@@ -50,13 +50,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         //Cocktails laden
-        Cocktails = new LinkedHashMap<Integer, Cocktail>();
-        Ingredients = new LinkedHashMap<String, Ingredient>();
+        Cocktails = new LinkedHashMap<>();
+        Ingredients = new LinkedHashMap<>();
 
-        LinkedHashMap<Integer, Cocktail> resMap = new LinkedHashMap<Integer, Cocktail>();
+        LinkedHashMap<Integer, Cocktail> resMap = new LinkedHashMap<>();
 
         //test MIS
-        LinkedHashMap<String, Ingredient> atHome = new LinkedHashMap<String, Ingredient>();
+        LinkedHashMap<String, Ingredient> atHome = new LinkedHashMap<>();
 
 //        atHome.put("Gin", new Ingredient("Gin"));
 //        atHome.put("Vodka", new Ingredient("Vodka"));

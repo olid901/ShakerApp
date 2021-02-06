@@ -7,8 +7,6 @@ import de.diebois.shakerapp.R;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 public class SmallCocktailRVAdapter extends CocktailRVAdapter {
 
     @Override
