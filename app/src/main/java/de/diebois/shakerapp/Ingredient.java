@@ -2,7 +2,10 @@ package de.diebois.shakerapp;
 
 public class Ingredient {
 
-    private String StrIngredient, StrDescription, StrID, Prozent;
+    private final String StrIngredient;
+    private String StrDescription;
+    private String StrID;
+    private String Prozent;
     private boolean atHome = false;
 
     public boolean isAtHome() {
@@ -17,11 +20,6 @@ public class Ingredient {
 
     public Ingredient(String StrIngredient){
         this.StrIngredient = StrIngredient;
-    }
-
-    public void downloadPicture(){
-        //TBA in Network! (Karte Bilder speichern)
-        //Network.downloadPic(Img_Url(SMALL));
     }
 
     public String getStrIngredient() {

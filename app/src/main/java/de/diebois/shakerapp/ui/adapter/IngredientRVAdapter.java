@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import de.diebois.shakerapp.Cocktail;
 import de.diebois.shakerapp.Helper;
 import de.diebois.shakerapp.Ingredient;
 import de.diebois.shakerapp.MainActivity;

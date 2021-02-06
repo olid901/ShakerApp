@@ -12,12 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import de.diebois.shakerapp.Cocktail;
 import de.diebois.shakerapp.ui.CocktailClickListener;
 import de.diebois.shakerapp.ui.CocktailDetailsActivity;
 import de.diebois.shakerapp.ui.adapter.CocktailRVAdapter;
-
-import java.util.LinkedHashMap;
 
 /**
  * Allgemeine Cocktail-Fragment-Klasse, da wir vermutlich mehrere
@@ -54,8 +51,6 @@ public abstract class CocktailFragment extends Fragment implements CocktailClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(getCurrentFragmentID(), container, false);
-
-        LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<>();
 
         RecyclerView recyclerView = view.findViewById(getCurrentRecViewID());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

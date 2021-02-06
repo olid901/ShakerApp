@@ -7,13 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import de.diebois.shakerapp.Cocktail;
 import de.diebois.shakerapp.ui.CocktailClickListener;
 import de.diebois.shakerapp.ui.CocktailDetailsActivity;
-import de.diebois.shakerapp.ui.adapter.CocktailRVAdapter;
 import de.diebois.shakerapp.ui.adapter.IngredientRVAdapter;
-
-import java.util.LinkedHashMap;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,8 +50,6 @@ public abstract class IngredientFragment extends Fragment implements CocktailCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(getCurrentFragmentID(), container, false);
-
-        LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<>();
 
         RecyclerView recyclerView = view.findViewById(getCurrentRecViewID());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

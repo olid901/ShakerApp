@@ -10,7 +10,8 @@ public class Cocktail {
     private final int ID;
     private final String StrDrink;
     private final String Img_Url;
-    private ArrayList<String> Ingredients, Measures;
+    private final ArrayList<String> Ingredients;
+    private final ArrayList<String> Measures;
     private String Instruction, Category, Alcoholic, Glass, Tags;
     private boolean favorite;
 
@@ -22,7 +23,7 @@ public class Cocktail {
 
     public String getImg_Url() { return Img_Url; }
 
-    public boolean hasImage() { return !(Img_Url == "null"); }
+    public boolean isImageMissing() { return Img_Url.equals("null"); }
 
     //TODO: Hier statt strings eigentlich ne Liste mit Ingredients ausspucken, wenn möglich
     public ArrayList<String> getIngredients() { return Ingredients; }
@@ -73,8 +74,8 @@ public class Cocktail {
         this.Alcoholic = "";
         this.Glass = "";
         this.Tags = "";
-        this.Ingredients = new ArrayList<String>();
-        this.Measures = new ArrayList<String>();
+        this.Ingredients = new ArrayList<>();
+        this.Measures = new ArrayList<>();
     }
 
     public void addIngredient(String Ingredient, String Measurement){
@@ -139,11 +140,6 @@ public class Cocktail {
         return Math.round(2*oz*2.95735)/2.0;
     }
     private static int cupsToMl(double cups){ return (int)Math.round(cups*240); }
-
-    public void downloadPicture(){
-        //TBA in Network! (Karte Bilder speichern)
-        //Network.downloadPic(Img_Url);
-    }
 
     @Override
     public String toString() {

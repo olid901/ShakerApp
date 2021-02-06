@@ -12,7 +12,7 @@ public class Helper {
      */
     public static void notifyAdaperFromUi(RecyclerView.Adapter adapter){
         if (adapter != null){
-            runOnUiThread(() -> adapter.notifyDataSetChanged());
+            runOnUiThread(adapter::notifyDataSetChanged);
         }
     }
 

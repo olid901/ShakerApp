@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:contentDescription="Cocktail Image"
+            android:contentDescription="@string/desc_cocktail_image"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_image_not_found"
             card_view:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:fontFamily="sans-serif-light"
-            android:text="Cocktail-Name"
+            android:text="@string/desc_cocktail_name"
             android:textSize="22sp"
             card_view:layout_constraintBottom_toBottomOf="@id/big_cocktail_name_background"
             card_view:layout_constraintLeft_toLeftOf="@id/big_cocktail_name_background"
@@ -60,7 +60,8 @@
             android:src="@drawable/ic_heart_border"
             card_view:layout_constraintBottom_toBottomOf="@id/big_cocktail_interaction_background"
             card_view:layout_constraintLeft_toLeftOf="@id/big_cocktail_interaction_background"
-            card_view:layout_constraintTop_toTopOf="@id/big_cocktail_interaction_background" />
+            card_view:layout_constraintTop_toTopOf="@id/big_cocktail_interaction_background"
+            android:contentDescription="@string/desc_like_button" />
 
         <ImageButton
             android:id="@+id/big_cocktail_interaction_share"
@@ -72,7 +73,8 @@
             android:src="@drawable/ic_share"
             card_view:layout_constraintBottom_toBottomOf="@id/big_cocktail_interaction_background"
             card_view:layout_constraintLeft_toRightOf="@id/big_cocktail_interaction_like"
-            card_view:layout_constraintTop_toTopOf="@id/big_cocktail_interaction_background" />
+            card_view:layout_constraintTop_toTopOf="@id/big_cocktail_interaction_background"
+            android:contentDescription="@string/desc_share_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

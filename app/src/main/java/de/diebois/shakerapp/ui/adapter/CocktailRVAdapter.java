@@ -74,7 +74,7 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
     public File updateCocktailImage(Cocktail cocktail, int position) {
         // Abbrechen, wenn der Cocktail kein Bild hat
         // Was aktuell nur beim "Americano" der Fall ist
-        if (!cocktail.hasImage()) {
+        if (cocktail.isImageMissing()) {
             return null;
         }
 

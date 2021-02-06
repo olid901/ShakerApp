@@ -18,9 +18,9 @@
             android:paddingTop="20dp"
             android:paddingHorizontal="20dp"
             android:adjustViewBounds="true"
-            android:contentDescription="Cocktail Image"
+            android:contentDescription="@string/desc_ingredient_image"
             android:scaleType="centerCrop"
-            android:src="@drawable/whiskey"
+            android:src="@drawable/ic_image_not_found"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
 
@@ -33,7 +33,7 @@
             android:textColor="@color/white"
             android:textAlignment="center"
             android:paddingTop="6dp"
-            android:text="'57 Chevy with a White License Plate"
+            android:text="@string/desc_ingredient_name"
             android:textSize="14sp"
             card_view:layout_constraintTop_toBottomOf="@id/ingredient_image"
             card_view:layout_constraintLeft_toLeftOf="parent"
