@@ -33,7 +33,7 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
     private CocktailClickListener itemClickListener;
 
     protected List<Cocktail> cocktailList(){
-        return new ArrayList<Cocktail>(cocktailMap.values());
+        return new ArrayList<>(cocktailMap.values());
     }
 
     public CocktailRVAdapter(Context context) {
@@ -108,12 +108,18 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
         final TextView cocktailNameView;
         final ImageView cocktailImgView;
         final ImageButton shareButtonView;
+        final ImageButton favoriteButtonView;
 
         ViewHolder(View itemView) {
             super(itemView);
             cocktailNameView = itemView.findViewById(getCocktailNameID());
             cocktailImgView = itemView.findViewById(getCocktailImageID());
+
+            // Die beiden Buttons sind im Prinzip nur bei der Großansicht wichtig
+            // In der kleinen Ansicht werden die mit "null" initialisiert
+            // Aber bei der kleinen Ansicht macht das nichts aus
             shareButtonView = itemView.findViewById(R.id.big_cocktail_interaction_share);
+            favoriteButtonView = itemView.findViewById(R.id.big_cocktail_interaction_like);
             itemView.setOnClickListener(this);
         }
 
@@ -125,9 +131,10 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
 
     /**
      * Convenience method for getting data at click position
+     * wichtig: Es muss die cocktailList verwendet werden, da bei der Map sonst versucht
+     * wird das Item zu returnen, das auf id gemappt ist, nicht das an der Stelle id
+     * Daher zur Verständnis auch mal "id" in "pos" umbenannt, damit es nicht zu Verwirrung kommt
      */
-    //wichtig: Es muss die cocktailList verwendet werden, da bei der Map sonst versucht wird das Item zu returnen, das auf id gemappt ist, nicht das an der Stelle id
-    //Daher zur Verständnis auch mal "id" in "pos" umbenannt, damit es nicht zu Verwirrung kommt
     public Cocktail getItem(int pos) {
         return cocktailList().get(pos);
     }

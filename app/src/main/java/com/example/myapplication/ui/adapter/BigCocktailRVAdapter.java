@@ -2,16 +2,22 @@ package com.example.myapplication.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.example.myapplication.Cocktail;
+import com.example.myapplication.Database;
+import com.example.myapplication.Helper;
 import com.example.myapplication.R;
 
 import org.jetbrains.annotations.NotNull;
 
 public class BigCocktailRVAdapter extends CocktailRVAdapter {
 
+    private final Database db;
+
     public BigCocktailRVAdapter(Context context) {
         super(context);
+        this.db = new Database(context);
     }
 
     @Override
@@ -20,6 +26,24 @@ public class BigCocktailRVAdapter extends CocktailRVAdapter {
         Cocktail cocktail = super.cocktailList().get(position);
 
         holder.shareButtonView.setOnClickListener(v -> shareIntent(cocktail));
+
+        holder.favoriteButtonView.setOnClickListener(v -> {
+            if (db.isInDatabase(cocktail)) {
+                db.deleteCocktail(cocktail);
+            } else {
+                db.addCocktail(cocktail);
+            }
+            Helper.notifyAdaperFromUi(this, position);
+        });
+
+        boolean val = db.isInDatabase(cocktail);
+
+        if (val) {
+            holder.favoriteButtonView.setImageResource(R.drawable.ic_heart_filled);
+        } else {
+            holder.favoriteButtonView.setImageResource(R.drawable.ic_heart_border);
+        }
+
     }
 
     private void shareIntent(Cocktail cocktail) {

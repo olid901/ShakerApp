@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
 public class Cocktail {
 
 
-    private int ID;
-    private String StrDrink;
-    private String Img_Url;
+    private final int ID;
+    private final String StrDrink;
+    private final String Img_Url;
     private ArrayList<String> Ingredients, Measures;
     private String Instruction, Category, Alcoholic, Glass, Tags;
     private boolean favorite;
