@@ -1,7 +1,5 @@
 package com.example.myapplication.ui.fragment;
 
-import android.widget.ImageButton;
-
 import com.example.myapplication.Cocktail;
 import com.example.myapplication.Network;
 import com.example.myapplication.R;
@@ -24,7 +22,6 @@ public class BigCocktailFragment extends CocktailFragment {
         LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<>();
         adapter.setCocktailList(cocktailMap);
         Network.loadCocktails(apiURL, cocktailMap, adapter);
-
     }
 
     @Override

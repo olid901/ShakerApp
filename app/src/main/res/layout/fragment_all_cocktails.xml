@@ -13,7 +13,8 @@
         android:ems="10"
         android:maxLines="1"
         android:inputType="textFilter"
-        android:hint="@string/cocktail_search_hint" />
+        android:hint="@string/cocktail_search_hint"
+        android:autofillHints="" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/small_cocktail_rv"
