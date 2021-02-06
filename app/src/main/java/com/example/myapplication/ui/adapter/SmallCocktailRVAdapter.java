@@ -5,7 +5,16 @@ import android.content.Context;
 import com.example.myapplication.Cocktail;
 import com.example.myapplication.R;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
 public class SmallCocktailRVAdapter extends CocktailRVAdapter {
+
+    @Override
+    public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+    }
 
     public SmallCocktailRVAdapter(Context context) {
         super(context);
@@ -18,12 +27,12 @@ public class SmallCocktailRVAdapter extends CocktailRVAdapter {
 
     @Override
     public int getCocktailNameID() {
-        return R.id.small_cocktail_layout_name;
+        return R.id.small_ingredient_layout_name;
     }
 
     @Override
     public int getCocktailImageID() {
-        return R.id.small_cocktail_img;
+        return R.id.small_ingredient_img;
     }
 
     @Override

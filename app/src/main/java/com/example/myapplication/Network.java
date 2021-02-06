@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.myapplication.ui.UICallback;
 import com.example.myapplication.ui.adapter.CocktailRVAdapter;
+import com.example.myapplication.ui.adapter.IngredientRVAdapter;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -17,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,8 +38,10 @@ public class Network{
         okHttpClient = new OkHttpClient();
     }
 
-    public static void loadIngredients(String URL, LinkedHashMap<String, Ingredient> IngredientMap, CocktailRVAdapter adapter){
+    //Wenn kein Filter gewünscht: Null als Filter übergeben
+    public static void loadIngredients(String URL, String filter, LinkedHashMap<String, Ingredient> IngredientMap, IngredientRVAdapter adapter){
         final Request request = new Request.Builder().url(URL).build();
+        System.out.println("Filter is: "+filter);
 
         // use async method, to not block the UI thread
         okHttpClient.newCall(request).enqueue(new Callback() {
@@ -53,10 +57,22 @@ public class Network{
                     String rawResponse = response.body().string();
 //                    System.out.println("Ingredient response: "+rawResponse);
                     extractIngredients(rawResponse, IngredientMap);
+
+                    if(filter != null){
+                            for(Iterator<String> it = IngredientMap.keySet().iterator(); it.hasNext();) {
+                                String s = it.next();
+                                if(!s.toLowerCase().contains(filter.toLowerCase())) {
+                                    it.remove();
+                                }
+                            }
+                    }
+
+                    Helper.notifyAdaperFromUi(adapter);
                 }
             }
         });
-        Helper.notifyAdaperFromUi(adapter);
+
+
     }
 
     public static void addFullIngredientInfo(Ingredient i){

@@ -1,0 +1,75 @@
+package com.example.myapplication.ui.fragment;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.example.myapplication.Cocktail;
+import com.example.myapplication.ui.CocktailClickListener;
+import com.example.myapplication.ui.CocktailDetailsActivity;
+import com.example.myapplication.ui.adapter.CocktailRVAdapter;
+import com.example.myapplication.ui.adapter.IngredientRVAdapter;
+
+import java.util.LinkedHashMap;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+/**
+ * Allgemeine Cocktail-Fragment-Klasse, da wir vermutlich mehrere
+ * Klassen brauchen die alle mehr oder weniger das gleiche machen
+ * TODO: Rausfinden, wie ich die Cocktail-Fragment generischer machen kann
+ * Vor allem in Hinsicht auf den jeweiligen RV-Adapter
+ */
+public abstract class IngredientFragment extends Fragment implements CocktailClickListener {
+
+    protected IngredientRVAdapter adapter;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    /**
+     * Was getan werden soll, wenn auf ein jeweiliges Cocktail-Item in einer Liste geklickt wird
+     * -> Cocktail öffnen und Zeug wie Zutaten in Großansicht darstellen
+     */
+    @Override
+    public void onItemClick(View view, int position) {
+        Context context = getContext();
+        Intent intent = new Intent(context, CocktailDetailsActivity.class);
+
+        // Wir weisen einem Cocktail direkt das Cocktail-Objekt zu, so haben wir
+        // direkt die Cocktail-Daten da und sparen uns die Netzwerkabfrage
+       // CocktailDetailsActivity.cocktail = adapter.getItem(position);
+        System.out.println("Ingredient has been clicked!");
+        context.startActivity(intent);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View view = inflater.inflate(getCurrentFragmentID(), container, false);
+
+        LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<>();
+
+        RecyclerView recyclerView = view.findViewById(getCurrentRecViewID());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        adapter = createAdapter();
+        recyclerView.setAdapter(adapter);
+        adapter.setClickListener(this);
+
+        fetchAllIngredients();
+        return view;
+    }
+
+    abstract public void fetchAllIngredients();
+    abstract int getCurrentFragmentID();
+    abstract int getCurrentRecViewID();
+    abstract IngredientRVAdapter createAdapter();
+}

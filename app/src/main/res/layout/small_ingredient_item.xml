@@ -1,5 +1,6 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,9 +16,9 @@
             android:id="@+id/small_ingredient_img"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:padding="10dp"
             android:adjustViewBounds="true"
-            android:contentDescription="Cocktail Image"
+            android:contentDescription="Ingredient Image"
+            android:padding="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_image_not_found"
             card_view:layout_constraintStart_toStartOf="parent"
@@ -27,14 +28,24 @@
             android:id="@+id/small_ingredient_layout_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
             android:fontFamily="sans-serif-light"
-            android:text="'57 Chevy with a White License Plate"
+            android:text="Vodka"
             android:textSize="22sp"
-            card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintLeft_toRightOf="@id/small_ingredient_img"
             card_view:layout_constraintRight_toRightOf="parent"
-            card_view:layout_constraintLeft_toRightOf="@id/small_ingredient_img" />
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ingredient_atHome_button"
+            android:layout_width="61dp"
+            android:layout_height="55dp"
+            card_view:layout_constraintRight_toRightOf="@id/small_ingredient_layout_name"
+            card_view:layout_constraintBaseline_toBaselineOf="@id/small_ingredient_layout_name"
+            card_view:srcCompat="@drawable/ic_home"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="350dp"
+            tools:layout_editor_absoluteY="23dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
