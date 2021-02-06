@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ShakerApp</string>
     <string name="navigation_header_image">Navigation Header Image</string>
-    <string name="navigation_header_sub">Die beste Cocktail-App aller Zeiten!</string>
+    <string name="navigation_header_sub">The best Cocktail app of all time!</string>
 
     <string name="popular_drinks">Popular Drinks</string>
     <string name="saved_drinks">Saved Drinks</string>
@@ -15,4 +15,5 @@
     <string name="heading_instructions">Instructions</string>
     <string name="heading_glass">Glass</string>
     <string name="default_text_glass">Unknown</string>
+    <string name="cocktail_icon_attribution">App icon and Cocktails:\nTheCocktailDB.com</string>
 </resources>
