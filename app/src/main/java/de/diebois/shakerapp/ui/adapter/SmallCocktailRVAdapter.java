@@ -1,9 +1,9 @@
-package com.example.myapplication.ui.adapter;
+package de.diebois.shakerapp.ui.adapter;
 
 import android.content.Context;
 
-import com.example.myapplication.Cocktail;
-import com.example.myapplication.R;
+import de.diebois.shakerapp.Cocktail;
+import de.diebois.shakerapp.R;
 
 import org.jetbrains.annotations.NotNull;
 

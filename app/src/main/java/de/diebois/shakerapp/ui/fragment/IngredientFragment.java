@@ -1,23 +1,23 @@
-package com.example.myapplication.ui.fragment;
+package de.diebois.shakerapp.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myapplication.Cocktail;
-import com.example.myapplication.ui.CocktailClickListener;
-import com.example.myapplication.ui.CocktailDetailsActivity;
-import com.example.myapplication.ui.adapter.CocktailRVAdapter;
+import de.diebois.shakerapp.Cocktail;
+import de.diebois.shakerapp.ui.CocktailClickListener;
+import de.diebois.shakerapp.ui.CocktailDetailsActivity;
+import de.diebois.shakerapp.ui.adapter.CocktailRVAdapter;
+import de.diebois.shakerapp.ui.adapter.IngredientRVAdapter;
 
 import java.util.LinkedHashMap;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Allgemeine Cocktail-Fragment-Klasse, da wir vermutlich mehrere
@@ -25,9 +25,9 @@ import java.util.LinkedHashMap;
  * TODO: Rausfinden, wie ich die Cocktail-Fragment generischer machen kann
  * Vor allem in Hinsicht auf den jeweiligen RV-Adapter
  */
-public abstract class CocktailFragment extends Fragment implements CocktailClickListener {
+public abstract class IngredientFragment extends Fragment implements CocktailClickListener {
 
-    protected CocktailRVAdapter adapter;
+    protected IngredientRVAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,8 +45,8 @@ public abstract class CocktailFragment extends Fragment implements CocktailClick
 
         // Wir weisen einem Cocktail direkt das Cocktail-Objekt zu, so haben wir
         // direkt die Cocktail-Daten da und sparen uns die Netzwerkabfrage
-        CocktailDetailsActivity.cocktail = adapter.getItem(position);
-
+       // CocktailDetailsActivity.cocktail = adapter.getItem(position);
+        System.out.println("Ingredient has been clicked!");
         context.startActivity(intent);
     }
 
@@ -64,12 +64,12 @@ public abstract class CocktailFragment extends Fragment implements CocktailClick
         recyclerView.setAdapter(adapter);
         adapter.setClickListener(this);
 
-        fetchAllCocktails();
+        fetchAllIngredients();
         return view;
     }
 
-    abstract public void fetchAllCocktails();
+    abstract public void fetchAllIngredients();
     abstract int getCurrentFragmentID();
     abstract int getCurrentRecViewID();
-    abstract CocktailRVAdapter createAdapter();
+    abstract IngredientRVAdapter createAdapter();
 }

@@ -1,4 +1,4 @@
-package com.example.myapplication.ui;
+package de.diebois.shakerapp.ui;
 
 /**
  * TODO Vielleicht wird dies hier noch rausgenommen

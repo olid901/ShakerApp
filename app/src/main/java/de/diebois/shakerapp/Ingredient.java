@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package de.diebois.shakerapp;
 
 public class Ingredient {
 

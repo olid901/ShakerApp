@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myapplication"
+    package="de.diebois.shakerapp"
     android:installLocation="preferExternal"
     android:requestLegacyExternalStorage="true">
 
@@ -18,7 +18,7 @@
         <activity
             android:name=".ui.CocktailDetailsActivity"
             android:label="HALLO TEST"
-            android:parentActivityName="com.example.myapplication.MainActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.MyApplication.NoActionBar">
         </activity>
         <activity

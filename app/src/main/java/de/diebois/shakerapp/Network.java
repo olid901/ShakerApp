@@ -1,12 +1,12 @@
-package com.example.myapplication;
+package de.diebois.shakerapp;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.example.myapplication.ui.UICallback;
-import com.example.myapplication.ui.adapter.CocktailRVAdapter;
-import com.example.myapplication.ui.adapter.IngredientRVAdapter;
+import de.diebois.shakerapp.ui.UICallback;
+import de.diebois.shakerapp.ui.adapter.CocktailRVAdapter;
+import de.diebois.shakerapp.ui.adapter.IngredientRVAdapter;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;

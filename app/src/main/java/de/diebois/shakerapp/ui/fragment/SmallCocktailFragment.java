@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.fragment;
+package de.diebois.shakerapp.ui.fragment;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,11 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.myapplication.Cocktail;
-import com.example.myapplication.Network;
-import com.example.myapplication.R;
-import com.example.myapplication.ui.adapter.CocktailRVAdapter;
-import com.example.myapplication.ui.adapter.SmallCocktailRVAdapter;
+import de.diebois.shakerapp.Cocktail;
+import de.diebois.shakerapp.Network;
+import de.diebois.shakerapp.R;
+import de.diebois.shakerapp.ui.adapter.CocktailRVAdapter;
+import de.diebois.shakerapp.ui.adapter.SmallCocktailRVAdapter;
 
 import java.util.LinkedHashMap;
 

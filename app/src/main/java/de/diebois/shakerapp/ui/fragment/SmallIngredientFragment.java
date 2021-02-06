@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.fragment;
+package de.diebois.shakerapp.ui.fragment;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,15 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.myapplication.Ingredient;
-import com.example.myapplication.Network;
-import com.example.myapplication.R;
-import com.example.myapplication.ui.adapter.IngredientRVAdapter;
-import com.example.myapplication.ui.adapter.SmallIngredientRVAdapter;
+import de.diebois.shakerapp.Ingredient;
+import de.diebois.shakerapp.Network;
+import de.diebois.shakerapp.R;
+import de.diebois.shakerapp.ui.adapter.IngredientRVAdapter;
+import de.diebois.shakerapp.ui.adapter.SmallIngredientRVAdapter;
 
 import java.util.LinkedHashMap;
 
 /**
+ * TODO: In IngredientFragment integrieren
  * Dieses Fragment zeigt Cocktails klein an, was für größere Listen praktischer wird
  */
 public class SmallIngredientFragment extends IngredientFragment {
