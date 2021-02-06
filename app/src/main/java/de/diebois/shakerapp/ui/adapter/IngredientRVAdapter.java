@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.adapter;
+package de.diebois.shakerapp.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,14 +10,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.myapplication.Cocktail;
-import com.example.myapplication.Helper;
-import com.example.myapplication.MainActivity;
-import com.example.myapplication.Network;
-import com.example.myapplication.R;
-import com.example.myapplication.ui.CocktailClickListener;
+import de.diebois.shakerapp.Cocktail;
+import de.diebois.shakerapp.Helper;
+import de.diebois.shakerapp.Ingredient;
+import de.diebois.shakerapp.MainActivity;
+import de.diebois.shakerapp.Network;
+import de.diebois.shakerapp.R;
+import de.diebois.shakerapp.ui.CocktailClickListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,24 +25,26 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVAdapter.ViewHolder> {
+import androidx.recyclerview.widget.RecyclerView;
 
-    private LinkedHashMap<Integer, Cocktail> cocktailMap;
+public abstract class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapter.ViewHolder> {
+
+    private LinkedHashMap<String, Ingredient> IngredientMap;
     protected final LayoutInflater layoutInflater;
     private CocktailClickListener itemClickListener;
 
-    protected List<Cocktail> cocktailList(){
-        return new ArrayList<>(cocktailMap.values());
+    protected List<Ingredient> ingredientList(){
+        return new ArrayList<>(IngredientMap.values());
     }
 
-    public CocktailRVAdapter(Context context) {
+    public IngredientRVAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
-        cocktailMap = new LinkedHashMap<>(); // Prevent app from crashing
+        IngredientMap = new LinkedHashMap<>(); // Prevent app from crashing
     }
 
 
-    public void setCocktailList(LinkedHashMap<Integer, Cocktail> cocktailMap) {
-        this.cocktailMap = cocktailMap;
+    public void setIngredientList(LinkedHashMap<String, Ingredient> IngredientMap) {
+        this.IngredientMap = IngredientMap;
     }
 
     @NotNull
@@ -53,40 +54,40 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
     }
 
     /**
-     * Hier wird der Cocktail-Name und das Bild zu jedem Eintrag im Recycler View gesetzt
+     * Hier wird der ingredient-Name und das Bild zu jedem Eintrag im Recycler View gesetzt
      */
     @Override
     public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
-        Cocktail cocktail = cocktailList().get(position);
+        Ingredient ingredient = ingredientList().get(position);
 
         // TODO Return null ist böse!!! Sollte noch geändert werden bei Gelegenheit
-        File file = updateCocktailImage(cocktail, position);
+        File file = updateingredientImage(ingredient, position);
         if (file != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-            holder.cocktailImgView.setImageBitmap(bitmap);
+            holder.ingredientImgView.setImageBitmap(bitmap);
         } else {
-            holder.cocktailImgView.setImageResource(R.drawable.ic_image_not_found);
+            holder.ingredientImgView.setImageResource(R.drawable.ic_image_not_found);
         }
 
-        holder.cocktailNameView.setText(cocktail.getStrDrink());
+        holder.ingredientNameView.setText(ingredient.getStrIngredient());
     }
 
-    public File updateCocktailImage(Cocktail cocktail, int position) {
-        // Abbrechen, wenn der Cocktail kein Bild hat
+    public File updateingredientImage(Ingredient ingredient, int position) {
+        // Abbrechen, wenn der ingredient kein Bild hat
         // Was aktuell nur beim "Americano" der Fall ist
-        if (!cocktail.hasImage()) {
+        if (!ingredient.hasImage()) {
             return null;
         }
 
-        String url = getCocktailImageURL(cocktail);
-        String filename = getCocktailImageFilename(cocktail);
+        String url = getingredientImageURL(ingredient);
+        String filename = getingredientImageFilename(ingredient);
 
         File file = new File(MainActivity.localDir, filename);
 
         // Wenn kein Bild gespeichert ist, dann lädt er eines runter und gibt dem Adapter bescheid
         // Danach durchläuft er erneut das onBindViewHolder inklusive dieser Methode hier
         if (!file.exists()) {
-            Network.downloadPic(filename, url, () -> Helper.notifyAdaperFromUi(CocktailRVAdapter.this, position));
+            Network.downloadPic(filename, url, () -> Helper.notifyAdaperFromUi(IngredientRVAdapter.this, position));
             return null;
         } else {
             return file;
@@ -98,28 +99,28 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
      */
     @Override
     public int getItemCount() {
-        return cocktailMap.size();
+        return IngredientMap.size();
     }
 
     /**
      * Stores and recycles views as they are scrolled off screen
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final TextView cocktailNameView;
-        final ImageView cocktailImgView;
-        final ImageButton shareButtonView;
-        final ImageButton favoriteButtonView;
+        final TextView ingredientNameView;
+        final ImageView ingredientImgView;
+        final ImageButton atHomeButtonView;
+       //final ImageButton favoriteButtonView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            cocktailNameView = itemView.findViewById(getCocktailNameID());
-            cocktailImgView = itemView.findViewById(getCocktailImageID());
+            ingredientNameView = itemView.findViewById(getingredientNameID());
+            ingredientImgView = itemView.findViewById(getingredientImageID());
 
             // Die beiden Buttons sind im Prinzip nur bei der Großansicht wichtig
             // In der kleinen Ansicht werden die mit "null" initialisiert
             // Aber bei der kleinen Ansicht macht das nichts aus
-            shareButtonView = itemView.findViewById(R.id.big_cocktail_interaction_share);
-            favoriteButtonView = itemView.findViewById(R.id.big_cocktail_interaction_like);
+            atHomeButtonView = itemView.findViewById(R.id.ingredient_atHome_button);
+            //favoriteButtonView = itemView.findViewById(R.id.big_ingredient_interaction_like);
             itemView.setOnClickListener(this);
         }
 
@@ -131,12 +132,12 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
 
     /**
      * Convenience method for getting data at click position
-     * wichtig: Es muss die cocktailList verwendet werden, da bei der Map sonst versucht
+     * wichtig: Es muss die ingredientList verwendet werden, da bei der Map sonst versucht
      * wird das Item zu returnen, das auf id gemappt ist, nicht das an der Stelle id
      * Daher zur Verständnis auch mal "id" in "pos" umbenannt, damit es nicht zu Verwirrung kommt
      */
-    public Cocktail getItem(int pos) {
-        return cocktailList().get(pos);
+    public Ingredient getItem(int pos) {
+        return ingredientList().get(pos);
     }
 
     /**
@@ -152,24 +153,24 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
     public abstract int getItemLayoutID();
 
     /**
-     * Hole die ID vom TextView, welches den Namen des Cocktails beinhaltet
+     * Hole die ID vom TextView, welches den Namen des ingredients beinhaltet
      */
-    public abstract int getCocktailNameID();
+    public abstract int getingredientNameID();
 
     /**
-     * Hole die ID vom ImageView, welche das Bild des Cocktails beinhaltet
+     * Hole die ID vom ImageView, welche das Bild des ingredients beinhaltet
      */
-    public abstract int getCocktailImageID();
+    public abstract int getingredientImageID();
 
     /**
-     * Hole die Bild-URL vom Cocktail
+     * Hole die Bild-URL vom ingredient
      * Wird benötigt, um zwischen kleinen und großen Bildern unterscheiden zu können
      */
-    public abstract String getCocktailImageURL(Cocktail cocktail);
+    public abstract String getingredientImageURL(Ingredient ingredient);
 
     /**
-     * Hole den Dateinamen des Cocktail-Bilds
+     * Hole den Dateinamen des ingredient-Bilds
      * Wird benötigt, um zwischen kleinen und großen Bildern unterscheiden zu können
      */
-    public abstract String getCocktailImageFilename(Cocktail cocktail);
+    public abstract String getingredientImageFilename(Ingredient ingredient);
 }

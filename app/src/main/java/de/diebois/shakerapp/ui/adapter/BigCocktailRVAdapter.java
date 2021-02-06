@@ -1,13 +1,12 @@
-package com.example.myapplication.ui.adapter;
+package de.diebois.shakerapp.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
-import com.example.myapplication.Cocktail;
-import com.example.myapplication.Database;
-import com.example.myapplication.Helper;
-import com.example.myapplication.R;
+import de.diebois.shakerapp.Cocktail;
+import de.diebois.shakerapp.Database;
+import de.diebois.shakerapp.Helper;
+import de.diebois.shakerapp.R;
 
 import org.jetbrains.annotations.NotNull;
 

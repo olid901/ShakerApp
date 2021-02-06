@@ -1,10 +1,10 @@
-package com.example.myapplication.ui.fragment;
+package de.diebois.shakerapp.ui.fragment;
 
-import com.example.myapplication.Cocktail;
-import com.example.myapplication.Network;
-import com.example.myapplication.R;
-import com.example.myapplication.ui.adapter.BigCocktailRVAdapter;
-import com.example.myapplication.ui.adapter.CocktailRVAdapter;
+import de.diebois.shakerapp.Cocktail;
+import de.diebois.shakerapp.Network;
+import de.diebois.shakerapp.R;
+import de.diebois.shakerapp.ui.adapter.BigCocktailRVAdapter;
+import de.diebois.shakerapp.ui.adapter.CocktailRVAdapter;
 
 import java.util.LinkedHashMap;
 

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package de.diebois.shakerapp;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;

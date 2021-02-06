@@ -1,4 +1,4 @@
-package com.example.myapplication.ui;
+package de.diebois.shakerapp.ui;
 
 import android.view.View;
 

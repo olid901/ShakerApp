@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package de.diebois.shakerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,8 +20,10 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
-    private static final String Cocktails_URL = "https://www.thecocktaildb.com/api/json/v2/9973533/filter.php?a=Alcoholic";
-    private static final String Ingredients_URL = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list";
+    // TODO: URL-Zeug in Network-Klasse vollständig auslagern?
+    private static final String baseUrl = "https://www.thecocktaildb.com/api/json/v2/" + BuildConfig.apikey;
+    private static final String Cocktails_URL = baseUrl + "/filter.php?a=Alcoholic";
+    private static final String Ingredients_URL = baseUrl + "/list.php?i=list";
     public LinkedHashMap<Integer, Cocktail> Cocktails;
     public LinkedHashMap<String, Ingredient> Ingredients;
     public static File localDir;
@@ -56,18 +58,18 @@ public class MainActivity extends AppCompatActivity {
         //test MIS
         LinkedHashMap<String, Ingredient> atHome = new LinkedHashMap<String, Ingredient>();
 
-        atHome.put("Gin", new Ingredient("Gin"));
-        atHome.put("Vodka", new Ingredient("Vodka"));
-        atHome.put("Rum", new Ingredient("Rum"));
-        atHome.put("Ice", new Ingredient("Ice"));
-        atHome.put("Bourbon", new Ingredient("Bourbon"));
-        atHome.put("Water", new Ingredient("Water"));
-        atHome.put("Light rum", new Ingredient("Light rum"));
-        atHome.put("Coca-Cola", new Ingredient("Coca-Cola"));
-        atHome.put("Lime", new Ingredient("Lime"));
-        atHome.put("Lemon", new Ingredient("Lemon"));
-        atHome.put("Tequila", new Ingredient("Tequila"));
-        Network.multiIngredientSearch(resMap, atHome);
+//        atHome.put("Gin", new Ingredient("Gin"));
+//        atHome.put("Vodka", new Ingredient("Vodka"));
+//        atHome.put("Rum", new Ingredient("Rum"));
+//        atHome.put("Ice", new Ingredient("Ice"));
+//        atHome.put("Bourbon", new Ingredient("Bourbon"));
+//        atHome.put("Water", new Ingredient("Water"));
+//        atHome.put("Light rum", new Ingredient("Light rum"));
+//        atHome.put("Coca-Cola", new Ingredient("Coca-Cola"));
+//        atHome.put("Lime", new Ingredient("Lime"));
+//        atHome.put("Lemon", new Ingredient("Lemon"));
+//        atHome.put("Tequila", new Ingredient("Tequila"));
+//        Network.multiIngredientSearch(resMap, atHome);
 
         //Testweise alles Laden, passiert später durch die einzelnen Fragments
         Network.loadCocktails(Cocktails_URL, Cocktails, null);

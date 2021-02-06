@@ -1,12 +1,12 @@
-package com.example.myapplication.ui.adapter;
+package de.diebois.shakerapp.ui.adapter;
 
 import android.content.Context;
 import android.view.View;
 
-import com.example.myapplication.Cocktail;
-import com.example.myapplication.Ingredient;
-import com.example.myapplication.R;
-import com.example.myapplication.ui.CocktailClickListener;
+import de.diebois.shakerapp.Cocktail;
+import de.diebois.shakerapp.Ingredient;
+import de.diebois.shakerapp.R;
+import de.diebois.shakerapp.ui.CocktailClickListener;
 
 import java.util.List;
 

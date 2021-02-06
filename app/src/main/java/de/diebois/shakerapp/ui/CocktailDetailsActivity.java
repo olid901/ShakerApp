@@ -1,4 +1,4 @@
-package com.example.myapplication.ui;
+package de.diebois.shakerapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,13 +19,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.myapplication.Cocktail;
-import com.example.myapplication.Database;
-import com.example.myapplication.Helper;
-import com.example.myapplication.Ingredient;
-import com.example.myapplication.MainActivity;
-import com.example.myapplication.Network;
-import com.example.myapplication.R;
+import de.diebois.shakerapp.Cocktail;
+import de.diebois.shakerapp.Database;
+import de.diebois.shakerapp.Helper;
+import de.diebois.shakerapp.Ingredient;
+import de.diebois.shakerapp.MainActivity;
+import de.diebois.shakerapp.Network;
+import de.diebois.shakerapp.R;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package de.diebois.shakerapp;
 
 import android.content.ContentValues;
 import android.content.Context;

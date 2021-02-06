@@ -4,6 +4,14 @@ Ein Projekt von:
 - @olid901
 - @c-schuhmann
 
+## Einrichtung
+Um die App kompilieren zu können, muss eine datei mit dem Namen `apikey.properties` angelegt
+werden mit dem Inhalt:
+```
+apikey="XXXXX"
+```
+Dazu muss bei TheCocktailDB.com ein API-Key angefragt werden.
+
 ## Geplante Features
 
 - Cocktails suchen

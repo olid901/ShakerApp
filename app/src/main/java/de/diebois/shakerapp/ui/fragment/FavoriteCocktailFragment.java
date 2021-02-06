@@ -1,7 +1,7 @@
-package com.example.myapplication.ui.fragment;
+package de.diebois.shakerapp.ui.fragment;
 
-import com.example.myapplication.Cocktail;
-import com.example.myapplication.Database;
+import de.diebois.shakerapp.Cocktail;
+import de.diebois.shakerapp.Database;
 
 import java.util.LinkedHashMap;
 import java.util.List;
