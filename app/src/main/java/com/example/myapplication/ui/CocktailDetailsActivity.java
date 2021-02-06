@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -15,10 +16,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.Cocktail;
+import com.example.myapplication.Database;
 import com.example.myapplication.Helper;
 import com.example.myapplication.Ingredient;
 import com.example.myapplication.MainActivity;
@@ -58,6 +61,41 @@ public class CocktailDetailsActivity extends AppCompatActivity {
 
         Network.addFullCocktailInfo(cocktail, this::onCocktailInfoLoaded);
         updateCocktailImage(cocktail);
+
+        findViewById(R.id.big_cocktail_interaction_share).setOnClickListener(v -> shareIntent(cocktail));
+
+        ImageButton likeButton = findViewById(R.id.big_cocktail_interaction_like);
+        Database db = new Database(this);
+        if (db.isInDatabase(cocktail)) {
+            likeButton.setImageResource(R.drawable.ic_heart_filled);
+        } else {
+            likeButton.setImageResource(R.drawable.ic_heart_border);
+        }
+
+        // Kopiert aus dem BigCocktailRVAdapter
+        // TODO vereinheitlichen
+        likeButton.setOnClickListener(v -> {
+            if (db.isInDatabase(cocktail)) {
+                db.deleteCocktail(cocktail);
+                likeButton.setImageResource(R.drawable.ic_heart_border);
+            } else {
+                db.addCocktail(cocktail);
+                likeButton.setImageResource(R.drawable.ic_heart_filled);
+            }
+        });
+
+    }
+
+    // Kopiert aus dem BigCocktailRVAdapter
+    // TODO vereinheitlichen
+    private void shareIntent(Cocktail cocktail) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Have a look at this nice cocktail!\nhttps://www.thecocktaildb.com/drink.php?c=" + cocktail.getID());
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getBaseContext().startActivity(shareIntent);
     }
 
     public void onCocktailInfoLoaded() {
