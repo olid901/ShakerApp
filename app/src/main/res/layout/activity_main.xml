@@ -26,5 +26,14 @@
         app:itemBackground="@android:color/transparent"
 
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/drawer_menu_items" />
+        app:menu="@menu/drawer_menu_items">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="14dp"
+            android:textColor="@color/cocktail_attribution"
+            android:text="@string/cocktail_icon_attribution" />
+    </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
