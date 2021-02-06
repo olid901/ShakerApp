@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Testweise alles Laden, passiert später durch die einzelnen Fragments
         Network.loadCocktails(Cocktails_URL, Cocktails, null);
-        Network.loadIngredients(Ingredients_URL, Ingredients, null);
+        Network.loadIngredients(Ingredients_URL, null, Ingredients, null);
     }
 
     @Override

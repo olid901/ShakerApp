@@ -5,6 +5,14 @@ public class Ingredient {
     private String StrIngredient, StrDescription, StrID, Prozent;
     private boolean atHome = false;
 
+    public boolean isAtHome() {
+        return atHome;
+    }
+
+    public void setAtHome(boolean atHome) {
+        this.atHome = atHome;
+    }
+
     public static final short SMALL = 1, MEDIUM = 2, LARGE = 3;
 
     public Ingredient(String StrIngredient){
@@ -20,7 +28,11 @@ public class Ingredient {
         return this.StrIngredient;
     }
 
-    private String Img_Url(short size){
+    public boolean hasImage(){
+        return true;
+    }
+
+    public String Img_Url(short size){
         if(size == SMALL)
             return "https://www.thecocktaildb.com/images/ingredients/"+StrIngredient+"-Small.png";
         else if(size == MEDIUM)
@@ -35,7 +47,6 @@ public class Ingredient {
     public String toString() {
         return "Ingredient{" +
                 "StrIngredient='" + StrIngredient + '\'' +
-                ", StrID='" + StrID + '\'' +
                 ", atHome=" + atHome +
                 '}';
     }
