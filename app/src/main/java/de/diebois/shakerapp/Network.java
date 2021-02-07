@@ -17,9 +17,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -59,12 +61,25 @@ public class Network{
                     extractIngredients(rawResponse, IngredientMap);
 
                     if(filter != null){
-                            for(Iterator<String> it = IngredientMap.keySet().iterator(); it.hasNext();) {
+                        List<String> toRemove = new ArrayList<String>();
+                            /*for(Iterator<String> it = IngredientMap.keySet().iterator(); it.hasNext();) {
                                 String s = it.next();
                                 if(!s.toLowerCase().contains(filter.toLowerCase())) {
-                                    it.remove();
+                                    //it.remove();
+                                    toRemove.add(s);
+                                }*/
+                            for(String s : IngredientMap.keySet()) {
+                                if(!s.toLowerCase().contains(filter.toLowerCase())) {
+                                    //it.remove();
+                                    toRemove.add(s);
                                 }
                             }
+
+
+                                for(String r : toRemove){
+                                    IngredientMap.remove(r);
+                                }
+
                     }
 
                     Helper.notifyAdaperFromUi(adapter);
@@ -80,7 +95,7 @@ public class Network{
     }
 
     //Multi Ingredient Search (kurz MIS)
-    public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, LinkedHashMap<String, Ingredient> ingredientsAtHome){
+    public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, LinkedHashMap<String, Ingredient> ingredientsAtHome, CocktailRVAdapter adapter){
 
         new Thread(() -> {
 
@@ -144,7 +159,7 @@ public class Network{
                 catch(NullPointerException e){
                     Log.wtf("Network/MIS","There was a NullPointerException in this MIS. This is probably due to a remote DB Error and hence not our fault. Aborting this MIS and starting a new one with the same Parameters!");
                     resultMap.clear();
-                    multiIngredientSearch(resultMap, ingredientsAtHome);
+                    multiIngredientSearch(resultMap, ingredientsAtHome, adapter);
                     return;
                 }
 
@@ -163,6 +178,8 @@ public class Network{
             for(Cocktail c : resultMap.values()){
                 System.out.println(c);
             }
+
+            Helper.notifyAdaperFromUi(adapter);
 
         }).start();
 
