@@ -15,7 +15,6 @@ import de.diebois.shakerapp.Ingredient;
 import de.diebois.shakerapp.MainActivity;
 import de.diebois.shakerapp.Network;
 import de.diebois.shakerapp.R;
-import de.diebois.shakerapp.ui.CocktailClickListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,11 +25,10 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public abstract class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapter.ViewHolder> {
+public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapter.ViewHolder> {
 
     private LinkedHashMap<String, Ingredient> IngredientMap;
-    protected final LayoutInflater layoutInflater;
-    private CocktailClickListener itemClickListener;
+    private final LayoutInflater layoutInflater;
 
     protected List<Ingredient> ingredientList(){
         return new ArrayList<>(IngredientMap.values());
@@ -49,7 +47,7 @@ public abstract class IngredientRVAdapter extends RecyclerView.Adapter<Ingredien
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
-        return new ViewHolder(layoutInflater.inflate(getItemLayoutID(), parent, false));
+        return new ViewHolder(layoutInflater.inflate(R.layout.small_ingredient_item, parent, false));
     }
 
     /**
@@ -69,11 +67,15 @@ public abstract class IngredientRVAdapter extends RecyclerView.Adapter<Ingredien
         }
 
         holder.ingredientNameView.setText(ingredient.getStrIngredient());
+
+        holder.atHomeButtonView.setOnClickListener(v -> {
+            ingredient.setAtHome(!ingredient.isAtHome());
+            System.out.println("Ingredient "+ingredient.toString()+" is at home: "+ingredient.isAtHome());
+        });
     }
 
     public File updateingredientImage(Ingredient ingredient, int position) {
         // Abbrechen, wenn der ingredient kein Bild hat
-        // Was aktuell nur beim "Americano" der Fall ist
         if (!ingredient.hasImage()) {
             return null;
         }
@@ -104,72 +106,38 @@ public abstract class IngredientRVAdapter extends RecyclerView.Adapter<Ingredien
     /**
      * Stores and recycles views as they are scrolled off screen
      */
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView ingredientNameView;
         final ImageView ingredientImgView;
         final ImageButton atHomeButtonView;
-       //final ImageButton favoriteButtonView;
 
         ViewHolder(View itemView) {
             super(itemView);
-            ingredientNameView = itemView.findViewById(getingredientNameID());
-            ingredientImgView = itemView.findViewById(getingredientImageID());
-
-            // Die beiden Buttons sind im Prinzip nur bei der Großansicht wichtig
-            // In der kleinen Ansicht werden die mit "null" initialisiert
-            // Aber bei der kleinen Ansicht macht das nichts aus
+            ingredientNameView = itemView.findViewById(R.id.small_ingredient_layout_name);
+            ingredientImgView = itemView.findViewById(R.id.small_ingredient_img);
             atHomeButtonView = itemView.findViewById(R.id.ingredient_atHome_button);
-            //favoriteButtonView = itemView.findViewById(R.id.big_ingredient_interaction_like);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (itemClickListener != null) itemClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
-    /**
-     * Convenience method for getting data at click position
-     * wichtig: Es muss die ingredientList verwendet werden, da bei der Map sonst versucht
-     * wird das Item zu returnen, das auf id gemappt ist, nicht das an der Stelle id
-     * Daher zur Verständnis auch mal "id" in "pos" umbenannt, damit es nicht zu Verwirrung kommt
-     */
-    public Ingredient getItem(int pos) {
-        return ingredientList().get(pos);
+    public String getingredientImageURL(Ingredient ingredient) {
+        return ingredient.Img_Url(Ingredient.SMALL);
     }
 
     /**
-     * allows clicks events to be caught
+     * Hole den Dateinamen des Ingredient-Bilds
      */
-    public void setClickListener(CocktailClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
+    public String getingredientImageFilename(Ingredient ingredient) {
+        String url = ingredient.Img_Url(Ingredient.SMALL);
+        String filename = url.substring(url.lastIndexOf('/') + 1);
+
+        // Wir verändern den Dateinamen so, dass er "<bezeichner>-small.<typ>" lautet
+        int pos = filename.lastIndexOf(".");
+        if (pos > -1) {
+            return filename.substring(0, pos)
+                    + "-small."
+                    + filename.substring(pos + ".".length());
+        } else {
+            return filename;
+        }
     }
-
-    /**
-     * Hole die ID vom jeweiligen Layout eines einzelnen Recycler View Eintrags
-     */
-    public abstract int getItemLayoutID();
-
-    /**
-     * Hole die ID vom TextView, welches den Namen des ingredients beinhaltet
-     */
-    public abstract int getingredientNameID();
-
-    /**
-     * Hole die ID vom ImageView, welche das Bild des ingredients beinhaltet
-     */
-    public abstract int getingredientImageID();
-
-    /**
-     * Hole die Bild-URL vom ingredient
-     * Wird benötigt, um zwischen kleinen und großen Bildern unterscheiden zu können
-     */
-    public abstract String getingredientImageURL(Ingredient ingredient);
-
-    /**
-     * Hole den Dateinamen des ingredient-Bilds
-     * Wird benötigt, um zwischen kleinen und großen Bildern unterscheiden zu können
-     */
-    public abstract String getingredientImageFilename(Ingredient ingredient);
 }
