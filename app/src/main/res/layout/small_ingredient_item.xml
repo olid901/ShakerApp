@@ -33,20 +33,21 @@
             android:textSize="22sp"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintLeft_toRightOf="@id/small_ingredient_img"
-            card_view:layout_constraintRight_toRightOf="parent"
+            card_view:layout_constraintRight_toLeftOf="@id/ingredient_atHome_button"
             card_view:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/ingredient_atHome_button"
-            android:layout_width="61dp"
-            android:layout_height="55dp"
-            card_view:layout_constraintRight_toRightOf="@id/small_ingredient_layout_name"
-            card_view:layout_constraintBaseline_toBaselineOf="@id/small_ingredient_layout_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             card_view:srcCompat="@drawable/ic_home"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="350dp"
-            tools:layout_editor_absoluteY="23dp"
-            android:contentDescription="@string/desc_save_ingredient_button" />
+            android:layout_marginRight="12dp"
+            android:background="@null"
+            card_view:layout_constraintRight_toRightOf="parent"
+            card_view:layout_constraintTop_toTopOf="@id/small_ingredient_layout_name"
+            card_view:layout_constraintBottom_toBottomOf="@id/small_ingredient_layout_name"
+            android:contentDescription="@string/desc_save_ingredient_button"
+            tools:ignore="RtlHardcoded" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
