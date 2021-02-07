@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         IngredientDatabase IngredientDB = new IngredientDatabase(this);
-        Ingredient.initialAtHome = new ArrayList<Ingredient>();
-        Ingredient.initialAtHome = IngredientDB.getAllIngredients();
+        Ingredient.atHomeList = new ArrayList<Ingredient>();
+        Ingredient.atHomeList = IngredientDB.getAllIngredients();
 
         localDir = getFilesDir();
         super.onCreate(savedInstanceState);

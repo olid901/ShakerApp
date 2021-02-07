@@ -77,17 +77,16 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
 
         holder.atHomeButtonView.setOnClickListener(v -> {
 
-            if(ingredientDatabase.isInDatabase(ingredient)){
+            if (ingredientDatabase.isInDatabase(ingredient)) {
                 ingredientDatabase.deleteIngredient(ingredient);
                 ingredient.setAtHome(false);
-//                atHomeList.remove(ingredient);
-            }else{
+                Ingredient.atHomeList.remove(ingredient);
+            } else {
                 ingredientDatabase.addIngredient(ingredient);
                 ingredient.setAtHome(true);
-//                atHomeList.add(ingredient);
+                Ingredient.atHomeList.add(ingredient);
             }
             Helper.notifyAdaperFromUi(this, position);
-
         });
 
         if(ingredientDatabase.isInDatabase(ingredient)){
