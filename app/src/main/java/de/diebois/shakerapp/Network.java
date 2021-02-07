@@ -116,7 +116,6 @@ public class Network{
             ExecutorService Executor2 = Executors.newCachedThreadPool();
 
             for(int ID : CocktailCount.keySet()){
-
                 Executor2.execute(() -> candidates.put(ID, MIScocktailLoader(ID)));
             }
 
@@ -132,14 +131,24 @@ public class Network{
 
                 boolean allAtHome = true;
 
-                for(String ingr : candidates.get(ID).getIngredients()){
-                    if (!ingredientsAtHome.containsKey(ingr)) {
-                        //System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
-                        allAtHome = false;
-                        break;
+                try{
+                    for(String ingr : candidates.get(ID).getIngredients()){
+                        if (!ingredientsAtHome.containsKey(ingr)) {
+                            //System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
+                            allAtHome = false;
+                            break;
+                        }
                     }
-
                 }
+
+                catch(NullPointerException e){
+                    Log.wtf("Network/MIS","There was a NullPointerException in this MIS. This is probably due to a remote DB Error and hence not our fault. Aborting this MIS and starting a new one with the same Parameters!");
+                    resultMap.clear();
+                    multiIngredientSearch(resultMap, ingredientsAtHome);
+                    return;
+                }
+
+
                 if(allAtHome){
                     System.out.println("Drink with ID = "+ID+" contains only Ingredients, that are at home!");
                     resultMap.put(ID, candidates.get(ID));
@@ -236,8 +245,11 @@ public class Network{
 
         }
         catch (IOException e){
-            //System.out.println("There was a error with the loading of MIS Information");
+            //Log.wtf("Network", "Hier kommt wohl null her!");
         }
+
+
+
         return null;
     }
 
