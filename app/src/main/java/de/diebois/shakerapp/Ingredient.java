@@ -63,7 +63,7 @@ public class Ingredient {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ingredient that = (Ingredient) o;
-        return StrIngredient.equals(that.getStrIngredient());
+        return StrIngredient.toLowerCase().equals(that.getStrIngredient().toLowerCase());
     }
 
     @Override
