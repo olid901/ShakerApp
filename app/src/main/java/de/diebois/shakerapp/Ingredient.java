@@ -1,6 +1,5 @@
 package de.diebois.shakerapp;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,9 +9,9 @@ public class Ingredient {
     private String StrDescription;
     private String StrID;
     private String Prozent;
-    private boolean atHome = false;
+    private boolean atHome;
 
-    public static List<Ingredient> initialAtHome;
+    public static List<Ingredient> atHomeList;
 
     public boolean isAtHome() {
         return atHome;
@@ -26,7 +25,9 @@ public class Ingredient {
 
     public Ingredient(String StrIngredient){
         this.StrIngredient = StrIngredient;
-        if(initialAtHome.contains(this)){
+        this.atHome = false;
+
+        if(atHomeList.contains(this)){
             setAtHome(true);
         }
     }
