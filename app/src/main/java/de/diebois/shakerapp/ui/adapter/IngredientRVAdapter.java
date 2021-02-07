@@ -28,12 +28,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapter.ViewHolder> {
 
-    private LinkedHashMap<String, Ingredient> IngredientMap;
+    public LinkedHashMap<String, Ingredient> IngredientMap;
     private final LayoutInflater layoutInflater;
     private final IngredientDatabase atHomeDB;
     private List<Ingredient> atHomeList;
 
-    private List<Ingredient> ingredientList(){
+    public LinkedHashMap<String, Ingredient> atHomeMap(){
+        LinkedHashMap<String, Ingredient> returnMap = new LinkedHashMap<>();
+        for(Ingredient i : atHomeList){
+            returnMap.put(i.getStrIngredient(), i);
+        }
+        return returnMap;
+    }
+
+    public List<Ingredient> ingredientList(){
 
         List<Ingredient> returnList = new ArrayList<>(atHomeList);
 
