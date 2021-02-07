@@ -33,14 +33,11 @@ import java.util.List;
 public class IngredientFragment extends Fragment {
 
     private IngredientRVAdapter adapter;
-    private IngredientDatabase savedIngredientsDatabase;
-    private List<Ingredient> savedIngredientsList;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        savedIngredientsDatabase = new IngredientDatabase(getContext());
-        savedIngredientsList = savedIngredientsDatabase.getAllIngredients();
     }
 
     @Override
@@ -52,13 +49,12 @@ public class IngredientFragment extends Fragment {
         MISbtn.setOnClickListener(v -> {
             Log.wtf("MISbtn", "I've been clicked!");
 
-
             FragmentManager fragmentManager = getParentFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            Fragment MISresultFragment = new MultiIngredientSearchFragment(savedIngredientsList);
+            Fragment MISresultFragment = new MultiIngredientSearchFragment(Ingredient.atHomeList);
             fragmentTransaction.replace(R.id.nav_host_fragment, MISresultFragment);
-            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.addToBackStack(this.getClass().getName());
             fragmentTransaction.commit();
 
         });

@@ -98,6 +98,13 @@ public class Network{
 
     public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, List<Ingredient> ingredientsAtHome, CocktailRVAdapter adapter){
 
+        System.out.println("Start of MIS, the following ingredients are at home:");
+        for(Ingredient i : ingredientsAtHome){
+            System.out.println(" - "+i.getStrIngredient());
+        }
+
+
+
         new Thread(() -> {
 
             //Zeitmessung weil ich performance Bedenken bei vielen Zutaten habe!
@@ -150,8 +157,8 @@ public class Network{
 
                 try{
                     for(String ingr : candidates.get(ID).getIngredients()){
-                        if (!ingredientsAtHome.contains(ingr)) {
-                            //System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
+                        if (!ingredientsAtHome.contains(new Ingredient(ingr))) {
+                            System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
                             allAtHome = false;
                             break;
                         }
