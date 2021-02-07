@@ -22,7 +22,6 @@
         android:hint="@string/ingredient_search_hint"
         android:autofillHints="" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/small_ingredient_rv"
         android:layout_width="match_parent"
