@@ -22,8 +22,11 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +35,10 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
     private List<Ingredient> ingredientList;
     private final LayoutInflater layoutInflater;
     private IngredientDatabase ingredientDatabase;
+
+    private void sortIngredientList(){
+        ingredientList = ingredientList.stream().sorted(Comparator.comparing(Ingredient::isAtHome,Comparator.reverseOrder())).collect(Collectors.toList());
+    }
 
     public IngredientRVAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -54,6 +61,7 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
      */
     @Override
     public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
+        sortIngredientList();
         Ingredient ingredient = ingredientList.get(position);
 
         // TODO Return null ist böse!!! Sollte noch geändert werden bei Gelegenheit
@@ -71,9 +79,11 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
 
             if(ingredientDatabase.isInDatabase(ingredient)){
                 ingredientDatabase.deleteIngredient(ingredient);
+                ingredient.setAtHome(false);
 //                atHomeList.remove(ingredient);
             }else{
                 ingredientDatabase.addIngredient(ingredient);
+                ingredient.setAtHome(true);
 //                atHomeList.add(ingredient);
             }
             Helper.notifyAdaperFromUi(this, position);

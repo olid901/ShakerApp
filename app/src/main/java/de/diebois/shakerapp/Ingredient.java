@@ -1,5 +1,7 @@
 package de.diebois.shakerapp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Ingredient {
@@ -8,11 +10,25 @@ public class Ingredient {
     private String StrDescription;
     private String StrID;
     private String Prozent;
+    private boolean atHome = false;
+
+    public static List<Ingredient> initialAtHome;
+
+    public boolean isAtHome() {
+        return atHome;
+    }
+
+    public void setAtHome(boolean atHome) {
+        this.atHome = atHome;
+    }
 
     public static final short SMALL = 1, MEDIUM = 2, LARGE = 3;
 
     public Ingredient(String StrIngredient){
         this.StrIngredient = StrIngredient;
+        if(initialAtHome.contains(this)){
+            setAtHome(true);
+        }
     }
 
     public String getStrIngredient() {
