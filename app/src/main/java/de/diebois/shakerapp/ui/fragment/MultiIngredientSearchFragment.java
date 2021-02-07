@@ -13,17 +13,17 @@ import de.diebois.shakerapp.Network;
  */
 public class MultiIngredientSearchFragment extends BigCocktailFragment{
 
-    LinkedHashMap<String, Ingredient> IngredientsAtHome;
+    private List<Ingredient> ingredientsAtHome;
 
-    public MultiIngredientSearchFragment(LinkedHashMap<String, Ingredient> IngredientsAtHome){
-        this.IngredientsAtHome = IngredientsAtHome;
+    public MultiIngredientSearchFragment(List<Ingredient> ingredientsAtHome){
+        this.ingredientsAtHome = ingredientsAtHome;
     }
 
     @Override
     public void fetchAllCocktails() {
         LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<>();
 
-        Network.multiIngredientSearch(cocktailMap, IngredientsAtHome, adapter);
+        Network.multiIngredientSearch(cocktailMap, ingredientsAtHome, adapter);
 
         adapter.setCocktailList(cocktailMap);
     }

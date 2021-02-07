@@ -46,7 +46,7 @@ public class Ingredient {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ingredient that = (Ingredient) o;
-        return Objects.equals(StrIngredient, that.StrIngredient);
+        return StrIngredient.equals(that.getStrIngredient());
     }
 
     @Override

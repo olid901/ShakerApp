@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
 //        Network.multiIngredientSearch(resMap, atHome);
 
         //Testweise alles Laden, passiert später durch die einzelnen Fragments
-        Network.loadCocktails(Cocktails_URL, Cocktails, null);
-        Network.loadIngredients(Ingredients_URL, null, Ingredients, null);
+//        Network.loadCocktails(Cocktails_URL, Cocktails, null);
+//        Network.loadIngredients(Ingredients_URL, null, Ingredients, null);
     }
 
     @Override

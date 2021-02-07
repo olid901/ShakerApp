@@ -13,6 +13,7 @@ import android.widget.EditText;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import de.diebois.shakerapp.Ingredient;
+import de.diebois.shakerapp.IngredientDatabase;
 import de.diebois.shakerapp.Network;
 import de.diebois.shakerapp.R;
 import de.diebois.shakerapp.ui.CocktailClickListener;
@@ -22,7 +23,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Klasse für das Ingredient-Fragment
@@ -30,10 +33,14 @@ import java.util.LinkedHashMap;
 public class IngredientFragment extends Fragment {
 
     private IngredientRVAdapter adapter;
+    private IngredientDatabase savedIngredientsDatabase;
+    private List<Ingredient> savedIngredientsList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        savedIngredientsDatabase = new IngredientDatabase(getContext());
+        savedIngredientsList = savedIngredientsDatabase.getAllIngredients();
     }
 
     @Override
@@ -42,22 +49,18 @@ public class IngredientFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all_ingredients, container, false);
 
         Button MISbtn = view.findViewById(R.id.MISbutton);
-        MISbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.wtf("MISbtn", "I've been clicked!");
+        MISbtn.setOnClickListener(v -> {
+            Log.wtf("MISbtn", "I've been clicked!");
 
 
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager
-                        .beginTransaction();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                Fragment MISresultFragment = new MultiIngredientSearchFragment(adapter.atHomeMap());
-                fragmentTransaction.replace(R.id.nav_host_fragment, MISresultFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+            Fragment MISresultFragment = new MultiIngredientSearchFragment(savedIngredientsList);
+            fragmentTransaction.replace(R.id.nav_host_fragment, MISresultFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
 
-            }
         });
 
         RecyclerView recyclerView = view.findViewById(R.id.small_ingredient_rv);
@@ -89,17 +92,17 @@ public class IngredientFragment extends Fragment {
 
     public void fetchAllIngredients() {
         String apiURL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/list.php?i=list";
-        LinkedHashMap<String, Ingredient> ingredientMap = new LinkedHashMap<>();
-        adapter.setIngredientList(ingredientMap);
-        Network.loadIngredients(apiURL, null, ingredientMap, adapter);
+        List<Ingredient> ingList = new ArrayList<>();
+        adapter.setIngredientList(ingList);
+        Network.loadIngredients(apiURL, null, ingList, adapter);
     }
 
     // Standard-Implementierung für eine allgemeine Cocktail-Suche
     // TODO Eigentlich kann man das auch mit der fetchAllIngredients-Methode kombinieren
     private void filterIngredients(String filter) {
         String IngredientURL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/list.php?i=list";
-        LinkedHashMap<String, Ingredient> ingredientMap = new LinkedHashMap<>();
-        //adapter.setIngredientList(adapter.);
-        Network.loadIngredients(IngredientURL, filter, adapter.IngredientMap, adapter);
+        List<Ingredient> ingList = new ArrayList<>();
+        adapter.setIngredientList(ingList);
+        Network.loadIngredients(IngredientURL, filter, ingList, adapter);
     }
 }

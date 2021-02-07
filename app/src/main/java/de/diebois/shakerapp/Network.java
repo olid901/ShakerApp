@@ -41,7 +41,7 @@ public class Network{
     }
 
     //Wenn kein Filter gewünscht: Null als Filter übergeben
-    public static void loadIngredients(String URL, String filter, LinkedHashMap<String, Ingredient> IngredientMap, IngredientRVAdapter adapter){
+    public static void loadIngredients(String URL, String filter, List<Ingredient> ingredientList, IngredientRVAdapter adapter){
         final Request request = new Request.Builder().url(URL).build();
         System.out.println("Filter is: "+filter);
 
@@ -58,27 +58,28 @@ public class Network{
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
 //                    System.out.println("Ingredient response: "+rawResponse);
-                    extractIngredients(rawResponse, IngredientMap);
+                    extractIngredients(rawResponse, ingredientList);
 
                     if(filter != null){
-                        List<String> toRemove = new ArrayList<String>();
+                        List<Ingredient> toRemove = new ArrayList<>();
                             /*for(Iterator<String> it = IngredientMap.keySet().iterator(); it.hasNext();) {
                                 String s = it.next();
                                 if(!s.toLowerCase().contains(filter.toLowerCase())) {
                                     //it.remove();
                                     toRemove.add(s);
                                 }*/
-                            for(String s : IngredientMap.keySet()) {
-                                if(!s.toLowerCase().contains(filter.toLowerCase())) {
-                                    //it.remove();
-                                    toRemove.add(s);
-                                }
+                        for(Ingredient i : ingredientList) {
+                            String s = i.getStrIngredient();
+                            if(!s.toLowerCase().contains(filter.toLowerCase())) {
+                                //it.remove();
+                                toRemove.add(i);
                             }
+                        }
 
 
-                                for(String r : toRemove){
-                                    IngredientMap.remove(r);
-                                }
+                        for(Ingredient i : toRemove){
+                            ingredientList.remove(i);
+                        }
 
                     }
 
@@ -94,8 +95,8 @@ public class Network{
         //TBA: Siehe Karte Zutaten abfragen
     }
 
-    //Multi Ingredient Search (kurz MIS)
-    public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, LinkedHashMap<String, Ingredient> ingredientsAtHome, CocktailRVAdapter adapter){
+
+    public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, List<Ingredient> ingredientsAtHome, CocktailRVAdapter adapter){
 
         new Thread(() -> {
 
@@ -105,12 +106,13 @@ public class Network{
             HashMap<Integer, Integer> CocktailCount = new HashMap<>();
             ExecutorService Executor = Executors.newCachedThreadPool();
 
-            for(String ingredientName : ingredientsAtHome.keySet()){
+            for(Ingredient ing : ingredientsAtHome){
+                String ingredientName = ing.getStrIngredient();
 
                 Executor.execute(() -> {
-                    System.out.println("Running MIS for "+ingredientName);
+                    System.out.println("Running MIS for " + ingredientName);
                     MIScocktailCounter(CocktailCount, ingredientName);
-                    System.out.println("MIS for "+ingredientName+" done!");
+                    System.out.println("MIS for " + ingredientName+" done!");
                 });
             }
 
@@ -148,7 +150,7 @@ public class Network{
 
                 try{
                     for(String ingr : candidates.get(ID).getIngredients()){
-                        if (!ingredientsAtHome.containsKey(ingr)) {
+                        if (!ingredientsAtHome.contains(ingr)) {
                             //System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
                             allAtHome = false;
                             break;
@@ -408,14 +410,15 @@ public class Network{
         }
     }
 
-    private static void extractIngredients(String rawResponse, LinkedHashMap<String, Ingredient> IngredientMap) {
+
+    private static void extractIngredients(String rawResponse, List<Ingredient> ingredientList) {
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
             for (int index = 0; index < responseArray.length(); index++) {
                 JSONObject tempObject = responseArray.getJSONObject(index);
                 String Name = tempObject.getString("strIngredient1");
-                IngredientMap.put(Name, new Ingredient(Name));
+                ingredientList.add(new Ingredient(Name));
             }
         } catch (JSONException e) {
 //            System.out.println("Something went wrong here");
