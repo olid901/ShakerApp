@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import de.diebois.shakerapp.Cocktail;
-import de.diebois.shakerapp.Database;
+import de.diebois.shakerapp.CocktailDatabase;
 import de.diebois.shakerapp.Helper;
 import de.diebois.shakerapp.Ingredient;
 import de.diebois.shakerapp.MainActivity;
@@ -64,7 +64,7 @@ public class CocktailDetailsActivity extends AppCompatActivity {
         findViewById(R.id.big_cocktail_interaction_share).setOnClickListener(v -> shareIntent(cocktail));
 
         ImageButton likeButton = findViewById(R.id.big_cocktail_interaction_like);
-        Database db = new Database(this);
+        CocktailDatabase db = new CocktailDatabase(this);
         if (db.isInDatabase(cocktail)) {
             likeButton.setImageResource(R.drawable.ic_heart_filled);
         } else {
