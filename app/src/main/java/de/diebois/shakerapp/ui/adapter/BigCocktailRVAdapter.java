@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import de.diebois.shakerapp.Cocktail;
-import de.diebois.shakerapp.Database;
+import de.diebois.shakerapp.CocktailDatabase;
 import de.diebois.shakerapp.Helper;
 import de.diebois.shakerapp.R;
 
@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class BigCocktailRVAdapter extends CocktailRVAdapter {
 
-    private final Database db;
+    private final CocktailDatabase db;
 
     public BigCocktailRVAdapter(Context context) {
         super(context);
-        this.db = new Database(context);
+        this.db = new CocktailDatabase(context);
     }
 
     @Override

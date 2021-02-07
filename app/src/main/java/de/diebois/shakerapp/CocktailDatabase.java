@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Database extends SQLiteOpenHelper {
+public class CocktailDatabase extends SQLiteOpenHelper {
 
     private static final String TAG = "SQLite";
 
@@ -28,7 +28,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String COLUMN_COCKTAIL_NAME ="Name";
     private static final String COLUMN_COCKTAIL_IMAGE_URL ="IMG_URL";
 
-    public Database(Context context)  {
+    public CocktailDatabase(Context context)  {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
