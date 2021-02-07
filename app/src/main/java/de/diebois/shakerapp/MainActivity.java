@@ -14,6 +14,7 @@ import java.io.File;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        IngredientDatabase IngredientDB = new IngredientDatabase(this);
+        Ingredient.initialAtHome = new ArrayList<Ingredient>();
+        Ingredient.initialAtHome = IngredientDB.getAllIngredients();
 
         localDir = getFilesDir();
         super.onCreate(savedInstanceState);
