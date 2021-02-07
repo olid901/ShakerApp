@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import de.diebois.shakerapp.Helper;
 import de.diebois.shakerapp.Ingredient;
+import de.diebois.shakerapp.IngredientDatabase;
 import de.diebois.shakerapp.MainActivity;
 import de.diebois.shakerapp.Network;
 import de.diebois.shakerapp.R;
@@ -29,14 +30,26 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
 
     private LinkedHashMap<String, Ingredient> IngredientMap;
     private final LayoutInflater layoutInflater;
+    private final IngredientDatabase atHomeDB;
+    private List<Ingredient> atHomeList;
 
-    protected List<Ingredient> ingredientList(){
-        return new ArrayList<>(IngredientMap.values());
+    private List<Ingredient> ingredientList(){
+
+        List<Ingredient> returnList = new ArrayList<>(atHomeList);
+
+        for(Ingredient i : IngredientMap.values()){
+            if(!atHomeList.contains(i)){
+                returnList.add(i);
+            }
+        }
+        return returnList;
     }
 
     public IngredientRVAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         IngredientMap = new LinkedHashMap<>(); // Prevent app from crashing
+        atHomeDB = new IngredientDatabase(context);
+        atHomeList = atHomeDB.getAllIngredients();
     }
 
 
@@ -69,9 +82,23 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
         holder.ingredientNameView.setText(ingredient.getStrIngredient());
 
         holder.atHomeButtonView.setOnClickListener(v -> {
-            ingredient.setAtHome(!ingredient.isAtHome());
-            System.out.println("Ingredient "+ingredient.toString()+" is at home: "+ingredient.isAtHome());
+
+            if(atHomeDB.isInDatabase(ingredient)){
+                atHomeDB.deleteIngredient(ingredient);
+                atHomeList.remove(ingredient);
+            }else{
+                atHomeDB.addIngredient(ingredient);
+                atHomeList.add(ingredient);
+            }
+            Helper.notifyAdaperFromUi(this, position);
+
         });
+
+        if(atHomeList.contains(ingredient)){
+            holder.atHomeButtonView.setImageResource(R.drawable.ic_checked);
+        }else{
+            holder.atHomeButtonView.setImageResource(R.drawable.ic_home);
+        }
     }
 
     public File updateingredientImage(Ingredient ingredient, int position) {
