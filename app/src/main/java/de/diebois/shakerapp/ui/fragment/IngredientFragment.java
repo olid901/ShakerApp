@@ -31,22 +31,6 @@ public class IngredientFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-//    /**
-//     * Was getan werden soll, wenn auf ein jeweiliges Cocktail-Item in einer Liste geklickt wird
-//     * -> Cocktail öffnen und Zeug wie Zutaten in Großansicht darstellen
-//     */
-//    @Override
-//    public void onItemClick(View view, int position) {
-//        Context context = getContext();
-//        Intent intent = new Intent(context, CocktailDetailsActivity.class);
-//
-//        // Wir weisen einem Cocktail direkt das Cocktail-Objekt zu, so haben wir
-//        // direkt die Cocktail-Daten da und sparen uns die Netzwerkabfrage
-//       // CocktailDetailsActivity.cocktail = adapter.getItem(position);
-//        System.out.println("Ingredient has been clicked!");
-//        context.startActivity(intent);
-//    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 

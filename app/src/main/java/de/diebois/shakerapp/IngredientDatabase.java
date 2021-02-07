@@ -27,7 +27,6 @@ public class IngredientDatabase extends SQLiteOpenHelper {
     private static final String COLUMN_INGREDIENT_NAME ="Ingredient";
 //    private static final String COLUMN_COCKTAIL_NAME ="Name";
 //    private static final String COLUMN_COCKTAIL_IMAGE_URL ="IMG_URL";
-
     public IngredientDatabase(Context context)  {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
