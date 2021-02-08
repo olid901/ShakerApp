@@ -8,24 +8,19 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import de.diebois.shakerapp.ui.CocktailDetailsActivity;
 import de.diebois.shakerapp.ui.RandomCocktailDetailsActivity;
 
 import com.squareup.seismic.ShakeDetector;
 
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,11 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
-    // TODO: URL-Zeug in Network-Klasse vollständig auslagern?
-    private static final String Cocktails_URL = Network.getBaseURL() + "/filter.php?a=Alcoholic";
-    private static final String Ingredients_URL = Network.getBaseURL() + "/list.php?i=list";
-    public LinkedHashMap<Integer, Cocktail> Cocktails;
-    public LinkedHashMap<String, Ingredient> Ingredients;
     public static File localDir;
     private static boolean shakeable = true;
 
@@ -66,15 +56,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        //Cocktails laden
-        Cocktails = new LinkedHashMap<>();
-        Ingredients = new LinkedHashMap<>();
-
-        LinkedHashMap<Integer, Cocktail> resMap = new LinkedHashMap<>();
-
-        //test MIS
-        LinkedHashMap<String, Ingredient> atHome = new LinkedHashMap<>();
-
         /*  Eine Shaker-App MUSS eine Funktion haben um mittels Handy schütteln einen (random) COcktail aufzurufen.
             Dies wir hier mit folgender Gradle Bibliothek implmentiert: 'com.squareup:seismic:1.0.2'
          */
@@ -98,22 +79,6 @@ public class MainActivity extends AppCompatActivity {
         });
         detector.start(mSensorManager);
 
-//        atHome.put("Gin", new Ingredient("Gin"));
-//        atHome.put("Vodka", new Ingredient("Vodka"));
-//        atHome.put("Rum", new Ingredient("Rum"));
-//        atHome.put("Ice", new Ingredient("Ice"));
-//        atHome.put("Bourbon", new Ingredient("Bourbon"));
-//        atHome.put("Water", new Ingredient("Water"));
-//        atHome.put("Light rum", new Ingredient("Light rum"));
-//        atHome.put("Coca-Cola", new Ingredient("Coca-Cola"));
-//        atHome.put("Lime", new Ingredient("Lime"));
-//        atHome.put("Lemon", new Ingredient("Lemon"));
-//        atHome.put("Tequila", new Ingredient("Tequila"));
-//        Network.multiIngredientSearch(resMap, atHome);
-
-        //Testweise alles Laden, passiert später durch die einzelnen Fragments
-//        Network.loadCocktails(Cocktails_URL, Cocktails, null);
-//        Network.loadIngredients(Ingredients_URL, null, Ingredients, null);
     }
 
     @Override
