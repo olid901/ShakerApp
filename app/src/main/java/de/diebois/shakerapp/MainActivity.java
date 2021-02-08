@@ -33,9 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
     // TODO: URL-Zeug in Network-Klasse vollständig auslagern?
-    private static final String baseUrl = "https://www.thecocktaildb.com/api/json/v2/" + BuildConfig.apikey;
-    private static final String Cocktails_URL = baseUrl + "/filter.php?a=Alcoholic";
-    private static final String Ingredients_URL = baseUrl + "/list.php?i=list";
+    private static final String Cocktails_URL = Network.getBaseURL() + "/filter.php?a=Alcoholic";
+    private static final String Ingredients_URL = Network.getBaseURL() + "/list.php?i=list";
     public LinkedHashMap<Integer, Cocktail> Cocktails;
     public LinkedHashMap<String, Ingredient> Ingredients;
     public static File localDir;

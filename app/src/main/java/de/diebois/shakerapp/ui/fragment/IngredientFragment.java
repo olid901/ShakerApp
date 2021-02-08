@@ -87,7 +87,7 @@ public class IngredientFragment extends Fragment {
     }
 
     public void fetchAllIngredients() {
-        String apiURL = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list";
+        String apiURL = Network.getBaseURL() + "/list.php?i=list";
         List<Ingredient> ingList = new ArrayList<>();
         adapter.setIngredientList(ingList);
         Network.loadIngredients(apiURL, null, ingList, adapter);
@@ -96,7 +96,7 @@ public class IngredientFragment extends Fragment {
     // Standard-Implementierung für eine allgemeine Cocktail-Suche
     // TODO Eigentlich kann man das auch mit der fetchAllIngredients-Methode kombinieren
     private void filterIngredients(String filter) {
-        String IngredientURL = "https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list";
+        String IngredientURL = Network.getBaseURL() + "/list.php?i=list";
         List<Ingredient> ingList = new ArrayList<>();
         adapter.setIngredientList(ingList);
         Network.loadIngredients(IngredientURL, filter, ingList, adapter);
