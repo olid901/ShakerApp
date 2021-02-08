@@ -18,7 +18,7 @@ public class BigCocktailFragment extends CocktailFragment {
 
     @Override
     public void fetchAllCocktails() {
-        String apiURL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/popular.php";
+        String apiURL = Network.getBaseURL() + "/popular.php";
         LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<>();
         adapter.setCocktailList(cocktailMap);
         Network.loadCocktails(apiURL, cocktailMap, adapter);
