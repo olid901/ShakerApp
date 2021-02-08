@@ -454,4 +454,39 @@ public class Network{
             e.printStackTrace();
         }
     }
+    public static Cocktail loadRandomCocktail(){
+
+        final Request request = new Request.Builder().url("https://www.thecocktaildb.com/api/json/v1/1/random.php").build();
+
+            Cocktail c;
+
+            try (Response response = okHttpClient.newCall(request).execute()) {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                String rawResponse = response.body().string();
+                JSONObject responseObject = new JSONObject(rawResponse);
+                JSONArray responseArray = responseObject.getJSONArray("drinks");
+                JSONObject tempObject = responseArray.getJSONObject(0);
+
+                int ID = Integer.parseInt(tempObject.getString("idDrink"));
+                String strDrink = tempObject.getString("strDrink");
+                String imgUrl = tempObject.getString("strDrinkThumb");
+
+                c = new Cocktail(ID, strDrink, imgUrl);
+
+                c.setAlcoholic(tempObject.getString("strAlcoholic"));
+                c.setInstruction(tempObject.getString("strInstructions"));
+                c.setCategory(tempObject.getString("strCategory"));
+                c.setGlass(tempObject.getString("strGlass"));
+                c.setTags(tempObject.getString("strGlass"));
+                extractAndAddIngredientsAndMeasurments(rawResponse, c);
+
+                return c;
+
+                } catch (JSONException | IOException e) {
+                    Log.wtf("Network", "ERROR!!!");
+                }
+            return new Cocktail(0, "THERE WAS AN ERROR LOADING THIS COCKTAIL", "");
+            }
+
 }

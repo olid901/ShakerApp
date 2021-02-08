@@ -23,4 +23,5 @@
     <string name="desc_cocktail_name">Cocktail-Name</string>
     <string name="desc_ingredient_image">Ingredient image</string>
     <string name="desc_ingredient_name">Ingredient name</string>
+    <string name="random">random</string>
 </resources>
