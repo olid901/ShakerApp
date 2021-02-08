@@ -60,6 +60,7 @@ public class CocktailDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
     public void addCocktail(Cocktail cocktail) {
         Log.i(TAG, "Database.addCocktail ... " + cocktail.getStrDrink());
 

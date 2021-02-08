@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class Cocktail {
 
 
-    private final int ID;
+    private int ID;
     private final String StrDrink;
     private final String Img_Url;
     private final ArrayList<String> Ingredients;
@@ -64,6 +64,8 @@ public class Cocktail {
     public void setTags(String tags) {
         this.Tags = tags;
     }
+
+    public void setID(int ID){this.ID = ID;}
 
     public Cocktail(int ID, String StrDrink, String Img_Url){
         this.ID = ID;

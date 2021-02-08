@@ -17,7 +17,7 @@
         android:theme="@style/Theme.MyApplication">
         <activity
             android:name=".ui.CocktailDetailsActivity"
-            android:label="HALLO TEST"
+            android:label="CocktailDetailsActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.MyApplication.NoActionBar">
         </activity>
@@ -30,6 +30,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.RandomCocktailDetailsActivity"
+            android:label="RandomCocktailDetailsActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.MyApplication.NoActionBar">
+        </activity>
+
     </application>
 
 </manifest>

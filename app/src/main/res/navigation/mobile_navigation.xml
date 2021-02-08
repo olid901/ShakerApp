@@ -27,4 +27,10 @@
         android:name="de.diebois.shakerapp.ui.fragment.IngredientFragment"
         android:label="@string/ingredients"
         tools:layout="@layout/fragment_all_ingredients" />
+
+    <activity
+        android:id="@+id/nav_random"
+        android:name="de.diebois.shakerapp.ui.RandomCocktailDetailsActivity"
+        android:label="@string/random"
+        tools:layout="@layout/activity_random_cocktail_details" />
 </navigation>
