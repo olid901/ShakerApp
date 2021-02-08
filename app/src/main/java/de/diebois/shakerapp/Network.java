@@ -40,6 +40,10 @@ public class Network{
         okHttpClient = new OkHttpClient();
     }
 
+    public static String getBaseURL(){
+        return "https://www.thecocktaildb.com/api/json/v2/" + BuildConfig.apikey;
+    }
+
     //Wenn kein Filter gewünscht: Null als Filter übergeben
     public static void loadIngredients(String URL, String filter, List<Ingredient> ingredientList, IngredientRVAdapter adapter){
         final Request request = new Request.Builder().url(URL).build();
@@ -62,12 +66,6 @@ public class Network{
 
                     if(filter != null){
                         List<Ingredient> toRemove = new ArrayList<>();
-                            /*for(Iterator<String> it = IngredientMap.keySet().iterator(); it.hasNext();) {
-                                String s = it.next();
-                                if(!s.toLowerCase().contains(filter.toLowerCase())) {
-                                    //it.remove();
-                                    toRemove.add(s);
-                                }*/
                         for(Ingredient i : ingredientList) {
                             String s = i.getStrIngredient();
                             if(!s.toLowerCase().contains(filter.toLowerCase())) {
@@ -91,19 +89,12 @@ public class Network{
 
     }
 
-    public static void addFullIngredientInfo(Ingredient i){
-        //TBA: Siehe Karte Zutaten abfragen
-    }
-
-
     public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, List<Ingredient> ingredientsAtHome, CocktailRVAdapter adapter){
 
         System.out.println("Start of MIS, the following ingredients are at home:");
         for(Ingredient i : ingredientsAtHome){
             System.out.println(" - "+i.getStrIngredient());
         }
-
-
 
         new Thread(() -> {
 
@@ -146,7 +137,6 @@ public class Network{
             try{
                 Executor2.shutdown();
                 boolean finished = Executor2.awaitTermination(1, TimeUnit.MINUTES);
-                //System.out.println("Finished Candidate loading!");
             }catch(Exception e){
                 System.out.println("Something went wrong with the Executor service in MIS!");
             }
@@ -201,7 +191,7 @@ public class Network{
     //                  gedroppt werden können, da es keine Cocktails mit nur einer Zutat gibt. Bei jeder MIS Abfrage wird eine Map erstellt, die allen Zutatenabfragen mitgegeben wird
     private static void MIScocktailCounter(HashMap<Integer, Integer> CocktailCount, String Ingredient){
 
-            final Request request = new Request.Builder().url("https://www.thecocktaildb.com/api/json/v2/***REMOVED***/filter.php?i="+Ingredient).build();
+            final Request request = new Request.Builder().url(Network.getBaseURL() + "/filter.php?i="+Ingredient).build();
 
             try{
                 try (Response response = okHttpClient.newCall(request).execute()) {
@@ -234,7 +224,7 @@ public class Network{
     }
 
     private static Cocktail MIScocktailLoader(int cocktailID){
-        final Request request = new Request.Builder().url("https://www.thecocktaildb.com/api/json/v2/***REMOVED***/lookup.php?i="+cocktailID).build();
+        final Request request = new Request.Builder().url(Network.getBaseURL() + "/lookup.php?i="+cocktailID).build();
         try{
             try (Response response = okHttpClient.newCall(request).execute()) {
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
@@ -295,7 +285,6 @@ public class Network{
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
                 System.out.println("Trying to save file");
-                //File file = new File (android.os.Environment.getExternalStorageDirectory(),"test2.jpg");
                 File file = new File(MainActivity.localDir, filename);
 
                 // ???
@@ -359,7 +348,7 @@ public class Network{
 
     public static void addFullCocktailInfo(Cocktail c, UICallback uicb){
 
-        String URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i="+c.getID();
+        String URL = getBaseURL() + "/lookup.php?i="+c.getID();
         final Request request = new Request.Builder().url(URL).build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
@@ -456,7 +445,7 @@ public class Network{
     }
     public static Cocktail loadRandomCocktail(){
 
-        final Request request = new Request.Builder().url("https://www.thecocktaildb.com/api/json/v1/1/random.php").build();
+        final Request request = new Request.Builder().url(Network.getBaseURL() + "/random.php").build();
 
             Cocktail c;
 

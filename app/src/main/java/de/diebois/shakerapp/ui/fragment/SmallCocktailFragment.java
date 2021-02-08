@@ -57,7 +57,7 @@ public class SmallCocktailFragment extends CocktailFragment {
 
     @Override
     public void fetchAllCocktails() {
-        String apiURL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/filter.php?a=Alcoholic";
+        String apiURL = Network.getBaseURL() + "/filter.php?a=Alcoholic";
         LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<>();
         adapter.setCocktailList(cocktailMap);
         Network.loadCocktails(apiURL, cocktailMap, adapter);
@@ -66,7 +66,7 @@ public class SmallCocktailFragment extends CocktailFragment {
     // Standard-Implementierung für eine allgemeine Cocktail-Suche
     // TODO Eigentlich kann man das auch mit der fetchAllCocktails-Methode kombinieren
     private void filterCocktails(String filter) {
-        String cocktailURL = "https://www.thecocktaildb.com/api/json/v2/***REMOVED***/search.php?s=" + filter;
+        String cocktailURL = Network.getBaseURL() + "/search.php?s=" + filter;
         LinkedHashMap<Integer, Cocktail> cocktailMap = new LinkedHashMap<>();
         adapter.setCocktailList(cocktailMap);
         Network.loadCocktails(cocktailURL, cocktailMap, adapter);
