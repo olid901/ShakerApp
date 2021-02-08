@@ -85,10 +85,10 @@ public class RandomCocktailDetailsActivity extends AppCompatActivity {
         });
 
         Button randomBtn = findViewById(R.id.random_new_button);
-        randomBtn.setOnClickListener(v ->{
+        randomBtn.setOnClickListener(v -> {
 
-            Log.wtf("RandomBtn", "A I enabled? "+randomBtn.isEnabled());
-            if(!loading){
+            Log.wtf("RandomBtn", "A I enabled? " + randomBtn.isEnabled());
+            if (!loading) {
                 loading = true;
                 initRandomCocktail();
             }
@@ -101,9 +101,9 @@ public class RandomCocktailDetailsActivity extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                        Helper.runOnUiThread(() -> {
-                            randomBtn.setEnabled(true);
-                        });
+                    Helper.runOnUiThread(() -> {
+                        randomBtn.setEnabled(true);
+                    });
                 }
             }, 1000);
         });
@@ -112,11 +112,11 @@ public class RandomCocktailDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void initRandomCocktail(){
+    private void initRandomCocktail() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d("initRandomCocktail","I am in thread now");
+                Log.d("initRandomCocktail", "I am in thread now");
                 cocktail = Network.loadRandomCocktail();
                 onCocktailInfoLoaded();
             }
@@ -136,13 +136,13 @@ public class RandomCocktailDetailsActivity extends AppCompatActivity {
     }
 
     public void onCocktailInfoLoaded() {
-        Log.wtf("RandomCocktailDetailsActivity",  "I got messaged that the cocktail is now fully loaded!");
+        Log.wtf("RandomCocktailDetailsActivity", "I got messaged that the cocktail is now fully loaded!");
 
         //Toolbar toolbar = findViewById(R.id.toolbar);
         //toolbar.setTitle(cocktail.getStrDrink());
         //setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Helper.runOnUiThread(() ->{
+        Helper.runOnUiThread(() -> {
             getSupportActionBar().setTitle(cocktail.getStrDrink());
         });
 
@@ -190,7 +190,7 @@ public class RandomCocktailDetailsActivity extends AppCompatActivity {
         }
 
         String url = cocktail.getImg_Url();
-        String filename = url.substring(url.lastIndexOf('/')+1);
+        String filename = url.substring(url.lastIndexOf('/') + 1);
 
         File file = new File(MainActivity.localDir, filename);
 

@@ -70,10 +70,12 @@ public class IngredientFragment extends Fragment {
         EditText ingredientSearch = view.findViewById(R.id.ingredient_search_text);
         ingredientSearch.addTextChangedListener(new TextWatcher() {
             @Override // Brauchen wir nicht
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override // Brauchen wir nicht
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {

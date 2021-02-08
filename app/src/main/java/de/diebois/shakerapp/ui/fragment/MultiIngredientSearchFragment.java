@@ -11,11 +11,11 @@ import de.diebois.shakerapp.Network;
 /**
  * Dieses Fragment zeigt die gespeicherten Cocktails groß an, ähnlich wie auf Instagram
  */
-public class MultiIngredientSearchFragment extends BigCocktailFragment{
+public class MultiIngredientSearchFragment extends BigCocktailFragment {
 
     private List<Ingredient> ingredientsAtHome;
 
-    public MultiIngredientSearchFragment(List<Ingredient> ingredientsAtHome){
+    public MultiIngredientSearchFragment(List<Ingredient> ingredientsAtHome) {
         this.ingredientsAtHome = ingredientsAtHome;
     }
 

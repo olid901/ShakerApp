@@ -10,8 +10,8 @@ public class Helper {
      * Gibt einen RecyclerView-Adapter bescheid, dass sich seine Daten geändert haben.
      * Das muss auf dem Ui Thread ausgeführt werden.
      */
-    public static void notifyAdaperFromUi(RecyclerView.Adapter adapter){
-        if (adapter != null){
+    public static void notifyAdaperFromUi(RecyclerView.Adapter adapter) {
+        if (adapter != null) {
             runOnUiThread(adapter::notifyDataSetChanged);
         }
     }
@@ -20,8 +20,8 @@ public class Helper {
      * Gibt einen RecyclerView-Adapter bescheid, dass sich die Daten eines Elements geändert haben.
      * Das muss auf dem Ui Thread ausgeführt werden.
      */
-    public static void notifyAdaperFromUi(RecyclerView.Adapter adapter, int position){
-        if (adapter != null){
+    public static void notifyAdaperFromUi(RecyclerView.Adapter adapter, int position) {
+        if (adapter != null) {
             runOnUiThread(() -> {
                 adapter.notifyDataSetChanged();
                 adapter.notifyItemChanged(position);

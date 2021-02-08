@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Dieses Fragment zeigt die gespeicherten Cocktails groß an, ähnlich wie auf Instagram
  */
-public class FavoriteCocktailFragment extends BigCocktailFragment{
+public class FavoriteCocktailFragment extends BigCocktailFragment {
 
     @Override
     public void fetchAllCocktails() {

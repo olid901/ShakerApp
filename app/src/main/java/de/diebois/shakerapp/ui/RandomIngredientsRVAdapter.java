@@ -57,14 +57,14 @@ class RandomIngredientsRVAdapter extends RecyclerView.Adapter<RandomIngredientsR
         List<Ingredient> ingredientList = ingredientList();
         ArrayList<String> measures = RandomCocktailDetailsActivity.cocktail.getMeasures();
 
-        if(position > ingredientList.size())
+        if (position > ingredientList.size())
             return;
 
         Ingredient ingredient = ingredientList.get(position);
         String ingredientName = ingredient.getStrIngredient();
         String displayedText = ingredientName;
 
-        if(position > measures.size()-1)
+        if (position > measures.size() - 1)
             return;
 
         // Für den Fall, dass bei einer Zutat keine Mengenangabe gegeben ist
@@ -87,7 +87,7 @@ class RandomIngredientsRVAdapter extends RecyclerView.Adapter<RandomIngredientsR
     }
 
     public File updateIngredientImage(Ingredient ingredient, int position) {
-        String filename = ingredient.getStrIngredient() +  "-Medium.png";
+        String filename = ingredient.getStrIngredient() + "-Medium.png";
         String url = "https://www.thecocktaildb.com/images/ingredients/" + filename;
 
         File file = new File(MainActivity.localDir, filename);

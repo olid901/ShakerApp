@@ -79,6 +79,6 @@ public class BigCocktailRVAdapter extends CocktailRVAdapter {
     public String getCocktailImageFilename(Cocktail cocktail) {
         // Wir nehmen den Dateinamen, so wie er in der URL steht
         String url = cocktail.getImg_Url();
-        return url.substring(url.lastIndexOf('/')+1);
+        return url.substring(url.lastIndexOf('/') + 1);
     }
 }

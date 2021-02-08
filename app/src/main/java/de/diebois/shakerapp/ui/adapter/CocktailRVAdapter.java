@@ -32,7 +32,7 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
     protected final LayoutInflater layoutInflater;
     private CocktailClickListener itemClickListener;
 
-    protected List<Cocktail> cocktailList(){
+    protected List<Cocktail> cocktailList() {
         return new ArrayList<>(cocktailMap.values());
     }
 
@@ -125,7 +125,8 @@ public abstract class CocktailRVAdapter extends RecyclerView.Adapter<CocktailRVA
 
         @Override
         public void onClick(View view) {
-            if (itemClickListener != null) itemClickListener.onItemClick(view, getAdapterPosition());
+            if (itemClickListener != null)
+                itemClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 

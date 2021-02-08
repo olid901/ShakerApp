@@ -32,7 +32,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class Network{
+public class Network {
 
     private static final OkHttpClient okHttpClient;
 
@@ -40,14 +40,14 @@ public class Network{
         okHttpClient = new OkHttpClient();
     }
 
-    public static String getBaseURL(){
+    public static String getBaseURL() {
         return "https://www.thecocktaildb.com/api/json/v2/" + BuildConfig.apikey;
     }
 
     //Wenn kein Filter gewünscht: Null als Filter übergeben
-    public static void loadIngredients(String URL, String filter, List<Ingredient> ingredientList, IngredientRVAdapter adapter){
+    public static void loadIngredients(String URL, String filter, List<Ingredient> ingredientList, IngredientRVAdapter adapter) {
         final Request request = new Request.Builder().url(URL).build();
-        System.out.println("Filter is: "+filter);
+        System.out.println("Filter is: " + filter);
 
         // use async method, to not block the UI thread
         okHttpClient.newCall(request).enqueue(new Callback() {
@@ -64,18 +64,18 @@ public class Network{
 //                    System.out.println("Ingredient response: "+rawResponse);
                     extractIngredients(rawResponse, ingredientList);
 
-                    if(filter != null){
+                    if (filter != null) {
                         List<Ingredient> toRemove = new ArrayList<>();
-                        for(Ingredient i : ingredientList) {
+                        for (Ingredient i : ingredientList) {
                             String s = i.getStrIngredient();
-                            if(!s.toLowerCase().contains(filter.toLowerCase())) {
+                            if (!s.toLowerCase().contains(filter.toLowerCase())) {
                                 //it.remove();
                                 toRemove.add(i);
                             }
                         }
 
 
-                        for(Ingredient i : toRemove){
+                        for (Ingredient i : toRemove) {
                             ingredientList.remove(i);
                         }
 
@@ -89,11 +89,11 @@ public class Network{
 
     }
 
-    public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, List<Ingredient> ingredientsAtHome, CocktailRVAdapter adapter){
+    public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, List<Ingredient> ingredientsAtHome, CocktailRVAdapter adapter) {
 
         System.out.println("Start of MIS, the following ingredients are at home:");
-        for(Ingredient i : ingredientsAtHome){
-            System.out.println(" - "+i.getStrIngredient());
+        for (Ingredient i : ingredientsAtHome) {
+            System.out.println(" - " + i.getStrIngredient());
         }
 
         new Thread(() -> {
@@ -104,21 +104,21 @@ public class Network{
             HashMap<Integer, Integer> CocktailCount = new HashMap<>();
             ExecutorService Executor = Executors.newCachedThreadPool();
 
-            for(Ingredient ing : ingredientsAtHome){
+            for (Ingredient ing : ingredientsAtHome) {
                 String ingredientName = ing.getStrIngredient();
 
                 Executor.execute(() -> {
                     System.out.println("Running MIS for " + ingredientName);
                     MIScocktailCounter(CocktailCount, ingredientName);
-                    System.out.println("MIS for " + ingredientName+" done!");
+                    System.out.println("MIS for " + ingredientName + " done!");
                 });
             }
 
-            try{
+            try {
                 Executor.shutdown();
                 boolean finished = Executor.awaitTermination(1, TimeUnit.MINUTES);
                 System.out.println("Finished MIS!");
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("Something went wrong with the Executor service in MIS!");
             }
 
@@ -130,51 +130,49 @@ public class Network{
 
             ExecutorService Executor2 = Executors.newCachedThreadPool();
 
-            for(int ID : CocktailCount.keySet()){
+            for (int ID : CocktailCount.keySet()) {
                 Executor2.execute(() -> candidates.put(ID, MIScocktailLoader(ID)));
             }
 
-            try{
+            try {
                 Executor2.shutdown();
                 boolean finished = Executor2.awaitTermination(1, TimeUnit.MINUTES);
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("Something went wrong with the Executor service in MIS!");
             }
 
-            for(int ID: candidates.keySet()){
+            for (int ID : candidates.keySet()) {
 
                 boolean allAtHome = true;
 
-                try{
-                    for(String ingr : candidates.get(ID).getIngredients()){
+                try {
+                    for (String ingr : candidates.get(ID).getIngredients()) {
                         if (!ingredientsAtHome.contains(new Ingredient(ingr))) {
-                            System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
+                            System.out.println("Drink with ID " + ID + " Contains Ingredient " + ingr + " which is not at home!");
                             allAtHome = false;
                             break;
                         }
                     }
-                }
-
-                catch(NullPointerException e){
-                    Log.wtf("Network/MIS","There was a NullPointerException in this MIS. This is probably due to a remote DB Error and hence not our fault. Aborting this MIS and starting a new one with the same Parameters!");
+                } catch (NullPointerException e) {
+                    Log.wtf("Network/MIS", "There was a NullPointerException in this MIS. This is probably due to a remote DB Error and hence not our fault. Aborting this MIS and starting a new one with the same Parameters!");
                     resultMap.clear();
                     multiIngredientSearch(resultMap, ingredientsAtHome, adapter);
                     return;
                 }
 
 
-                if(allAtHome){
-                    System.out.println("Drink with ID = "+ID+" contains only Ingredients, that are at home!");
+                if (allAtHome) {
+                    System.out.println("Drink with ID = " + ID + " contains only Ingredients, that are at home!");
                     resultMap.put(ID, candidates.get(ID));
                 }
 
 
             }
 
-            long elapsedTimeMillis = (System.nanoTime() - startTime)/1000000;
-            System.out.println("MIS-test: \n - size = "+ingredientsAtHome.size()+"\n - time "+ elapsedTimeMillis+" millis \n - Cocktails found: "+resultMap.size());
+            long elapsedTimeMillis = (System.nanoTime() - startTime) / 1000000;
+            System.out.println("MIS-test: \n - size = " + ingredientsAtHome.size() + "\n - time " + elapsedTimeMillis + " millis \n - Cocktails found: " + resultMap.size());
             System.out.println("Result of MIS: ");
-            for(Cocktail c : resultMap.values()){
+            for (Cocktail c : resultMap.values()) {
                 System.out.println(c);
             }
 
@@ -189,43 +187,42 @@ public class Network{
     //          Darf NIEMALS UND UNTER KEINEN UMSTÄNDEN AUF DEM UI THREAD AUSGEFÜHRT WERDEN!!! (Immer ein extra Thread machen!)
     // CocktailCount:   Zählt wie oft ein Cocktail in den einzelnen Abfragen vorkommt. Sinn des ganzen ist, dass Cocktails die nur in einer Abfrage vorkommen,
     //                  gedroppt werden können, da es keine Cocktails mit nur einer Zutat gibt. Bei jeder MIS Abfrage wird eine Map erstellt, die allen Zutatenabfragen mitgegeben wird
-    private static void MIScocktailCounter(HashMap<Integer, Integer> CocktailCount, String Ingredient){
+    private static void MIScocktailCounter(HashMap<Integer, Integer> CocktailCount, String Ingredient) {
 
-            final Request request = new Request.Builder().url(Network.getBaseURL() + "/filter.php?i="+Ingredient).build();
+        final Request request = new Request.Builder().url(Network.getBaseURL() + "/filter.php?i=" + Ingredient).build();
 
-            try{
-                try (Response response = okHttpClient.newCall(request).execute()) {
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        try {
+            try (Response response = okHttpClient.newCall(request).execute()) {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                    String rawResponse = response.body().string();
+                String rawResponse = response.body().string();
 
-                    //do something with the response
-                    System.out.println("MIS Search response of Ingr. "+Ingredient+": "+rawResponse);
-                    try {
-                        JSONObject responseObject = new JSONObject(rawResponse);
-                        JSONArray responseArray = responseObject.getJSONArray("drinks");
-                        for (int index = 0; index < responseArray.length(); index++) {
-                            JSONObject tempObject = responseArray.getJSONObject(index);
-                            int ID = tempObject.getInt("idDrink");
-                            //int cnt = CocktailCount.containsKey(ID) ? CocktailCount.get(ID) : 0;
-                            //CocktailCount.put(ID, cnt + 1);
-                            CocktailCount.merge(ID, 1, Integer::sum);
-                        }
-                    } catch (JSONException e) {
-                        System.out.println("There is probaly no cocktail that uses: "+Ingredient+" as an Ingredient");
+                //do something with the response
+                System.out.println("MIS Search response of Ingr. " + Ingredient + ": " + rawResponse);
+                try {
+                    JSONObject responseObject = new JSONObject(rawResponse);
+                    JSONArray responseArray = responseObject.getJSONArray("drinks");
+                    for (int index = 0; index < responseArray.length(); index++) {
+                        JSONObject tempObject = responseArray.getJSONObject(index);
+                        int ID = tempObject.getInt("idDrink");
+                        //int cnt = CocktailCount.containsKey(ID) ? CocktailCount.get(ID) : 0;
+                        //CocktailCount.put(ID, cnt + 1);
+                        CocktailCount.merge(ID, 1, Integer::sum);
                     }
-
+                } catch (JSONException e) {
+                    System.out.println("There is probaly no cocktail that uses: " + Ingredient + " as an Ingredient");
                 }
+
             }
-            catch (IOException e){
-                //System.out.println("There was a error with the loading of MIS Information");
-            }
+        } catch (IOException e) {
+            //System.out.println("There was a error with the loading of MIS Information");
+        }
 
     }
 
-    private static Cocktail MIScocktailLoader(int cocktailID){
-        final Request request = new Request.Builder().url(Network.getBaseURL() + "/lookup.php?i="+cocktailID).build();
-        try{
+    private static Cocktail MIScocktailLoader(int cocktailID) {
+        final Request request = new Request.Builder().url(Network.getBaseURL() + "/lookup.php?i=" + cocktailID).build();
+        try {
             try (Response response = okHttpClient.newCall(request).execute()) {
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                 String rawResponse = response.body().string();
@@ -250,26 +247,23 @@ public class Network{
                     return c;
 
 
-
                 } catch (JSONException e) {
                     System.out.println("Something went wrong here");
-                }finally {
+                } finally {
                     response.close();
                 }
 
             }
 
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             //Log.wtf("Network", "Hier kommt wohl null her!");
         }
-
 
 
         return null;
     }
 
-    public static void downloadPic(String filename, String URL, UICallback uicb){
+    public static void downloadPic(String filename, String URL, UICallback uicb) {
         Request request = new Request.Builder().url(URL).build();
         okHttpClient.newCall(request).enqueue(new Callback() {
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -330,7 +324,7 @@ public class Network{
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
-                    System.out.println("Cocktailsdata: "+rawResponse);
+                    System.out.println("Cocktailsdata: " + rawResponse);
 
                     extractAndAddCocktails(rawResponse, CocktailMap);
 
@@ -346,9 +340,9 @@ public class Network{
         });
     }
 
-    public static void addFullCocktailInfo(Cocktail c, UICallback uicb){
+    public static void addFullCocktailInfo(Cocktail c, UICallback uicb) {
 
-        String URL = getBaseURL() + "/lookup.php?i="+c.getID();
+        String URL = getBaseURL() + "/lookup.php?i=" + c.getID();
         final Request request = new Request.Builder().url(URL).build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
@@ -379,7 +373,7 @@ public class Network{
                     } catch (JSONException e) {
 //                        System.out.println("Something went wrong here");
                         e.printStackTrace();
-                    }finally {
+                    } finally {
                         response.close();
                     }
                 }
@@ -422,19 +416,19 @@ public class Network{
         }
     }
 
-    private static void extractAndAddIngredientsAndMeasurments(String rawResponse, Cocktail c){
+    private static void extractAndAddIngredientsAndMeasurments(String rawResponse, Cocktail c) {
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
             JSONObject tempObject = responseArray.getJSONObject(0);
             String Ingredient, Measurement;
 
-            for(int i = 1; i <= 15; i++){
-                Ingredient = tempObject.getString("strIngredient"+i);
-                Measurement = tempObject.getString("strMeasure"+i);
-                if(!Ingredient.equals("null") && !Ingredient.equals(" ") && !Ingredient.equals("")){
+            for (int i = 1; i <= 15; i++) {
+                Ingredient = tempObject.getString("strIngredient" + i);
+                Measurement = tempObject.getString("strMeasure" + i);
+                if (!Ingredient.equals("null") && !Ingredient.equals(" ") && !Ingredient.equals("")) {
                     c.addIngredient(Ingredient, Measurement);
-                }else{
+                } else {
                     return;
                 }
             }
@@ -443,39 +437,40 @@ public class Network{
             e.printStackTrace();
         }
     }
-    public static Cocktail loadRandomCocktail(){
+
+    public static Cocktail loadRandomCocktail() {
 
         final Request request = new Request.Builder().url(Network.getBaseURL() + "/random.php").build();
 
-            Cocktail c;
+        Cocktail c;
 
-            try (Response response = okHttpClient.newCall(request).execute()) {
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        try (Response response = okHttpClient.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                String rawResponse = response.body().string();
-                JSONObject responseObject = new JSONObject(rawResponse);
-                JSONArray responseArray = responseObject.getJSONArray("drinks");
-                JSONObject tempObject = responseArray.getJSONObject(0);
+            String rawResponse = response.body().string();
+            JSONObject responseObject = new JSONObject(rawResponse);
+            JSONArray responseArray = responseObject.getJSONArray("drinks");
+            JSONObject tempObject = responseArray.getJSONObject(0);
 
-                int ID = Integer.parseInt(tempObject.getString("idDrink"));
-                String strDrink = tempObject.getString("strDrink");
-                String imgUrl = tempObject.getString("strDrinkThumb");
+            int ID = Integer.parseInt(tempObject.getString("idDrink"));
+            String strDrink = tempObject.getString("strDrink");
+            String imgUrl = tempObject.getString("strDrinkThumb");
 
-                c = new Cocktail(ID, strDrink, imgUrl);
+            c = new Cocktail(ID, strDrink, imgUrl);
 
-                c.setAlcoholic(tempObject.getString("strAlcoholic"));
-                c.setInstruction(tempObject.getString("strInstructions"));
-                c.setCategory(tempObject.getString("strCategory"));
-                c.setGlass(tempObject.getString("strGlass"));
-                c.setTags(tempObject.getString("strGlass"));
-                extractAndAddIngredientsAndMeasurments(rawResponse, c);
+            c.setAlcoholic(tempObject.getString("strAlcoholic"));
+            c.setInstruction(tempObject.getString("strInstructions"));
+            c.setCategory(tempObject.getString("strCategory"));
+            c.setGlass(tempObject.getString("strGlass"));
+            c.setTags(tempObject.getString("strGlass"));
+            extractAndAddIngredientsAndMeasurments(rawResponse, c);
 
-                return c;
+            return c;
 
-                } catch (JSONException | IOException e) {
-                    Log.wtf("Network", "ERROR!!!");
-                }
-            return new Cocktail(0, "THERE WAS AN ERROR LOADING THIS COCKTAIL", "");
-            }
+        } catch (JSONException | IOException e) {
+            Log.wtf("Network", "ERROR!!!");
+        }
+        return new Cocktail(0, "THERE WAS AN ERROR LOADING THIS COCKTAIL", "");
+    }
 
 }

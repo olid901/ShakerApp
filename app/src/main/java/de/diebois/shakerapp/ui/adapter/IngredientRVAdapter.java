@@ -37,8 +37,8 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
     private final LayoutInflater layoutInflater;
     private IngredientDatabase ingredientDatabase;
 
-    private void sortIngredientList(){
-            ingredientList = ingredientList.stream().sorted(Comparator.comparing(Ingredient::isAtHome,Comparator.reverseOrder())).collect(Collectors.toList());
+    private void sortIngredientList() {
+        ingredientList = ingredientList.stream().sorted(Comparator.comparing(Ingredient::isAtHome, Comparator.reverseOrder())).collect(Collectors.toList());
     }
 
     public IngredientRVAdapter(Context context) {
@@ -90,9 +90,9 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
             Helper.notifyAdaperFromUi(this, position);
         });
 
-        if(ingredientDatabase.isInDatabase(ingredient)){
+        if (ingredientDatabase.isInDatabase(ingredient)) {
             holder.atHomeButtonView.setImageResource(R.drawable.ic_checked);
-        }else{
+        } else {
             holder.atHomeButtonView.setImageResource(R.drawable.ic_home);
         }
     }

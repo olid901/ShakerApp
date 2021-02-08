@@ -17,33 +17,59 @@ public class Cocktail {
 
 
     //GETTER
-    public String getStrDrink() { return StrDrink; }
+    public String getStrDrink() {
+        return StrDrink;
+    }
 
-    public int getID() { return ID; }
+    public int getID() {
+        return ID;
+    }
 
-    public String getImg_Url() { return Img_Url; }
+    public String getImg_Url() {
+        return Img_Url;
+    }
 
-    public boolean isImageMissing() { return Img_Url.equals("null"); }
+    public boolean isImageMissing() {
+        return Img_Url.equals("null");
+    }
 
     //TODO: Hier statt strings eigentlich ne Liste mit Ingredients ausspucken, wenn möglich
-    public ArrayList<String> getIngredients() { return Ingredients; }
+    public ArrayList<String> getIngredients() {
+        return Ingredients;
+    }
 
-    public ArrayList<String> getMeasures() { return Measures; }
+    public ArrayList<String> getMeasures() {
+        return Measures;
+    }
 
-    public String getInstruction() { return Instruction; }
+    public String getInstruction() {
+        return Instruction;
+    }
 
-    public String getCategory() { return Category; }
+    public String getCategory() {
+        return Category;
+    }
 
-    public String getAlcoholic() { return Alcoholic; }
+    public String getAlcoholic() {
+        return Alcoholic;
+    }
 
-    public String getGlass() { return Glass; }
+    public String getGlass() {
+        return Glass;
+    }
 
-    public String getTags() { return Tags; }
+    public String getTags() {
+        return Tags;
+    }
 
-    public boolean isFavorite() { return favorite; }
+    public boolean isFavorite() {
+        return favorite;
+    }
 
     //SETTER
-    public void setFavorite(boolean favorite) { this.favorite = favorite; }
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
 
     public void setInstruction(String instruction) {
         this.Instruction = instruction;
@@ -65,12 +91,14 @@ public class Cocktail {
         this.Tags = tags;
     }
 
-    public void setID(int ID){this.ID = ID;}
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 
-    public Cocktail(int ID, String StrDrink, String Img_Url){
+    public Cocktail(int ID, String StrDrink, String Img_Url) {
         this.ID = ID;
         this.StrDrink = StrDrink;
-        this.Img_Url= Img_Url;
+        this.Img_Url = Img_Url;
         this.Instruction = "";
         this.Category = "";
         this.Alcoholic = "";
@@ -80,8 +108,8 @@ public class Cocktail {
         this.Measures = new ArrayList<>();
     }
 
-    public void addIngredient(String Ingredient, String Measurement){
-        if(Ingredients.contains(Ingredient)){
+    public void addIngredient(String Ingredient, String Measurement) {
+        if (Ingredients.contains(Ingredient)) {
             return;
         }
 
@@ -92,46 +120,46 @@ public class Cocktail {
         Pattern patternDezimalzahlOz = Pattern.compile("[0-9]+\\.?[0-9]?(?= +oz)");
         Pattern patternDezimalzahlCups = Pattern.compile("[0-9]+\\.?[0-9]?(?= +[C|c]ups?)");
         Matcher matcherAllOz = patternAllOz.matcher(Measurement);
-        if (matcherAllOz.find()){
+        if (matcherAllOz.find()) {
             double totalOz = 0;
             String all = matcherAllOz.group(0);
             String all_replaced = all;
             Matcher matcherBruchOz = patternBruchOz.matcher(all);
-            if (matcherBruchOz.find()){
+            if (matcherBruchOz.find()) {
                 String Bruch = matcherBruchOz.group(0);
-                double DezimalBruch = ((double) Integer.parseInt(String.valueOf(Bruch.charAt(0))))/Integer.parseInt(String.valueOf(Bruch.charAt(2)));
+                double DezimalBruch = ((double) Integer.parseInt(String.valueOf(Bruch.charAt(0)))) / Integer.parseInt(String.valueOf(Bruch.charAt(2)));
                 all_replaced = all.replace(Bruch, "");
                 totalOz += DezimalBruch;
             }
             Matcher matcherDezimalOz = patternDezimalzahlOz.matcher(all_replaced);
-            if (matcherDezimalOz.find()){
+            if (matcherDezimalOz.find()) {
                 String Dezizahl = matcherDezimalOz.group(0);
                 totalOz += Double.parseDouble(Dezizahl);
             }
-            String replacement = ozToCl(totalOz)+" cl";
+            String replacement = ozToCl(totalOz) + " cl";
             Measurement = Measurement.replace(all, replacement);
             //System.out.println("Regex replacement: "+all+" --> "+replacement);
 
         }
 
         Matcher matcherAllCups = patternAllCups.matcher(Measurement);
-        if (matcherAllCups.find()){
+        if (matcherAllCups.find()) {
             double totalCups = 0;
             String all = matcherAllCups.group(0);
             String all_replaced = all;
             Matcher matcherBruchCups = patternBruchCups.matcher(all);
-            if (matcherBruchCups.find()){
+            if (matcherBruchCups.find()) {
                 String Bruch = matcherBruchCups.group(0);
-                double DezimalBruch = ((double) Integer.parseInt(String.valueOf(Bruch.charAt(0))))/Integer.parseInt(String.valueOf(Bruch.charAt(2)));
+                double DezimalBruch = ((double) Integer.parseInt(String.valueOf(Bruch.charAt(0)))) / Integer.parseInt(String.valueOf(Bruch.charAt(2)));
                 all_replaced = all.replace(Bruch, "");
                 totalCups += DezimalBruch;
             }
             Matcher matcherDezimalCups = patternDezimalzahlCups.matcher(all_replaced);
-            if (matcherDezimalCups.find()){
+            if (matcherDezimalCups.find()) {
                 String Dezizahl = matcherDezimalCups.group(0);
                 totalCups += Double.parseDouble(Dezizahl);
             }
-            String replacement = cupsToMl(totalCups)+" ml";
+            String replacement = cupsToMl(totalCups) + " ml";
             Measurement = Measurement.replace(all, replacement);
             //System.out.println("Regex replacement: "+all+" --> "+replacement);
 
@@ -141,10 +169,13 @@ public class Cocktail {
         Measures.add(Measurement);
     }
 
-    private static double ozToCl(double oz){
-        return Math.round(2*oz*2.95735)/2.0;
+    private static double ozToCl(double oz) {
+        return Math.round(2 * oz * 2.95735) / 2.0;
     }
-    private static int cupsToMl(double cups){ return (int)Math.round(cups*240); }
+
+    private static int cupsToMl(double cups) {
+        return (int) Math.round(cups * 240);
+    }
 
     @Override
     public String toString() {

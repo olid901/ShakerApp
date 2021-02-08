@@ -24,10 +24,11 @@ public class IngredientDatabase extends SQLiteOpenHelper {
     // Table name
     private static final String TABLE_INGREDIENTS = "Ingredients";
 
-    private static final String COLUMN_INGREDIENT_NAME ="Ingredient";
-//    private static final String COLUMN_COCKTAIL_NAME ="Name";
+    private static final String COLUMN_INGREDIENT_NAME = "Ingredient";
+
+    //    private static final String COLUMN_COCKTAIL_NAME ="Name";
 //    private static final String COLUMN_COCKTAIL_IMAGE_URL ="IMG_URL";
-    public IngredientDatabase(Context context)  {
+    public IngredientDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -76,9 +77,9 @@ public class IngredientDatabase extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(
                 TABLE_INGREDIENTS,
-                new String[] { COLUMN_INGREDIENT_NAME },
+                new String[]{COLUMN_INGREDIENT_NAME},
                 COLUMN_INGREDIENT_NAME + "=?",
-                new String[] { String.valueOf(ingredient.getStrIngredient()) },
+                new String[]{String.valueOf(ingredient.getStrIngredient())},
                 null,
                 null,
                 null,
@@ -90,7 +91,7 @@ public class IngredientDatabase extends SQLiteOpenHelper {
     }
 
     public List<Ingredient> getAllIngredients() {
-        Log.i(TAG, "IngredientDatabase.getAllIngredients ... " );
+        Log.i(TAG, "IngredientDatabase.getAllIngredients ... ");
 
         List<Ingredient> ingredientList = new ArrayList<>();
         // Select All Query
@@ -112,10 +113,10 @@ public class IngredientDatabase extends SQLiteOpenHelper {
     }
 
     public void deleteIngredient(Ingredient ingredient) {
-        Log.i(TAG, "IngredientDatabase.deleteIngredient ... " + ingredient.getStrIngredient() );
+        Log.i(TAG, "IngredientDatabase.deleteIngredient ... " + ingredient.getStrIngredient());
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_INGREDIENTS, COLUMN_INGREDIENT_NAME + " = ?", new String[] { "" + ingredient.getStrIngredient() });
+        db.delete(TABLE_INGREDIENTS, COLUMN_INGREDIENT_NAME + " = ?", new String[]{"" + ingredient.getStrIngredient()});
         db.close();
     }
 }

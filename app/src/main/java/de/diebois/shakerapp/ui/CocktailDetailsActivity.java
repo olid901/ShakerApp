@@ -136,7 +136,7 @@ public class CocktailDetailsActivity extends AppCompatActivity {
         }
 
         String url = cocktail.getImg_Url();
-        String filename = url.substring(url.lastIndexOf('/')+1);
+        String filename = url.substring(url.lastIndexOf('/') + 1);
 
         File file = new File(MainActivity.localDir, filename);
 
@@ -213,7 +213,7 @@ class IngredientsRVAdapter extends RecyclerView.Adapter<IngredientsRVAdapter.Vie
     }
 
     public File updateIngredientImage(Ingredient ingredient, int position) {
-        String filename = ingredient.getStrIngredient() +  "-Medium.png";
+        String filename = ingredient.getStrIngredient() + "-Medium.png";
         String url = "https://www.thecocktaildb.com/images/ingredients/" + filename;
 
         File file = new File(MainActivity.localDir, filename);

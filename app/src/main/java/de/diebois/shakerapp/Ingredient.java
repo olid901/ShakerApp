@@ -23,11 +23,11 @@ public class Ingredient {
 
     public static final short SMALL = 1, MEDIUM = 2, LARGE = 3;
 
-    public Ingredient(String StrIngredient){
+    public Ingredient(String StrIngredient) {
         this.StrIngredient = StrIngredient;
         this.atHome = false;
 
-        if(atHomeList.contains(this)){
+        if (atHomeList.contains(this)) {
             setAtHome(true);
         }
     }
@@ -36,19 +36,19 @@ public class Ingredient {
         return this.StrIngredient;
     }
 
-    public boolean hasImage(){
+    public boolean hasImage() {
         return true;
     }
 
-    public String Img_Url(short size){
-        if(size == SMALL)
-            return "https://www.thecocktaildb.com/images/ingredients/"+StrIngredient+"-Small.png";
-        else if(size == MEDIUM)
-            return "https://www.thecocktaildb.com/images/ingredients/"+StrIngredient+"-Medium.png";
+    public String Img_Url(short size) {
+        if (size == SMALL)
+            return "https://www.thecocktaildb.com/images/ingredients/" + StrIngredient + "-Small.png";
+        else if (size == MEDIUM)
+            return "https://www.thecocktaildb.com/images/ingredients/" + StrIngredient + "-Medium.png";
         else if (size == LARGE)
-            return "https://www.thecocktaildb.com/images/ingredients/"+StrIngredient+".png";
+            return "https://www.thecocktaildb.com/images/ingredients/" + StrIngredient + ".png";
         else //default return bei falscher size Angabe
-            return "https://www.thecocktaildb.com/images/ingredients/"+StrIngredient+".png";
+            return "https://www.thecocktaildb.com/images/ingredients/" + StrIngredient + ".png";
     }
 
     @Override

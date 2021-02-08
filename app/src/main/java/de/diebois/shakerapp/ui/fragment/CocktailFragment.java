@@ -64,7 +64,10 @@ public abstract class CocktailFragment extends Fragment implements CocktailClick
     }
 
     abstract public void fetchAllCocktails();
+
     abstract int getCurrentFragmentID();
+
     abstract int getCurrentRecViewID();
+
     abstract CocktailRVAdapter createAdapter();
 }
