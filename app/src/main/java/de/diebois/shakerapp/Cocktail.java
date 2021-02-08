@@ -79,6 +79,9 @@ public class Cocktail {
     }
 
     public void addIngredient(String Ingredient, String Measurement){
+        if(Ingredients.contains(Ingredient)){
+            return;
+        }
 
         Pattern patternAllOz = Pattern.compile("([0-9]+ )?([0-9].)?[0-9] oz");
         Pattern patternAllCups = Pattern.compile("([0-9]+ )?([0-9].)?[0-9] [C|c]ups?");
