@@ -7,15 +7,26 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import de.diebois.shakerapp.ui.CocktailDetailsActivity;
+import de.diebois.shakerapp.ui.RandomCocktailDetailsActivity;
 
+import com.squareup.seismic.ShakeDetector;
 
+import android.content.Context;
+import android.content.Intent;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
 import java.io.File;
 
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public LinkedHashMap<Integer, Cocktail> Cocktails;
     public LinkedHashMap<String, Ingredient> Ingredients;
     public static File localDir;
+    private static boolean shakeable = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +74,29 @@ public class MainActivity extends AppCompatActivity {
 
         //test MIS
         LinkedHashMap<String, Ingredient> atHome = new LinkedHashMap<>();
+
+        /*  Eine Shaker-App MUSS eine Funktion haben um mittels Handy schütteln einen (random) COcktail aufzurufen.
+            Dies wir hier mit folgender Gradle Bibliothek implmentiert: 'com.squareup:seismic:1.0.2'
+         */
+        final SensorManager mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        ShakeDetector detector = new ShakeDetector(new ShakeDetector.Listener() {
+            @Override
+            public void hearShake() {
+                if(shakeable){
+                    Intent myIntent = new Intent(MainActivity.this, RandomCocktailDetailsActivity.class);
+                    MainActivity.this.startActivity(myIntent);
+                    shakeable = false;
+                    Timer buttonTimer = new Timer();
+                    buttonTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                                shakeable = true;
+                        }
+                    }, 1000);
+                }
+            }
+        });
+        detector.start(mSensorManager);
 
 //        atHome.put("Gin", new Ingredient("Gin"));
 //        atHome.put("Vodka", new Ingredient("Vodka"));
