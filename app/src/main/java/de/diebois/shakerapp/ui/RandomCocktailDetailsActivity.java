@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -35,6 +38,7 @@ public class RandomCocktailDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.wtf("Test", "On create executed!");
 
         cocktail = new Cocktail(0, "Loading", "");
 
@@ -80,16 +84,43 @@ public class RandomCocktailDetailsActivity extends AppCompatActivity {
             }
         });
 
+        Button randomBtn = findViewById(R.id.random_new_button);
+        randomBtn.setOnClickListener(v ->{
+
+            Log.wtf("RandomBtn", "A I enabled? "+randomBtn.isEnabled());
+            if(!loading){
+                loading = true;
+                initRandomCocktail();
+            }
+            randomBtn.setEnabled(false);
+
+
+            //1 second cooldonw: Button spammen verursacht nen crash!
+            Timer buttonTimer = new Timer();
+            buttonTimer.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                        Helper.runOnUiThread(() -> {
+                            randomBtn.setEnabled(true);
+                        });
+                }
+            }, 1000);
+        });
+
+        initRandomCocktail();
+
+    }
+
+    private void initRandomCocktail(){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("I am in thread now");
+                Log.d("initRandomCocktail","I am in thread now");
                 cocktail = Network.loadRandomCocktail();
                 onCocktailInfoLoaded();
-                loading = false;
             }
         }).start();
-
     }
 
     // Kopiert aus dem BigCocktailRVAdapter
@@ -136,6 +167,8 @@ public class RandomCocktailDetailsActivity extends AppCompatActivity {
 
         updateCocktailImage(cocktail);
 
+        loading = false;
+
         //updateCocktailImage();
     }
 
@@ -168,7 +201,10 @@ public class RandomCocktailDetailsActivity extends AppCompatActivity {
                 Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
                 Helper.runOnUiThread(() -> view.setImageBitmap(bitmap));
             });
-            view.setImageResource(R.drawable.ic_image_not_found);
+            Helper.runOnUiThread(() -> {
+                view.setImageResource(R.drawable.ic_image_not_found);
+            });
+
         } else {
             Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
             view.setImageBitmap(bitmap);

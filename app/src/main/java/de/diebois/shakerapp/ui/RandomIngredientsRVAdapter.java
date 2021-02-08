@@ -57,9 +57,15 @@ class RandomIngredientsRVAdapter extends RecyclerView.Adapter<RandomIngredientsR
         List<Ingredient> ingredientList = ingredientList();
         ArrayList<String> measures = RandomCocktailDetailsActivity.cocktail.getMeasures();
 
+        if(position > ingredientList.size())
+            return;
+
         Ingredient ingredient = ingredientList.get(position);
         String ingredientName = ingredient.getStrIngredient();
         String displayedText = ingredientName;
+
+        if(position > measures.size()-1)
+            return;
 
         // Für den Fall, dass bei einer Zutat keine Mengenangabe gegeben ist
         if (!measures.get(position).equals("null")) {
