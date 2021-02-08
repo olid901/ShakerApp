@@ -20,41 +20,34 @@ import de.diebois.shakerapp.R;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapter.ViewHolder> {
 
-    private LinkedHashMap<String, Ingredient> IngredientMap;
+    private List<Ingredient> ingredientList;
     private final LayoutInflater layoutInflater;
-    private final IngredientDatabase atHomeDB;
-    private List<Ingredient> atHomeList;
+    private IngredientDatabase ingredientDatabase;
 
-    private List<Ingredient> ingredientList(){
-
-        List<Ingredient> returnList = new ArrayList<>(atHomeList);
-
-        for(Ingredient i : IngredientMap.values()){
-            if(!atHomeList.contains(i)){
-                returnList.add(i);
-            }
-        }
-        return returnList;
+    private void sortIngredientList(){
+        ingredientList = ingredientList.stream().sorted(Comparator.comparing(Ingredient::isAtHome,Comparator.reverseOrder())).collect(Collectors.toList());
     }
 
     public IngredientRVAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
-        IngredientMap = new LinkedHashMap<>(); // Prevent app from crashing
-        atHomeDB = new IngredientDatabase(context);
-        atHomeList = atHomeDB.getAllIngredients();
+        ingredientList = new ArrayList<>();
+        ingredientDatabase = new IngredientDatabase(context);
     }
 
-
-    public void setIngredientList(LinkedHashMap<String, Ingredient> IngredientMap) {
-        this.IngredientMap = IngredientMap;
+    public void setIngredientList(List<Ingredient> ingredientList) {
+        this.ingredientList = ingredientList;
     }
 
     @NotNull
@@ -68,7 +61,8 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
      */
     @Override
     public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
-        Ingredient ingredient = ingredientList().get(position);
+        sortIngredientList();
+        Ingredient ingredient = ingredientList.get(position);
 
         // TODO Return null ist böse!!! Sollte noch geändert werden bei Gelegenheit
         File file = updateingredientImage(ingredient, position);
@@ -83,18 +77,19 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
 
         holder.atHomeButtonView.setOnClickListener(v -> {
 
-            if(atHomeDB.isInDatabase(ingredient)){
-                atHomeDB.deleteIngredient(ingredient);
-                atHomeList.remove(ingredient);
-            }else{
-                atHomeDB.addIngredient(ingredient);
-                atHomeList.add(ingredient);
+            if (ingredientDatabase.isInDatabase(ingredient)) {
+                ingredientDatabase.deleteIngredient(ingredient);
+                ingredient.setAtHome(false);
+                Ingredient.atHomeList.remove(ingredient);
+            } else {
+                ingredientDatabase.addIngredient(ingredient);
+                ingredient.setAtHome(true);
+                Ingredient.atHomeList.add(ingredient);
             }
             Helper.notifyAdaperFromUi(this, position);
-
         });
 
-        if(atHomeList.contains(ingredient)){
+        if(ingredientDatabase.isInDatabase(ingredient)){
             holder.atHomeButtonView.setImageResource(R.drawable.ic_checked);
         }else{
             holder.atHomeButtonView.setImageResource(R.drawable.ic_home);
@@ -127,7 +122,7 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
      */
     @Override
     public int getItemCount() {
-        return IngredientMap.size();
+        return ingredientList.size();
     }
 
     /**

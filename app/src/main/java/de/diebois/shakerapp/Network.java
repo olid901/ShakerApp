@@ -17,9 +17,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -39,7 +41,7 @@ public class Network{
     }
 
     //Wenn kein Filter gewünscht: Null als Filter übergeben
-    public static void loadIngredients(String URL, String filter, LinkedHashMap<String, Ingredient> IngredientMap, IngredientRVAdapter adapter){
+    public static void loadIngredients(String URL, String filter, List<Ingredient> ingredientList, IngredientRVAdapter adapter){
         final Request request = new Request.Builder().url(URL).build();
         System.out.println("Filter is: "+filter);
 
@@ -56,15 +58,29 @@ public class Network{
                 if (response.isSuccessful()) {
                     String rawResponse = response.body().string();
 //                    System.out.println("Ingredient response: "+rawResponse);
-                    extractIngredients(rawResponse, IngredientMap);
+                    extractIngredients(rawResponse, ingredientList);
 
                     if(filter != null){
-                            for(Iterator<String> it = IngredientMap.keySet().iterator(); it.hasNext();) {
+                        List<Ingredient> toRemove = new ArrayList<>();
+                            /*for(Iterator<String> it = IngredientMap.keySet().iterator(); it.hasNext();) {
                                 String s = it.next();
                                 if(!s.toLowerCase().contains(filter.toLowerCase())) {
-                                    it.remove();
-                                }
+                                    //it.remove();
+                                    toRemove.add(s);
+                                }*/
+                        for(Ingredient i : ingredientList) {
+                            String s = i.getStrIngredient();
+                            if(!s.toLowerCase().contains(filter.toLowerCase())) {
+                                //it.remove();
+                                toRemove.add(i);
                             }
+                        }
+
+
+                        for(Ingredient i : toRemove){
+                            ingredientList.remove(i);
+                        }
+
                     }
 
                     Helper.notifyAdaperFromUi(adapter);
@@ -79,8 +95,15 @@ public class Network{
         //TBA: Siehe Karte Zutaten abfragen
     }
 
-    //Multi Ingredient Search (kurz MIS)
-    public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, LinkedHashMap<String, Ingredient> ingredientsAtHome){
+
+    public static void multiIngredientSearch(LinkedHashMap<Integer, Cocktail> resultMap, List<Ingredient> ingredientsAtHome, CocktailRVAdapter adapter){
+
+        System.out.println("Start of MIS, the following ingredients are at home:");
+        for(Ingredient i : ingredientsAtHome){
+            System.out.println(" - "+i.getStrIngredient());
+        }
+
+
 
         new Thread(() -> {
 
@@ -90,12 +113,13 @@ public class Network{
             HashMap<Integer, Integer> CocktailCount = new HashMap<>();
             ExecutorService Executor = Executors.newCachedThreadPool();
 
-            for(String ingredientName : ingredientsAtHome.keySet()){
+            for(Ingredient ing : ingredientsAtHome){
+                String ingredientName = ing.getStrIngredient();
 
                 Executor.execute(() -> {
-                    System.out.println("Running MIS for "+ingredientName);
+                    System.out.println("Running MIS for " + ingredientName);
                     MIScocktailCounter(CocktailCount, ingredientName);
-                    System.out.println("MIS for "+ingredientName+" done!");
+                    System.out.println("MIS for " + ingredientName+" done!");
                 });
             }
 
@@ -133,8 +157,8 @@ public class Network{
 
                 try{
                     for(String ingr : candidates.get(ID).getIngredients()){
-                        if (!ingredientsAtHome.containsKey(ingr)) {
-                            //System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
+                        if (!ingredientsAtHome.contains(new Ingredient(ingr))) {
+                            System.out.println("Drink with ID "+ID+" Contains Ingredient "+ingr+" which is not at home!");
                             allAtHome = false;
                             break;
                         }
@@ -144,7 +168,7 @@ public class Network{
                 catch(NullPointerException e){
                     Log.wtf("Network/MIS","There was a NullPointerException in this MIS. This is probably due to a remote DB Error and hence not our fault. Aborting this MIS and starting a new one with the same Parameters!");
                     resultMap.clear();
-                    multiIngredientSearch(resultMap, ingredientsAtHome);
+                    multiIngredientSearch(resultMap, ingredientsAtHome, adapter);
                     return;
                 }
 
@@ -163,6 +187,8 @@ public class Network{
             for(Cocktail c : resultMap.values()){
                 System.out.println(c);
             }
+
+            Helper.notifyAdaperFromUi(adapter);
 
         }).start();
 
@@ -391,14 +417,15 @@ public class Network{
         }
     }
 
-    private static void extractIngredients(String rawResponse, LinkedHashMap<String, Ingredient> IngredientMap) {
+
+    private static void extractIngredients(String rawResponse, List<Ingredient> ingredientList) {
         try {
             JSONObject responseObject = new JSONObject(rawResponse);
             JSONArray responseArray = responseObject.getJSONArray("drinks");
             for (int index = 0; index < responseArray.length(); index++) {
                 JSONObject tempObject = responseArray.getJSONObject(index);
                 String Name = tempObject.getString("strIngredient1");
-                IngredientMap.put(Name, new Ingredient(Name));
+                ingredientList.add(new Ingredient(Name));
             }
         } catch (JSONException e) {
 //            System.out.println("Something went wrong here");
