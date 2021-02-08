@@ -23,6 +23,6 @@
         <item
             android:id="@+id/nav_random"
             android:icon="@drawable/ic_random"
-            android:title="@string/random" />
+            android:title="@string/random_cocktail" />
     </group>
 </menu>
