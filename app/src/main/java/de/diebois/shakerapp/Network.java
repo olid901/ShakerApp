@@ -443,7 +443,7 @@ public class Network{
             for(int i = 1; i <= 15; i++){
                 Ingredient = tempObject.getString("strIngredient"+i);
                 Measurement = tempObject.getString("strMeasure"+i);
-                if(!Ingredient.equals("null") && !Ingredient.equals(" ")){
+                if(!Ingredient.equals("null") && !Ingredient.equals(" ") && !Ingredient.equals("")){
                     c.addIngredient(Ingredient, Measurement);
                 }else{
                     return;

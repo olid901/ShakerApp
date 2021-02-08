@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,12 +38,12 @@ public class IngredientRVAdapter extends RecyclerView.Adapter<IngredientRVAdapte
     private IngredientDatabase ingredientDatabase;
 
     private void sortIngredientList(){
-        ingredientList = ingredientList.stream().sorted(Comparator.comparing(Ingredient::isAtHome,Comparator.reverseOrder())).collect(Collectors.toList());
+            ingredientList = ingredientList.stream().sorted(Comparator.comparing(Ingredient::isAtHome,Comparator.reverseOrder())).collect(Collectors.toList());
     }
 
     public IngredientRVAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
-        ingredientList = new ArrayList<>();
+        ingredientList = new CopyOnWriteArrayList<>();
         ingredientDatabase = new IngredientDatabase(context);
     }
 
