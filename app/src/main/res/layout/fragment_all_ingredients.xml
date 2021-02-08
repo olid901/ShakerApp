@@ -6,6 +6,12 @@
     tools:context=".ui.fragment.SmallCocktailFragment"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/MISbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scotty mix me up!" />
+
     <EditText
         android:id="@+id/ingredient_search_text"
         android:layout_width="match_parent"

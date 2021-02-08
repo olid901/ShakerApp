@@ -14,6 +14,7 @@ import java.io.File;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        IngredientDatabase IngredientDB = new IngredientDatabase(this);
+        Ingredient.atHomeList = new ArrayList<Ingredient>();
+        Ingredient.atHomeList = IngredientDB.getAllIngredients();
 
         localDir = getFilesDir();
         super.onCreate(savedInstanceState);
@@ -72,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
 //        Network.multiIngredientSearch(resMap, atHome);
 
         //Testweise alles Laden, passiert später durch die einzelnen Fragments
-        Network.loadCocktails(Cocktails_URL, Cocktails, null);
-        Network.loadIngredients(Ingredients_URL, null, Ingredients, null);
+//        Network.loadCocktails(Cocktails_URL, Cocktails, null);
+//        Network.loadIngredients(Ingredients_URL, null, Ingredients, null);
     }
 
     @Override
