@@ -39,10 +39,12 @@ public class SmallCocktailFragment extends CocktailFragment {
         EditText etValue = view.findViewById(R.id.cocktail_search_text);
         etValue.addTextChangedListener(new TextWatcher() {
             @Override // Brauchen wir nicht
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override // Brauchen wir nicht
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {

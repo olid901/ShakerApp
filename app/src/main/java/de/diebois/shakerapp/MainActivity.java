@@ -7,6 +7,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
 import de.diebois.shakerapp.ui.CocktailDetailsActivity;
 import de.diebois.shakerapp.ui.RandomCocktailDetailsActivity;
 
@@ -77,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
         /*  Eine Shaker-App MUSS eine Funktion haben um mittels Handy schütteln einen (random) COcktail aufzurufen.
             Dies wir hier mit folgender Gradle Bibliothek implmentiert: 'com.squareup:seismic:1.0.2'
          */
-        final SensorManager mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        final SensorManager mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         ShakeDetector detector = new ShakeDetector(new ShakeDetector.Listener() {
             @Override
             public void hearShake() {
-                if(shakeable){
+                if (shakeable) {
                     Intent myIntent = new Intent(MainActivity.this, RandomCocktailDetailsActivity.class);
                     MainActivity.this.startActivity(myIntent);
                     shakeable = false;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     buttonTimer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                                shakeable = true;
+                            shakeable = true;
                         }
                     }, 1000);
                 }
